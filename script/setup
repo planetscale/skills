@@ -1,0 +1,51 @@
+#!/bin/sh
+# Install the PlanetScale skills into agent skills directories.
+#
+# Usage:
+#   script/setup             # detect installed agents and install to each
+#   script/setup <dir>       # install to an explicit skills directory
+#
+# Any agent that reads SKILL.md files works. Known locations are detected
+# automatically; for anything else, pass the directory explicitly.
+
+set -eu
+
+REPO_DIR=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+
+install_to() {
+  dest=$1
+  mkdir -p "$dest"
+  count=0
+  for skill in "$REPO_DIR"/[0-9]*; do
+    [ -f "$skill/SKILL.md" ] || continue
+    name=$(basename "$skill")
+    mkdir -p "$dest/$name"
+    cp "$skill/SKILL.md" "$dest/$name/SKILL.md"
+    count=$((count + 1))
+  done
+  echo "installed $count skills -> $dest"
+}
+
+if [ $# -ge 1 ]; then
+  install_to "$1"
+  exit 0
+fi
+
+found=0
+for dest in \
+  "$HOME/.cursor/skills" \
+  "$HOME/.claude/skills" \
+  "$HOME/.agents/skills"
+do
+  parent=$(dirname "$dest")
+  if [ -d "$parent" ]; then
+    install_to "$dest"
+    found=1
+  fi
+done
+
+if [ "$found" -eq 0 ]; then
+  echo "no known agent directories found (~/.cursor, ~/.claude, ~/.agents)"
+  echo "pass a target directory explicitly: script/setup <dir>"
+  exit 1
+fi
