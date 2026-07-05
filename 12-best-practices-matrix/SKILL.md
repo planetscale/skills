@@ -38,7 +38,7 @@ Recommend:
 
 - Use insights-only MCP for most autonomous analysis.
 - Use full MCP only with narrow scopes and read-only default.
-- Put database targeting and safety rules in `AGENTS.md`.
+- Put database targeting and safety rules in the project's agent instructions file (`AGENTS.md`, `CLAUDE.md`, or equivalent — use whichever the project already has).
 - Agents generate PRs/issues/change plans; humans approve database changes.
 
 ### SQLCommenter / query tags
@@ -61,6 +61,8 @@ Recommend:
 - Apply only through approved workflow.
 
 ## Vitess-specific recommendations
+
+These features do not exist on PlanetScale Postgres. For a Postgres database, mark every item in this section "Applies: no — Vitess-only feature" and never carry them into the recommendations.
 
 ### Safe migrations
 

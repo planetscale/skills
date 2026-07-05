@@ -42,9 +42,9 @@ that stops to ask permission to open a PR is misclassifying.
 
 Always requires explicit approval:
 
-- Enable safe migrations.
-- Disable safe migrations.
-- Change deploy request approval settings.
+- Enable safe migrations (Vitess only).
+- Disable safe migrations (Vitess only).
+- Change deploy request approval settings (Vitess only).
 - Create/update/delete Traffic Control budget or rule.
 - Move Traffic Control budget to enforce mode.
 - Create/update/delete webhook.

@@ -17,9 +17,11 @@ Use the full PlanetScale MCP server only when the task explicitly requires datab
 
 The full MCP server has query execution tools. Treat write query tools as disabled unless the operator explicitly approves a specific non-production action or a carefully reviewed production action.
 
-## AGENTS.md guidance
+## Agent instructions file guidance
 
-When working inside a repository, recommend adding a database targeting section to `AGENTS.md` or equivalent project instructions:
+First discover the repository's existing agent instructions file: `AGENTS.md`, `CLAUDE.md`, `.cursor/rules`, `.github/copilot-instructions.md`, or whatever equivalent the project already uses. Treat any of these as the agent instructions file. Do not flag the absence of `AGENTS.md` specifically or recommend creating one when an equivalent already exists; recommend a new file only when the repository has no agent instructions at all.
+
+Recommend adding a database targeting section to that file:
 
 - PlanetScale organization.
 - Database.
@@ -30,7 +32,7 @@ When working inside a repository, recommend adding a database targeting section 
 - Whether write queries are forbidden.
 - Required approval protocol for schema, Traffic Control, webhooks, roles, and network changes.
 
-Do not edit `AGENTS.md` without approval.
+Do not edit the agent instructions file without approval.
 
 ## Safe autonomous tasks
 
@@ -128,9 +130,9 @@ for the same fingerprint/recommendation ID).
 - **Anomaly triage** (webhook-triggered, not polled): on `branch.anomaly`,
   gather affected patterns, classify probable cause, post triage note to
   the incident channel. Output: triage note.
-- **Posture drift check** (daily): diff current safe-migrations flags,
-  webhook config, role list, and backup schedule against the last
-  assessment report; report any drift. Output: report.
+- **Posture drift check** (daily): diff current safe-migrations flags
+  (Vitess only), webhook config, role list, and backup schedule against
+  the last assessment report; report any drift. Output: report.
 
 ### Tier 2 — execute the review-gate action (standing authorization required)
 
@@ -190,7 +192,7 @@ Return:
 
 - Recommended MCP server choice.
 - Required scopes.
-- AGENTS.md instructions to add.
+- Agent instructions file additions (naming the file the project actually uses).
 - Allowed autonomous work.
 - Disallowed work.
 - Proposed agent loops.
