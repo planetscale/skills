@@ -19,7 +19,19 @@ The full MCP server has query execution tools. Treat write query tools as disabl
 
 ## AGENTS.md guidance
 
-When working inside a repository, recommend adding a database targeting section to `AGENTS.md` or equivalent project instructions:
+Two different documents both named `AGENTS.md` serve different purposes:
+
+1. **CLI agent guide** — shipped with `pscale` (`AGENTS.md` in the
+   [planetscale/cli](https://github.com/planetscale/cli) repo, or
+   `pscale agent-guide --format json`). Covers auth, `--format json`, flag
+   placement, and `pscale sql`. Load skill `14-pscale-cli-automation` for the
+   same conventions inside this skills pack.
+
+2. **Project agent guide** — your application repository's `AGENTS.md` (or
+   equivalent). Covers database targeting and approval policy for *this* app.
+
+When working inside a repository, recommend adding a **project** database
+targeting section to `AGENTS.md` or equivalent project instructions:
 
 - PlanetScale organization.
 - Database.

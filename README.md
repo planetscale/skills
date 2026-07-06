@@ -31,13 +31,18 @@ agent-specific: no plugins, no custom tools, no proprietary rendering.
 
 ### Prerequisites
 
-1. **PlanetScale CLI**, authenticated:
+1. **PlanetScale CLI**, authenticated for automation:
 
    ```sh
    brew install planetscale/tap/pscale   # or see planetscale.com/cli
-   pscale auth login
-   pscale org list                       # verify access
+   pscale agent-guide --format json      # CLI conventions (or load skill 14-pscale-cli-automation)
+   pscale auth check --format json       # verify auth; follow next_steps if action_required
+   pscale org list --format json         # verify access
    ```
+
+   Agents should always pass `--format json` on `pscale` commands. Use `pscale sql`
+   for non-interactive queries, not `pscale shell`. See skill `14-pscale-cli-automation`
+   or the CLI repo `AGENTS.md` for full conventions.
 
 2. **Optional: PlanetScale MCP server.** The skills prefer the
    insights-only MCP server for telemetry analysis when it is available,
