@@ -16,8 +16,13 @@ Map database findings to recommended PlanetScale features. Use this to ensure th
 Recommend for every production database:
 
 - Review slow, expensive, high-frequency, and erroring query patterns.
+- For Postgres, use CPU-sorted Insights data when diagnosing CPU pressure.
+- For sharded Vitess, review vindex usage per query pattern and the usage
+  trend after index or routing changes.
 - Correlate regressions with deploys.
 - Use tags/comments to map queries back to code.
+- Use tag filtering/navigation in Vitess Query Insights where available
+  (`tag:key:value`, Tags view, and per-execution tag drill-down).
 - Use anomalies as alert and automation inputs.
 
 ### Webhooks
@@ -70,6 +75,13 @@ Recommend for production branches and staging branches that accept deploy reques
 
 Recommend for schema changes into protected branches.
 
+### Force cutover discipline
+
+Recommend documenting who may use "force cutover now" for deploy requests
+delayed by long-running transactions. It stops running transactions to finish
+schema cutover, so frequent use should trigger workload review before enabling
+aggressive cutover as the database default.
+
 ### Admin approval
 
 Recommend for production deploy requests in multi-admin organizations.
@@ -94,7 +106,10 @@ Recommend when query patterns or growth suggest shard-awareness problems. Do not
 
 ### User-defined roles
 
-Recommend for application servers instead of default role.
+Recommend for application servers instead of default role. If roles are managed
+by Terraform and passwords should stay outside Terraform state, prefer
+`planetscale_postgres_redacted_branch_role` plus a separate password reset and
+secret-manager storage path.
 
 ### pg_strict
 
@@ -107,6 +122,8 @@ Recommend for resource isolation of agents, exports, reports, workers, integrati
 ### Backups and PITR
 
 Recommend verifying retention and restore drill coverage.
+If Terraform is the customer's source of truth, recommend managing backup
+policies there so backup posture changes are reviewed as infrastructure code.
 
 ### PgBouncer and connection pooling
 
@@ -119,6 +136,16 @@ Recommend for customers requiring private network posture or reduced public expo
 ### Extensions
 
 Recommend only when use case is clear and restart/activation impact is accepted.
+Include `auto_explain` when automatic plan logging for slow queries would
+materially improve diagnosis and the resulting log volume is acceptable.
+If Terraform manages Postgres branch parameters or supported extensions, keep
+that source of truth aligned with approved dashboard/API changes.
+
+### Live connections
+
+Recommend inspecting `pscale branch connections top` during active connection
+pressure incidents to identify sessions, blockers, and idle-in-transaction
+roots without relying on normal database connection capacity.
 
 ## Output
 

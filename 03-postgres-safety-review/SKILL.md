@@ -40,6 +40,10 @@ Recommend:
 - Separate roles by service, environment, and access pattern.
 - Use read-only roles for analytics, dashboards, reporting, and agents that do not need writes.
 - Use short-lived or purpose-limited roles for automation.
+- When Terraform manages PlanetScale Postgres roles, prefer
+  `planetscale_postgres_redacted_branch_role` for roles whose password should
+  stay out of Terraform state; reset the password through the API or dashboard
+  and store it in the team's secret manager.
 - Document credential rotation without application downtime.
 
 Do not create, reset, delete, or rotate roles without approval.
@@ -65,6 +69,8 @@ Review:
 
 - Slow queries.
 - High rows-read queries.
+- High CPU query patterns when MCP or API Insights exposes CPU-sorted Postgres
+  data.
 - High-frequency queries.
 - Erroring queries.
 - Active anomalies.
@@ -154,6 +160,9 @@ Recommend:
 
 - Confirm default backups meet the customer’s RPO/RTO.
 - Increase retention or add backup schedules if the customer’s recovery window exceeds defaults.
+- If Terraform is the customer's source of truth, manage backup policies in
+  Terraform so retention and schedule changes are reviewed with the rest of
+  the infrastructure code.
 - Run a restore drill to a new branch.
 - Document the exact application cutover procedure after restore.
 
@@ -166,6 +175,9 @@ Check:
 - Whether app uses direct port 5432 or PgBouncer port 6432.
 - Whether connection pool size matches runtime and deployment model.
 - Whether serverless or edge environments can create connection storms.
+- Live connection/session pressure through `pscale branch connections top`,
+  including blockers and idle-in-transaction sessions when diagnosing active
+  incidents.
 - Whether private connectivity is configured.
 - Whether IP restrictions are configured.
 - Whether public access remains available unexpectedly.
@@ -187,13 +199,22 @@ Review enabled and available extensions relevant to safety and observability:
 - `pginsights`
 - `pg_strict`
 - `pg_stat_statements`
+- `auto_explain`
 - `pg_squeeze`
 - `pg_cron`
 - `pg_partman_bgw`
 - `pg_hint_plan`
 - TimescaleDB, if time-series features are relevant
 
-Recommend extensions only when use case is clear. Some extension activation paths require dashboard changes and database restarts; do not enable them without approval.
+Recommend extensions only when use case is clear. `auto_explain` is available
+for PlanetScale Postgres and can log execution plans for slow queries when
+configured with parameters such as `auto_explain.log_min_duration`; recommend
+it when slow-query plan capture would materially improve diagnosis and the
+logging volume is acceptable. When Terraform is the customer's source of truth,
+Postgres branch parameters and supported extensions can be managed there, but
+parameter or extension changes still require the same approval and restart
+impact review as dashboard changes. Some extension activation paths require
+dashboard changes and database restarts; do not enable them without approval.
 
 ## Webhook recommendations for Postgres
 

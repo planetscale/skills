@@ -182,11 +182,23 @@ for the same fingerprint/recommendation ID).
 For read queries:
 
 - Prefer replicas when available.
+- `planetscale_execute_read_query` routes reads to replicas by default when a
+  branch has replicas configured (`use_replica: true`). Set
+  `use_replica: false` only when the task needs primary-read semantics, such
+  as checking immediately-after-write state or primary-only behavior.
 - Add source tags/comments for agent work.
 - Avoid unbounded scans.
 - Avoid `EXPLAIN ANALYZE` on production unless explicitly approved.
 - Limit result sizes.
 - Avoid querying sensitive columns unless required and approved.
+- For Postgres tables with row-level security, remember that the MCP read role
+  uses `pg_read_all_data` and does not bypass RLS. If a read query returns zero
+  rows or a zero count and the MCP response warns that RLS may be filtering
+  results, treat the result as policy-filtered/unknown until confirmed through
+  an approved path; do not conclude the table is empty.
+- When debugging high CPU on Postgres, use MCP Insights data sorted by CPU
+  usage where available. CPU time metrics are Postgres-only in that tool; do
+  not ask for the same CPU-sorted view on Vitess.
 
 For write queries:
 
