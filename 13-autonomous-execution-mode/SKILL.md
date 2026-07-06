@@ -43,8 +43,7 @@ Class E operations (dropping production databases/tables, disabling all safety m
 Interactive acknowledgment is single-run. Scheduled agents (cron, Cursor
 Automations, webhook-triggered runs) instead operate under a **standing
 authorization**: a written artifact, committed where the agent reads its
-instructions (a section of the agent instructions file — `AGENTS.md`,
-`CLAUDE.md`, or equivalent — or a dedicated authorization file),
+instructions (an `AGENTS.md` section or a dedicated authorization file),
 containing:
 
 - Automation name and owner.
@@ -77,7 +76,7 @@ Per-run rules for standing authorization:
 
 Before the first mutation, produce and show an **execution plan**:
 
-1. **Order by dependency, then by risk.** Prerequisites first (e.g. stop the app's boot-time DDL before enabling safe migrations on Vitess, add an index before dropping the one it replaces). Among independent changes, lowest-risk first so early failures cost the least.
+1. **Order by dependency, then by risk.** Prerequisites first (e.g. stop the app's boot-time DDL before enabling safe migrations, add an index before dropping the one it replaces). Among independent changes, lowest-risk first so early failures cost the least.
 2. **Pre-flight each change.** Re-read the live state immediately before mutating (branch flags, recommendation state, webhook config). If the state no longer matches the report evidence, the change is **stale**: skip it, mark it `BLOCKED — state drift`, and continue with independent changes.
 3. **Safety prerequisites are steps, not assumptions.** Before any Class D DDL: confirm a backup completed within the retention window, confirm safe migrations or a deploy request is the vehicle where the engine supports it, and prefer revertible mechanisms (deploy requests with revert window, warn-mode before enforce-mode for Traffic Control).
 4. **One atomic change at a time.** Never batch unrelated mutations into one command. Never parallelize Class D steps.

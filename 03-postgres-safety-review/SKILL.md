@@ -11,7 +11,7 @@ Recommend best practices for a PlanetScale Postgres database. Focus on availabil
 
 ## Branch and schema workflow
 
-PlanetScale Postgres branches do not use Vitess-style deploy requests, and safe migrations is a Vitess-only branch setting that does not exist on Postgres — never recommend enabling, disabling, or configuring safe migrations for a Postgres database. Schema changes are made directly to each branch, and production schema changes should be managed through the application’s normal migration workflow with a branch validation step.
+PlanetScale Postgres branches do not use Vitess-style deploy requests. Schema changes are made directly to each branch, and production schema changes should be managed through the application’s normal migration workflow with a branch validation step.
 
 Check:
 

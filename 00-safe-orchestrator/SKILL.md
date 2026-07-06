@@ -28,7 +28,7 @@ Ground all CLI and API usage in the official documentation rather than guessing:
 
 1. Read this file completely.
 2. Copy the progress checklist below into your working notes and update it as you go.
-3. Collect inputs (ask or infer from the project's agent instructions file — `AGENTS.md`, `CLAUDE.md`, or equivalent — MCP context, environment, repository):
+3. Collect inputs (ask or infer from `AGENTS.md`, MCP context, environment, repository):
 
    - Organization slug
    - Database name
@@ -149,7 +149,7 @@ Deliverables: detected stack, current tagging state, recommended package/path, p
 
 Read and execute: `../09-mcp-agent-operating-model/SKILL.md`
 
-Deliverables: recommended MCP server choice, agent instructions file additions, allowed/disallowed autonomous work, proposed agent loops.
+Deliverables: recommended MCP server choice, AGENTS.md additions, allowed/disallowed autonomous work, proposed agent loops.
 
 ### Phase 9 — Best-practices matrix coverage check
 
