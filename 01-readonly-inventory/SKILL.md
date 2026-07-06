@@ -22,7 +22,11 @@ Allowed by default:
 - Read Postgres roles and non-secret role metadata.
 - Read backup schedules and restore metadata.
 - Read branch schema.
+- Inspect live connection/session metadata with the Connections CLI view.
 - Inspect repository files for frameworks, ORMs, migrations, SQL tagging, and connection config.
+- Inspect Terraform or other infrastructure-as-code definitions for
+  PlanetScale roles, backups, backup policies, Postgres parameters, and
+  supported extensions.
 
 Not allowed without explicit approval:
 
@@ -55,6 +59,10 @@ Verified interface notes (recheck against the docs when a command fails):
 - `pscale webhook list <database> --org <org>` — the database is a
   positional argument. `pscale backup list <database> <branch>` requires
   the branch.
+- `pscale branch connections top <database> <branch>` — live read-only
+  session inventory works for Postgres and Vitess over a reserved
+  administrative connection. Do not cancel queries or terminate connections
+  unless the operator explicitly approves that operational action.
 - Live query telemetry: `.../branches/{branch}/insights`. Anomalies:
   `.../branches/{branch}/insights/anomalies`. The `query-patterns` path
   returns generated report metadata, not live patterns.
@@ -129,6 +137,8 @@ Record:
 - Whether complete/raw query collection is enabled.
 - Active anomalies.
 - Query patterns with high latency, high rows read, high error rate, or high execution count.
+- Postgres CPU-heavy query patterns and Vitess vindex-usage data when exposed
+  by the Insights interface in use.
 - Whether application deploy identifiers are visible in comments or tags.
 
 ### Recommendations
@@ -174,6 +184,8 @@ For Postgres only, record:
 - Whether app roles are least-privilege.
 - Whether pg_strict is enabled for application roles.
 - Whether PgBouncer is used for appropriate workloads.
+- Whether live connections show blockers, idle-in-transaction sessions, or
+  connection saturation during an active incident.
 - Whether private connectivity and IP restrictions are configured.
 - Whether backup retention and PITR meet the customer’s recovery expectations.
 
@@ -188,6 +200,7 @@ For Vitess only, record:
 - Schema revert availability.
 - Branch and keyspace topology.
 - Sharding/vschema status.
+- Whether sharded query patterns use relevant vindexes.
 - Backups and restore posture.
 
 ## Evidence format

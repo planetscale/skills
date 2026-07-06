@@ -33,6 +33,7 @@ Check:
 - Whether deploy requests are reviewed for data loss, conflicts, lint errors, foreign key problems, charset issues, and shard impact.
 - Whether teams use gated deployments for cutover control.
 - Whether “deploy instantly” is used and whether the team understands it removes the gated-deployment/revert shape.
+- Whether cutover is regularly delayed by long-running transactions.
 - Whether deploy request events are subscribed to via webhooks.
 
 Recommend:
@@ -41,6 +42,11 @@ Recommend:
 - Enable administrator approval for production deploy requests when there is more than one administrator.
 - Prefer normal safe deployments over instant deployments unless the migration is known to be instant-safe and the rollback story is acceptable.
 - Use gated deployment when cutover timing matters.
+- Treat “force cutover now” as an operator-controlled action for delayed
+  cutovers: it aggressively stops running transactions to complete schema
+  cutover. Recommend reviewing the blocking workload and incident context
+  before use, and only recommend the database-level aggressive cutover default
+  when frequent cutover blocking is understood and accepted.
 
 ### Schema revert
 
@@ -72,8 +78,12 @@ Review Insights for:
 - Queries reading too many rows.
 - Erroring queries.
 - Queries with poor index usage.
+- For sharded databases, whether query patterns use relevant vindexes and how
+  vindex usage changes after index or routing changes.
 - Unusual query volume.
 - Missing SQL comment tags.
+- Tag breakdowns and `tag:key:value` filtering when Query Insights exposes
+  built-in metadata or SQLCommenter tags.
 - Deploy correlation data.
 
 Recommend enabling or improving application query tagging so Insights can attribute queries to app, route, controller, action, job, deployment SHA, and feature.

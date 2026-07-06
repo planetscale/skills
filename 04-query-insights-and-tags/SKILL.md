@@ -19,10 +19,16 @@ For the selected database and branch, inspect:
 - Top queries by time per execution.
 - Top queries by rows read.
 - Top queries by execution count.
+- For Postgres, top queries by CPU usage when the MCP/API surface exposes
+  CPU-sorted Insights data.
 - Queries with errors.
 - Notable queries and active anomalies.
 - Query patterns affected by recent deploys.
 - Query patterns attached to schema recommendations.
+- For sharded Vitess databases, vindex usage for each query pattern: the
+  percentage of traffic using relevant vindexes and the vindex-usage trend
+  over time. Treat missing or declining relevant-vindex usage as an indexing
+  or routing investigation input, not as proof that a new index is required.
 
 The Insights API (`.../branches/{branch}/insights`) returns hourly
 pattern snapshots. Duration aggregates use field names like
@@ -41,6 +47,11 @@ For each expensive or anomalous query, determine:
 - Which deployment SHA produced it?
 - Is the tag cardinality safe?
 - Are tags consistent across frameworks and languages?
+- For Vitess, use Query Insights tag filtering and navigation when available:
+  filter the query table with `tag:key:value`, inspect the Tags view for
+  breakdowns, and drill into query details to see tags attached to individual
+  executions. Built-in query metadata and SQLCommenter tags are both valid
+  attribution sources.
 
 ### Raw query collection
 
