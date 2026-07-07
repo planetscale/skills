@@ -147,6 +147,17 @@ If the database is sharded, review:
 
 Recommend an agent-safe sharding review only as a proposal. Never reshard, change vschema, or alter routing automatically.
 
+### VTTablet and MySQL settings
+
+Review VTTablet and MySQL settings exposed on the Clusters page or through the
+API when diagnosing tablet behavior, MySQL compatibility, resource usage, or
+operational limits. Compare current values against documented defaults and the
+customer's workload evidence before recommending changes.
+
+Treat any VTTablet or MySQL setting change as a behavior-changing operation:
+capture the exact setting, expected effect, restart or rollout implications,
+rollback path, and validation plan. Do not apply these settings automatically.
+
 ## Webhook recommendations for Vitess
 
 Evaluate and recommend webhooks for:
@@ -183,6 +194,7 @@ Return:
 - Recommended webhook subscriptions.
 - Schema recommendation triage table.
 - Deploy safety gaps.
+- VTTablet/MySQL setting gaps, if any.
 - Proposed changes requiring approval.
 
 End with:

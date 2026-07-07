@@ -50,6 +50,7 @@ Always requires explicit approval:
 - Create/update/delete webhook.
 - Enable raw query collection.
 - Enable/disable extensions or settings that require restart.
+- Change Vitess VTTablet or MySQL settings.
 - Create/update/delete role.
 - Reset passwords.
 - Change pg_strict settings.
