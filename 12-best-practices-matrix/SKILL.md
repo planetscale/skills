@@ -102,6 +102,13 @@ Recommend production, staging, and short-lived development branches with safe mi
 
 Recommend when query patterns or growth suggest shard-awareness problems. Do not reshard automatically.
 
+### VTTablet and MySQL settings
+
+Review when workload evidence points to tablet behavior, MySQL compatibility,
+resource usage, or operational-limit issues. Recommend changes only with exact
+setting names, expected effect, rollout or restart implications, rollback path,
+and validation evidence.
+
 ## Postgres-specific recommendations
 
 ### User-defined roles

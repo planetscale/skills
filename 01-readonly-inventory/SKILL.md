@@ -21,6 +21,7 @@ Allowed by default:
 - Read traffic budgets and rules.
 - Read Postgres roles and non-secret role metadata.
 - Read backup schedules and restore metadata.
+- Read Vitess VTTablet and MySQL settings from the Clusters page or API.
 - Read branch schema.
 - Inspect live connection/session metadata with the Connections CLI view.
 - Inspect repository files for frameworks, ORMs, migrations, SQL tagging, and connection config.
@@ -73,6 +74,10 @@ Verified interface notes (recheck against the docs when a command fails):
 - IP restrictions: database-level
   `organizations/{org}/databases/{db}/cidrs`. Branch-level IP-restriction
   paths are not valid.
+- Vitess VTTablet and MySQL settings are configurable from the dashboard
+  Clusters page and available through the API. Treat reads of those settings
+  as inventory; do not change them from the dashboard or API without an
+  approved change set.
 - Schema recommendations: database-level
   `.../databases/{db}/schema-recommendations` (the branch-level path is
   not valid). Requesting `page=2` currently returns 404 even when the
@@ -200,6 +205,7 @@ For Vitess only, record:
 - Schema revert availability.
 - Branch and keyspace topology.
 - Sharding/vschema status.
+- VTTablet and MySQL settings visible from the Clusters page or API.
 - Whether sharded query patterns use relevant vindexes.
 - Backups and restore posture.
 
