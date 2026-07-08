@@ -24,6 +24,9 @@ Recommend for every production database:
 - Use tag filtering/navigation in Vitess Query Insights where available
   (`tag:key:value`, Tags view, and per-execution tag drill-down).
 - Use anomalies as alert and automation inputs.
+- For audits, handoffs, or offline analysis, download Query Insights
+  query-pattern reports with `pscale branch query-patterns download` for
+  Postgres or Vitess and keep the CSV with the assessment evidence.
 
 ### Webhooks
 

@@ -2,9 +2,10 @@
 name: planetscale-pscale-cli-automation
 description: >-
   Use the PlanetScale CLI (pscale) from automated agents with --format json,
-  auth check, pscale sql, and per-command --force. Run before other PlanetScale
-  skills when driving pscale directly. Use when the user asks to automate
-  pscale, run CLI commands headless, or verify pscale auth from an agent.
+  auth check, pscale sql, Query Insights report downloads, and per-command
+  --force. Run before other PlanetScale skills when driving pscale directly. Use
+  when the user asks to automate pscale, run CLI commands headless, or verify
+  pscale auth from an agent.
 ---
 
 # PlanetScale CLI automation
@@ -12,8 +13,9 @@ description: >-
 ## Purpose
 
 Teach agents how to invoke `pscale` non-interactively. This skill covers **CLI
-conventions only**. Operational workflows (inventory, safety review, schema
-recommendations) use the other skills in this repo — start with
+conventions only**, including read-only report downloads. Operational workflows
+(inventory, safety review, schema recommendations) use the other skills in this
+repo — start with
 `../00-safe-orchestrator/SKILL.md` for a full assessment.
 
 ## Two AGENTS.md files (do not confuse them)
@@ -63,6 +65,19 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
+
+## Query Insights report downloads
+
+For an offline or shareable Query Insights query-pattern report, use:
+
+```bash
+pscale branch query-patterns download <database> <branch> --org <org> --output <path>
+```
+
+The command works for Postgres and Vitess branches, creates the report, waits for
+generation, and saves the CSV locally. Prefer an explicit `--output` path in
+automation so downstream steps read a known artifact. Treat the CSV as generated
+report evidence; use MCP/API Insights surfaces for live query-pattern telemetry.
 
 ## MCP vs CLI
 

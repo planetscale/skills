@@ -37,6 +37,13 @@ aggregation window is not explicit in the response, time-share
 percentages within the returned window are more reliable than absolute
 duration totals; prefer them for ranking.
 
+When a workflow needs an offline or shareable report artifact instead of live
+telemetry, download a Query Insights query-pattern report with
+`pscale branch query-patterns download <database> <branch> --org <org> --output <path>`.
+The command works for Postgres and Vitess branches and saves a CSV after report
+generation completes. Use the CSV as report evidence; use the live Insights API
+or MCP surfaces for current investigation loops.
+
 ### Tag coverage
 
 For each expensive or anomalous query, determine:
