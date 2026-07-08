@@ -65,7 +65,10 @@ Verified interface notes (recheck against the docs when a command fails):
   unless the operator explicitly approves that operational action.
 - Live query telemetry: `.../branches/{branch}/insights`. Anomalies:
   `.../branches/{branch}/insights/anomalies`. The `query-patterns` path
-  returns generated report metadata, not live patterns.
+  returns generated report metadata, not live patterns. To create and download
+  a generated query-pattern report for Postgres or Vitess, use the CLI
+  `query-patterns download` subcommand with `--output <path>` and treat the CSV
+  as a report artifact.
 - Traffic budgets: `.../branches/{branch}/traffic/budgets`. The CLI has no
   `pscale traffic-control budget list`; use the API for inventory.
 - Postgres roles: list via `.../branches/{branch}/roles`; fetch a single
