@@ -63,8 +63,14 @@ Verified interface notes (recheck against the docs when a command fails):
   session inventory works for Postgres and Vitess over a reserved
   administrative connection. Do not cancel queries or terminate connections
   unless the operator explicitly approves that operational action.
-- Live query telemetry: `.../branches/{branch}/insights`. Anomalies:
-  `.../branches/{branch}/insights/anomalies`. The `query-patterns` path
+- Query Insights is public API. Live query telemetry:
+  `.../branches/{branch}/insights` (per-pattern statistics; supports
+  `from`/`to`/`period`, `q`, `sort`, `dir`, `tablet_type`, `type`,
+  `fields`, and pagination). Related endpoints under the same branch path:
+  `insights/errors`, `insights/anomalies`, `insights/tags`,
+  `insights/tags/summaries`, `insights/{fingerprint}` (individual
+  executions), `insights/{fingerprint}/summary`, and
+  `insights/{fingerprint}/traffic/budgets`. The `query-patterns` path
   returns generated report metadata, not live patterns.
 - Traffic budgets: `.../branches/{branch}/traffic/budgets`. The CLI has no
   `pscale traffic-control budget list`; use the API for inventory.

@@ -82,8 +82,9 @@ Review Insights for:
   vindex usage changes after index or routing changes.
 - Unusual query volume.
 - Missing SQL comment tags.
-- Tag breakdowns and `tag:key:value` filtering when Query Insights exposes
-  built-in metadata or SQLCommenter tags.
+- Tag breakdowns when built-in metadata or SQLCommenter tags are present:
+  `tag:key:value` filtering in the dashboard, and the `insights/tags` and
+  `insights/tags/summaries` API endpoints for programmatic breakdowns.
 - Deploy correlation data.
 
 Recommend enabling or improving application query tagging so Insights can attribute queries to app, route, controller, action, job, deployment SHA, and feature.

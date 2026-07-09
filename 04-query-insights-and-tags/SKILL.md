@@ -19,23 +19,68 @@ For the selected database and branch, inspect:
 - Top queries by time per execution.
 - Top queries by rows read.
 - Top queries by execution count.
-- For Postgres, top queries by CPU usage when the MCP/API surface exposes
-  CPU-sorted Insights data.
+- For Postgres, top queries by CPU usage (`sort=cpuTime` or
+  `sort=percentCpuTime` on the Insights API).
 - Queries with errors.
 - Notable queries and active anomalies.
 - Query patterns affected by recent deploys.
 - Query patterns attached to schema recommendations.
 - For sharded Vitess databases, vindex usage for each query pattern: the
   percentage of traffic using relevant vindexes and the vindex-usage trend
-  over time. Treat missing or declining relevant-vindex usage as an indexing
-  or routing investigation input, not as proof that a new index is required.
+  over time. The API exposes per-pattern `index_usages` and
+  `routing_index_usages`; get the trend from the dashboard Vindexes tab or
+  by comparing API windows. Treat missing or declining relevant-vindex
+  usage as an indexing or routing investigation input, not as proof that a
+  new index is required.
 
-The Insights API (`.../branches/{branch}/insights`) returns hourly
-pattern snapshots. Duration aggregates use field names like
-`sum_total_duration_millis` — not `total_time_millis`. When the
-aggregation window is not explicit in the response, time-share
-percentages within the returned window are more reliable than absolute
-duration totals; prefer them for ranking.
+### Insights API surface
+
+Query Insights is public API: read-only GET endpoints under
+`organizations/{org}/databases/{db}/branches/{branch}`, authorized by a
+service token or OAuth token with `read_databases`/`read_database`.
+
+- `/insights` — aggregated statistics per query pattern over the requested
+  window. Set the window with `from`/`to` (ISO 8601) or `period` (for
+  example `1h`, `24h`); search SQL patterns with `q`; sort server-side with
+  `sort` and `dir` — sort keys include `count`, `errorCount`, `rowsRead`,
+  `totalTime`, `cpuTime`, `ioTime`, `percentTime`, `percentCpuTime`,
+  `p50Latency`, `p99Latency`, `maxLatency`, `egressBytes`, and the
+  `trafficControlWarnings`/`trafficControlThrottled` family. Filter with
+  `tablet_type` (`primary`, `replica`, `rdonly`) and `type` (`SELECT`,
+  `INSERT`, `UPDATE`, `DELETE`); trim responses with `fields`; paginate
+  with `page`/`per_page`.
+- `/insights/{fingerprint}` — individual collected executions for a
+  pattern (timestamps, duration, rows, username, client address, error
+  message). Available regardless of raw query collection; raw collection
+  adds literal parameter values to these records.
+  `/insights/{fingerprint}/summary` returns the single-pattern aggregate;
+  `/insights/queries/{id}` fetches one execution.
+- `/insights/errors` — error fingerprints with counts and messages (`q`
+  searches the error message; sort by `count`, `lastRun`, `totalTime`, or
+  `timePerQuery`). `/insights/errors/{fingerprint}` lists the failing
+  executions behind one error fingerprint.
+- `/insights/anomalies` and `/insights/anomalies/{id}` — anomaly windows
+  with per-query correlation coefficients identifying which patterns moved
+  with the anomaly.
+- `/insights/tags` — tag keys with observed values (`values_limit`,
+  `literal_values_only`, and `fingerprint`/`keyspace` filters);
+  `/insights/tags/{tag}` for a single key. `/insights/tags/summaries`
+  groups the full statistics schema by one or more tag keys via the `tags`
+  parameter — use it to attribute load to routes, jobs, or features
+  without client-side aggregation.
+- `/insights/{fingerprint}/traffic/budgets` — the Traffic Control budgets
+  and rules that affect a fingerprint (Postgres).
+
+Aggregates cover the requested window. Duration fields use names like
+`sum_total_duration_millis`, with explicit share-of-window percent fields
+(`sum_total_duration_percent`); both totals and percentages are reliable
+for the window requested.
+
+The response schema is shared across engines, but some fields are
+engine-specific: CPU/IO durations and block-cache statistics
+(`sum_cpu_duration_millis`, `blocks_read`, `block_cache_hit_ratio`, …) are
+populated for Postgres; shard queries, keyspaces, `tablet_type`, and
+routing-index (vindex) usage are populated for Vitess.
 
 ### Tag coverage
 
@@ -47,11 +92,12 @@ For each expensive or anomalous query, determine:
 - Which deployment SHA produced it?
 - Is the tag cardinality safe?
 - Are tags consistent across frameworks and languages?
-- For Vitess, use Query Insights tag filtering and navigation when available:
-  filter the query table with `tag:key:value`, inspect the Tags view for
-  breakdowns, and drill into query details to see tags attached to individual
-  executions. Built-in query metadata and SQLCommenter tags are both valid
-  attribution sources.
+- Use the tags API to answer these questions: `/insights/tags` shows which
+  keys and values are present, and `/insights/tags/summaries?tags=...`
+  attributes load per tag value. In the Vitess dashboard, filter the query
+  table with `tag:key:value` and drill into query details to see tags on
+  individual executions. Built-in query metadata and SQLCommenter tags are
+  both valid attribution sources.
 
 ### Raw query collection
 
@@ -67,7 +113,9 @@ is the effective state.
 Report it as a capability state, not a risk posture. Raw query collection
 records literal parameter values per execution, which pattern-level Insights
 data does not provide. It is the mechanism for isolating which specific
-invocation of a pattern is pathological.
+invocation of a pattern is pathological. Execution-level records are
+retrievable from `/insights/{fingerprint}` with or without raw collection;
+raw collection adds the literal parameter values to those records.
 
 When it is disabled, the finding is a capability gap: identify the query
 patterns in this assessment where pattern-level data is insufficient

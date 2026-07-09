@@ -196,9 +196,10 @@ For read queries:
   rows or a zero count and the MCP response warns that RLS may be filtering
   results, treat the result as policy-filtered/unknown until confirmed through
   an approved path; do not conclude the table is empty.
-- When debugging high CPU on Postgres, use MCP Insights data sorted by CPU
-  usage where available. CPU time metrics are Postgres-only in that tool; do
-  not ask for the same CPU-sorted view on Vitess.
+- When debugging high CPU on Postgres, use Insights data sorted by CPU
+  usage (via MCP where available, or `sort=cpuTime` on the Insights API).
+  CPU time metrics are Postgres-only; do not ask for the same CPU-sorted
+  view on Vitess.
 
 For write queries:
 
