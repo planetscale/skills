@@ -182,6 +182,8 @@ For Postgres only, record:
 - Application role usage.
 - Whether apps use the default role.
 - Whether app roles are least-privilege.
+- Whether any roles have the `REPLICATION` attribute, and whether each one is
+  tied to an approved logical replication or CDC workflow.
 - Whether pg_strict is enabled for application roles.
 - Whether PgBouncer is used for appropriate workloads.
 - Whether live connections show blockers, idle-in-transaction sessions, or

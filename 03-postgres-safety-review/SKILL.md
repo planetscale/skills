@@ -40,13 +40,17 @@ Recommend:
 - Separate roles by service, environment, and access pattern.
 - Use read-only roles for analytics, dashboards, reporting, and agents that do not need writes.
 - Use short-lived or purpose-limited roles for automation.
+- Grant the `REPLICATION` attribute only to roles used for approved logical
+  replication or CDC workflows; do not give it to application, analytics, or
+  agent roles as a convenience permission.
 - When Terraform manages PlanetScale Postgres roles, prefer
   `planetscale_postgres_redacted_branch_role` for roles whose password should
   stay out of Terraform state; reset the password through the API or dashboard
   and store it in the team's secret manager.
 - Document credential rotation without application downtime.
 
-Do not create, reset, delete, or rotate roles without approval.
+Do not create, reset, delete, rotate, or add replication capability to roles
+without approval.
 
 ## pg_strict
 

@@ -111,6 +111,11 @@ by Terraform and passwords should stay outside Terraform state, prefer
 `planetscale_postgres_redacted_branch_role` plus a separate password reset and
 secret-manager storage path.
 
+For logical replication or CDC, use a dedicated role with the `REPLICATION`
+attribute. Treat replication capability as a narrow privilege: application,
+analytics, and agent roles should not carry it unless that is their approved
+replication purpose.
+
 ### pg_strict
 
 Recommend for application roles after evaluation, especially to block accidental full-table update/delete mistakes.
