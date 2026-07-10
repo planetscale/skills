@@ -13,7 +13,8 @@ Build an evidence-backed inventory of a PlanetScale database without making chan
 
 Allowed by default:
 
-- List organizations, databases, branches, keyspaces, regions, and sizes.
+- List organizations, databases, branches, keyspaces, regions, branch sizes,
+  and Vitess read-only region cluster sizes and replica counts.
 - Read branch metadata.
 - Read webhook configuration.
 - Read schema recommendations.
@@ -64,8 +65,12 @@ Verified interface notes (recheck against the docs when a command fails):
   administrative connection. Do not cancel queries or terminate connections
   unless the operator explicitly approves that operational action.
 - Live query telemetry: `.../branches/{branch}/insights`. Anomalies:
-  `.../branches/{branch}/insights/anomalies`. The `query-patterns` path
-  returns generated report metadata, not live patterns.
+  `.../branches/{branch}/insights/anomalies`. The public Query Insights API
+  also exposes query statistics, per-fingerprint statistics and summaries,
+  query errors, anomalies, query tags, tag groupings, and Postgres traffic
+  budgets affecting a query fingerprint. Service tokens need `read_database`
+  permission for these endpoints. The `query-patterns` path returns generated
+  report metadata, not live patterns.
 - Traffic budgets: `.../branches/{branch}/traffic/budgets`. The CLI has no
   `pscale traffic-control budget list`; use the API for inventory.
 - Postgres roles: list via `.../branches/{branch}/roles`; fetch a single
@@ -105,7 +110,8 @@ Record:
 - Region and cloud provider.
 - Production/development branch status.
 - Branch protection and safe workflow state.
-- Size and cluster shape.
+- Size and cluster shape, including Vitess read-only region cluster sizes and
+  replica counts per keyspace when configured.
 
 ### Branches and schema workflow
 

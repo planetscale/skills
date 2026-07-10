@@ -70,6 +70,20 @@ Recommend a branch topology:
 
 Do not create branches without approval.
 
+### Read-only regions and cluster shape
+
+Check:
+
+- Primary region and production branch size.
+- Read-only regions configured for each keyspace.
+- Cluster size and replica count for each Vitess read-only region.
+- Whether application read traffic, analytics, agents, or regional workloads are
+  expected to use read-only regions.
+
+Recommend documenting the intended read topology before changing it. Read-only
+region cluster size and replica count changes are behavior-changing capacity
+changes requiring approval; do not apply them automatically.
+
 ### Query Insights
 
 Review Insights for:
