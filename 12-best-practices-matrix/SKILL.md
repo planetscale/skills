@@ -16,6 +16,10 @@ Map database findings to recommended PlanetScale features. Use this to ensure th
 Recommend for every production database:
 
 - Review slow, expensive, high-frequency, and erroring query patterns.
+- Use public Query Insights API endpoints when automation needs dashboard-backed
+  query statistics, per-fingerprint summaries, query errors, anomalies, query
+  tags or tag groupings, or Postgres traffic budgets affecting a fingerprint.
+  Service tokens need `read_database` permission.
 - For Postgres, use CPU-sorted Insights data when diagnosing CPU pressure.
 - For sharded Vitess, review vindex usage per query pattern and the usage
   trend after index or routing changes.
@@ -101,6 +105,14 @@ Recommend production, staging, and short-lived development branches with safe mi
 ### Sharding/keyspace review
 
 Recommend when query patterns or growth suggest shard-awareness problems. Do not reshard automatically.
+
+### Read-only regions
+
+For Vitess databases with regional read traffic, analytics, agents, or other
+replica-suitable workloads, review read-only regions per keyspace, including
+cluster size and replica count. Recommend topology changes only with evidence
+from workload placement, query volume, latency, or availability requirements;
+do not apply read-only region size or replica changes automatically.
 
 ## Postgres-specific recommendations
 

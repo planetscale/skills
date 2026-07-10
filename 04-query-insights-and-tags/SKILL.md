@@ -30,12 +30,19 @@ For the selected database and branch, inspect:
   over time. Treat missing or declining relevant-vindex usage as an indexing
   or routing investigation input, not as proof that a new index is required.
 
-The Insights API (`.../branches/{branch}/insights`) returns hourly
-pattern snapshots. Duration aggregates use field names like
-`sum_total_duration_millis` — not `total_time_millis`. When the
-aggregation window is not explicit in the response, time-share
-percentages within the returned window are more reliable than absolute
-duration totals; prefer them for ranking.
+PlanetScale exposes Query Insights data through public API endpoints.
+Use them for the dashboard-backed telemetry surfaces: query statistics,
+per-fingerprint statistics and summaries, query errors, anomalies, query
+tags and tag groupings, and Postgres traffic budgets affecting a query
+fingerprint. Service tokens need `read_database` permission for these
+endpoints. Verify exact paths in the OpenAPI reference before calling.
+
+The branch Insights endpoint (`.../branches/{branch}/insights`) returns
+hourly pattern snapshots. Duration aggregates use field names like
+`sum_total_duration_millis` — not `total_time_millis`. When the aggregation
+window is not explicit in the response, time-share percentages within the
+returned window are more reliable than absolute duration totals; prefer them
+for ranking.
 
 ### Tag coverage
 

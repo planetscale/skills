@@ -17,6 +17,8 @@ Before recommending rules, inspect:
 
 - Current budgets and rules.
 - Insights query patterns.
+- For candidate Postgres fingerprints, any Query Insights API data showing
+  which traffic budgets already affect the fingerprint.
 - Current query tags.
 - Application routes and jobs.
 - Known critical paths.
@@ -157,6 +159,8 @@ For each proposed budget:
 - Proposed tags or fingerprint.
 - Limit rationale.
 - Queries seen in Insights that justify it.
+- Existing budgets already affecting the target fingerprint, if Query Insights
+  exposes that data.
 - Safety risk.
 - Test/observe plan.
 - Rollback plan.
