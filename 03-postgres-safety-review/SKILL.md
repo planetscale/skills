@@ -69,8 +69,8 @@ Review:
 
 - Slow queries.
 - High rows-read queries.
-- High CPU query patterns when MCP or API Insights exposes CPU-sorted Postgres
-  data.
+- High CPU query patterns (`sort=cpuTime` or `sort=percentCpuTime` on the
+  Insights API).
 - High-frequency queries.
 - Erroring queries.
 - Active anomalies.

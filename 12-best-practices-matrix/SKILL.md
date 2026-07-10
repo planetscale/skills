@@ -16,13 +16,16 @@ Map database findings to recommended PlanetScale features. Use this to ensure th
 Recommend for every production database:
 
 - Review slow, expensive, high-frequency, and erroring query patterns.
-- For Postgres, use CPU-sorted Insights data when diagnosing CPU pressure.
+- For Postgres, sort Insights by CPU (`sort=cpuTime` on the Insights API)
+  when diagnosing CPU pressure.
 - For sharded Vitess, review vindex usage per query pattern and the usage
   trend after index or routing changes.
 - Correlate regressions with deploys.
 - Use tags/comments to map queries back to code.
-- Use tag filtering/navigation in Vitess Query Insights where available
-  (`tag:key:value`, Tags view, and per-execution tag drill-down).
+- Use tag filtering/navigation in Query Insights: the tags API
+  (`insights/tags`, `insights/tags/summaries`) on both engines, plus
+  `tag:key:value` filtering and per-execution tag drill-down in the Vitess
+  dashboard.
 - Use anomalies as alert and automation inputs.
 
 ### Webhooks
