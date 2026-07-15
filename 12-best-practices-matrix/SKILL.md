@@ -128,6 +128,21 @@ Recommend verifying retention and restore drill coverage.
 If Terraform is the customer's source of truth, recommend managing backup
 policies there so backup posture changes are reviewed as infrastructure code.
 
+### Migration assessment
+
+Recommend the public PlanetScale Migration Assessment Tool for Postgres import
+or migration planning when a PlanetScale Discovery Tool report is available.
+Use it to surface compatibility blockers, migration complexity, and recommended
+next steps before selecting the migration path; treat the report as customer
+data and require explicit approval before generating or uploading one.
+
+### Metal storage capacity
+
+For Postgres Metal databases, recommend reviewing instance family and cluster
+size against measured CPU, memory, and storage growth. When local NVMe capacity
+is the binding constraint, include storage-dense `i8ge` Metal sizes as a
+capacity-planning option.
+
 ### PgBouncer and connection pooling
 
 Recommend where connection churn or serverless/edge behavior creates pressure, subject to transaction-pooling limitations.
