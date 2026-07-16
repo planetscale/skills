@@ -18,6 +18,10 @@ Recommend for every production database:
 - Review slow, expensive, high-frequency, and erroring query patterns.
 - For Postgres, sort Insights by CPU (`sort=cpuTime` on the Insights API)
   when diagnosing CPU pressure.
+- Use the Insights query detail graph tab or clickable query-table sparklines
+  to inspect the time series for the metric that explains the finding, such as
+  total time, CPU or I/O time, rows read or returned, block cache hit ratio, or
+  bytes returned.
 - For sharded Vitess, review vindex usage per query pattern and the usage
   trend after index or routing changes.
 - Correlate regressions with deploys.

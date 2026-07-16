@@ -78,6 +78,9 @@ Review Insights for:
 - Queries reading too many rows.
 - Erroring queries.
 - Queries with poor index usage.
+- Metric trends on query detail pages, using the Insights graph tab or
+  query-table sparklines for the metric under investigation: total time, rows
+  read or returned, bytes returned, and other available metrics.
 - For sharded databases, whether query patterns use relevant vindexes and how
   vindex usage changes after index or routing changes.
 - Unusual query volume.

@@ -71,6 +71,9 @@ Review:
 - High rows-read queries.
 - High CPU query patterns (`sort=cpuTime` or `sort=percentCpuTime` on the
   Insights API).
+- Metric trends on query detail pages, using the Insights graph tab or
+  query-table sparklines for the metric under investigation: CPU or I/O time,
+  rows read or returned, block cache hit ratio, bytes returned, and total time.
 - High-frequency queries.
 - Erroring queries.
 - Active anomalies.
