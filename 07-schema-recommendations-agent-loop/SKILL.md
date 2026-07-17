@@ -55,9 +55,12 @@ Recommended path:
 2. Apply the schema change to that branch only after approval.
 3. Open a deploy request only after approval.
 4. Use deploy request review to inspect schema, shard impact, data-loss warnings, lint errors, and conflicts.
-5. Use normal safe migration path unless instant deployment is explicitly justified.
-6. Deploy only after approval.
-7. Monitor Insights and anomaly state after deployment.
+5. If the schema diff changes after approval, require fresh review. PlanetScale
+   dismisses existing approvals, comments with the changes since approval, and
+   removes queued deploy requests from the queue.
+6. Use normal safe migration path unless instant deployment is explicitly justified.
+7. Deploy only after approval.
+8. Monitor Insights and anomaly state after deployment.
 
 Default output before approval: issue or PR with migration proposal, not a live deploy request.
 

@@ -67,7 +67,10 @@ Where a PR + deploy-request workflow exists, the default deliverable for a
 schema recommendation is the complete reviewable unit: development branch
 with the DDL applied, PR with evidence (fingerprint, metrics, expected
 effect), and an open deploy request. The human action is the merge/deploy
-decision, not shepherding the proposal into existence.
+decision, not shepherding the proposal into existence. If the schema diff is
+edited after that review, PlanetScale dismisses deploy request approvals and
+removes the request from the queue, so the loop must surface the new diff for
+fresh review instead of relying on the old approval.
 
 Not allowed by default (the review-gate actions and non-reviewable mutations):
 
@@ -155,7 +158,10 @@ for the same fingerprint/recommendation ID).
   bound (e.g. "drop only indexes with zero reads in 30 days, confirmed
   via Insights at run time"). Where the org requires PR approval before
   deploy, an approved PR satisfies the review gate and the authorization
-  covers only the mechanical deploy.
+  covers only the mechanical deploy. Before deploying or queueing, confirm
+  the deploy request still has approval for the current schema diff; a
+  planetscale-bot "changes since approval" comment or a missing queue position
+  means the request needs fresh review.
 - **Branch hygiene** (weekly): delete development branches older than the
   authorized age bound with no open deploy request; never touch
   production or protected branches. 
