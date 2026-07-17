@@ -77,6 +77,9 @@ Recommend for production branches and staging branches that accept deploy reques
 ### Deploy requests
 
 Recommend for schema changes into protected branches.
+Treat schema edits after approval as a new review event: PlanetScale dismisses
+existing deploy request approvals and removes queued requests when the schema
+diff changes.
 
 ### Force cutover discipline
 
@@ -88,6 +91,8 @@ aggressive cutover as the database default.
 ### Admin approval
 
 Recommend for production deploy requests in multi-admin organizations.
+When assessing approval posture, verify approvals apply to the current schema
+diff, not an earlier diff that has since been invalidated.
 
 ### Gated deployments
 

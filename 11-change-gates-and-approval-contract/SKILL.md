@@ -36,7 +36,10 @@ Allowed by default; requires approval only when the operator has demanded strict
 The last three are proposals inside an existing review system: nothing
 reaches production until a human merges or deploys. The gate belongs on
 the merge/deploy action (Class C/D), not on proposal creation. An agent
-that stops to ask permission to open a PR is misclassifying.
+that stops to ask permission to open a PR is misclassifying. For Vitess
+deploy requests, any schema update after approval automatically dismisses
+existing approvals and removes the deploy request from the deploy queue; treat
+that as a required re-review, not as a still-approved change.
 
 ### Class C: behavior-changing
 
@@ -96,6 +99,9 @@ A valid approval must include:
 - Target organization/database/branch.
 - Whether production is affected.
 - Permission to execute the exact action.
+- For a Vitess deploy request, approval of the current schema diff. If the
+  schema diff changes after approval, PlanetScale dismisses the approval and
+  the deploy request must be reviewed and queued again.
 
 Invalid approvals:
 

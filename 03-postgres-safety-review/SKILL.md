@@ -33,6 +33,9 @@ Do not create branches, run migrations, or restore backups without approval.
 ## Roles and least privilege
 
 Check whether the application connects with the default role. Flag this as a safety gap.
+For targeted role inventory, `pscale role list <database> <branch> --name
+<substring> --status <active|renewable|expired>` can narrow Postgres roles by
+name substring and credential status without changing roles.
 
 Recommend:
 

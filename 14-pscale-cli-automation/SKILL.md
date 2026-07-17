@@ -64,6 +64,24 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Filtered credential inventory
+
+For read-only credential sweeps, prefer server-side CLI filters over fetching
+every credential and filtering locally:
+
+```bash
+# Postgres roles
+pscale role list <database> <branch> --org <org> --format json --name <substring> --status active
+
+# Vitess passwords
+pscale password list <database> <branch> --org <org> --format json --name <substring> --status active
+```
+
+`--name` uses substring matching. `--status` narrows results to active,
+renewable, or expired credentials. Use these filters for targeted rotation,
+expiry, and least-privilege audits, but do not create, reset, delete, or rotate
+credentials without the approval required by the operational skill in use.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide

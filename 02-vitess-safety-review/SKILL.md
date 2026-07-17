@@ -31,6 +31,9 @@ Check:
 - Whether deploy requests are used for schema changes.
 - Whether administrator approval is required.
 - Whether deploy requests are reviewed for data loss, conflicts, lint errors, foreign key problems, charset issues, and shard impact.
+- Whether any approved deploy request has new schema changes since approval;
+  PlanetScale automatically dismisses approvals and removes queued deploy
+  requests when the schema diff changes.
 - Whether teams use gated deployments for cutover control.
 - Whether “deploy instantly” is used and whether the team understands it removes the gated-deployment/revert shape.
 - Whether cutover is regularly delayed by long-running transactions.
@@ -40,6 +43,8 @@ Recommend:
 
 - Require deploy requests for production schema changes.
 - Enable administrator approval for production deploy requests when there is more than one administrator.
+- Treat a bot comment about changes since approval as a fresh review gate:
+  re-read the diff, collect approval again, and queue the deploy request again.
 - Prefer normal safe deployments over instant deployments unless the migration is known to be instant-safe and the rollback story is acceptable.
 - Use gated deployment when cutover timing matters.
 - Treat “force cutover now” as an operator-controlled action for delayed

@@ -75,7 +75,12 @@ Verified interface notes (recheck against the docs when a command fails):
 - Traffic budgets: `.../branches/{branch}/traffic/budgets`. The CLI has no
   `pscale traffic-control budget list`; use the API for inventory.
 - Postgres roles: list via `.../branches/{branch}/roles`; fetch a single
-  role by ID, not name (`pscale role get <db> <branch> <role-id>`).
+  role by ID, not name (`pscale role get <db> <branch> <role-id>`). For
+  targeted CLI inventory, `pscale role list <db> <branch> --name <substring>
+  --status <active|renewable|expired>` filters Postgres roles server-side.
+- Vitess passwords: `pscale password list <db> <branch> --name <substring>
+  --status <active|renewable|expired>` filters credential metadata
+  server-side for focused rotation or expiry audits.
 - IP restrictions: database-level
   `organizations/{org}/databases/{db}/cidrs`. Branch-level IP-restriction
   paths are not valid.
