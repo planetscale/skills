@@ -53,7 +53,7 @@ Always requires explicit approval:
 - Create/update/delete role.
 - Reset passwords.
 - Change pg_strict settings.
-- Change connection pooling behavior.
+- Create/update/delete dedicated PgBouncers or change connection pooling behavior.
 - Change IP restrictions, PrivateLink, PSC, or public access.
 - Change backup schedule or retention.
 - Create restore branch.

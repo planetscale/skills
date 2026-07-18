@@ -26,7 +26,7 @@ Allowed by default:
 - Inspect repository files for frameworks, ORMs, migrations, SQL tagging, and connection config.
 - Inspect Terraform or other infrastructure-as-code definitions for
   PlanetScale roles, backups, backup policies, Postgres parameters, and
-  supported extensions.
+  supported extensions, and dedicated Postgres PgBouncers.
 
 Not allowed without explicit approval:
 
@@ -190,6 +190,8 @@ For Postgres only, record:
 - Whether app roles are least-privilege.
 - Whether pg_strict is enabled for application roles.
 - Whether PgBouncer is used for appropriate workloads.
+- Whether dedicated PgBouncers are managed in Terraform, including size,
+  target, replica count, and parameter overrides when present.
 - Whether live connections show blockers, idle-in-transaction sessions, or
   connection saturation during an active incident.
 - Whether private connectivity and IP restrictions are configured.

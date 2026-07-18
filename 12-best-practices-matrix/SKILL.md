@@ -130,7 +130,11 @@ policies there so backup posture changes are reviewed as infrastructure code.
 
 ### PgBouncer and connection pooling
 
-Recommend where connection churn or serverless/edge behavior creates pressure, subject to transaction-pooling limitations.
+Recommend where connection churn or serverless/edge behavior creates pressure,
+subject to transaction-pooling limitations. If Terraform is the customer's
+source of truth, recommend `planetscale_postgres_bouncer` for dedicated
+PgBouncers so size, target, replica count, and parameter overrides are reviewed
+and drift-detected with the rest of the infrastructure code.
 
 ### Private connectivity and IP restrictions
 

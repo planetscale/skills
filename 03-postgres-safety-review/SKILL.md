@@ -175,6 +175,9 @@ Check:
 - Whether app uses direct port 5432 or PgBouncer port 6432.
 - Whether connection pool size matches runtime and deployment model.
 - Whether serverless or edge environments can create connection storms.
+- Whether dedicated PgBouncers are dashboard-managed or Terraform-managed,
+  and whether the configured size, target, replica count, and parameter
+  overrides match the workload.
 - Live connection/session pressure through `pscale branch connections top`,
   including blockers and idle-in-transaction sessions when diagnosing active
   incidents.
@@ -186,6 +189,10 @@ Recommend:
 
 - Use PgBouncer for high-churn application connections where transaction-pooling limitations are acceptable.
 - Use direct connections for session-dependent features that PgBouncer transaction mode cannot support.
+- If Terraform is the customer's source of truth, manage dedicated Postgres
+  PgBouncers with `planetscale_postgres_bouncer` so size, target (`primary`,
+  `replica`, or `replica_az_affinity`), replica count, and parameter overrides
+  are reviewed as infrastructure code and drift is detected.
 - Use AWS PrivateLink or GCP Private Service Connect for private network requirements.
 - Use IP restrictions to reduce public exposure.
 - Be explicit that private connectivity does not automatically block public access; IP restrictions or equivalent controls are required for private-only posture.
