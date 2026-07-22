@@ -141,8 +141,10 @@ Recommend for customers requiring private network posture or reduced public expo
 Recommend only when use case is clear and restart/activation impact is accepted.
 Include `auto_explain` when automatic plan logging for slow queries would
 materially improve diagnosis and the resulting log volume is acceptable.
-If Terraform manages Postgres branch parameters or supported extensions, keep
-that source of truth aligned with approved dashboard/API changes.
+Use `pscale branch parameters list` for read-only evidence about current
+parameter values and restart requirements when CLI access is available. If
+Terraform manages Postgres branch parameters or supported extensions, keep that
+source of truth aligned with approved CLI, dashboard, or API changes.
 
 ### Live connections
 

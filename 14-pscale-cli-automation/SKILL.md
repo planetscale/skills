@@ -64,6 +64,43 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Postgres branch parameter automation
+
+Postgres cluster configuration parameters are available through the branch CLI:
+
+```bash
+pscale branch parameters list <database> <branch> --org <org> --format json
+pscale branch parameters list <database> <branch> --org <org> --namespace pgconf --format json
+```
+
+Use `parameters list` for read-only inventory. It returns each parameter's
+current value, default, allowed range, and whether changing it requires a
+restart. The `--namespace` filter can narrow large parameter sets, for example
+`pgconf`, `pgbouncer`, or `patroni`.
+
+Changing parameters is an operational action and requires explicit operator
+approval:
+
+```bash
+pscale branch resize <database> <branch> \
+  --org <org> \
+  --parameters pgconf.max_connections=200 \
+  --format json
+```
+
+`--parameters` is repeatable and can be combined with `--cluster-size` and
+`--replicas` in the same resize/change request. Use `--wait` only when the
+operator wants the agent or script to block until completion. Inspect or control
+the queued change with:
+
+```bash
+pscale branch resize status <database> <branch> --org <org> --format json
+pscale branch resize cancel <database> <branch> --org <org> --format json
+```
+
+Do not queue, cancel, or wait on parameter changes without approval, and surface
+the restart requirement from `parameters list` before proposing any change.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide
