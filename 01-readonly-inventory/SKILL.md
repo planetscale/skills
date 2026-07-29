@@ -63,6 +63,11 @@ Verified interface notes (recheck against the docs when a command fails):
   session inventory works for Postgres and Vitess over a reserved
   administrative connection. Do not cancel queries or terminate connections
   unless the operator explicitly approves that operational action.
+- `pscale branch parameters list <database> <branch> --org <org> --format json`
+  — read Postgres branch parameter values, defaults, allowed ranges, and restart
+  requirements. Use `--namespace` (for example `pgconf`, `pgbouncer`, or
+  `patroni`) to narrow the result set. Do not change parameters during
+  inventory.
 - Query Insights is public API. Live query telemetry:
   `.../branches/{branch}/insights` (per-pattern statistics; supports
   `from`/`to`/`period`, `q`, `sort`, `dir`, `tablet_type`, `type`,
@@ -189,6 +194,9 @@ For Postgres only, record:
 - Whether apps use the default role.
 - Whether app roles are least-privilege.
 - Whether pg_strict is enabled for application roles.
+- Current Postgres branch parameters that materially affect safety,
+  observability, or pooling, including whether proposed changes require a
+  restart.
 - Whether PgBouncer is used for appropriate workloads.
 - Whether live connections show blockers, idle-in-transaction sessions, or
   connection saturation during an active incident.

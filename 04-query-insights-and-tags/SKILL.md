@@ -103,12 +103,13 @@ For each expensive or anomalous query, determine:
 
 Check whether raw query / complete query collection is enabled. On
 Postgres the effective state is the `pginsights.raw_queries` cluster
-parameter (per branch, dashboard Extensions tab, default `false`); the
-database API object's `insights_raw_queries` field is a separate surface.
-When the two differ, report the cluster parameter as the effective state
-and do not describe the difference as an inconsistency. On Vitess there
-is no cluster parameter; the database API's `insights_raw_queries` field
-is the effective state.
+parameter (per branch, default `false`); inspect branch parameters with
+`pscale branch parameters list <database> <branch> --org <org> --format json`
+or in the dashboard Extensions tab. The database API object's
+`insights_raw_queries` field is a separate surface. When the two differ, report
+the cluster parameter as the effective state and do not describe the difference
+as an inconsistency. On Vitess there is no cluster parameter; the database API's
+`insights_raw_queries` field is the effective state.
 
 Report it as a capability state, not a risk posture. Raw query collection
 records literal parameter values per execution, which pattern-level Insights

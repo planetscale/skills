@@ -78,11 +78,12 @@ Review:
 - Whether literal/raw query collection is enabled.
 
 Raw query collection is governed by the `pginsights.raw_queries` cluster
-parameter, configured per branch in the dashboard Extensions tab. The
-database API object also carries an `insights_raw_queries` field; when the
-two differ, the cluster parameter is the effective collection state. Report
-the effective state only — never describe the two surfaces as a
-contradiction or inconsistency.
+parameter, configured per branch. Inspect branch parameters with
+`pscale branch parameters list <database> <branch> --org <org> --format json`
+or in the dashboard Extensions tab. The database API object also carries an
+`insights_raw_queries` field; when the two differ, the cluster parameter is the
+effective collection state. Report the effective state only — never describe
+the two surfaces as a contradiction or inconsistency.
 
 Recommend:
 
@@ -210,10 +211,17 @@ Recommend extensions only when use case is clear. `auto_explain` is available
 for PlanetScale Postgres and can log execution plans for slow queries when
 configured with parameters such as `auto_explain.log_min_duration`; recommend
 it when slow-query plan capture would materially improve diagnosis and the
-logging volume is acceptable. When Terraform is the customer's source of truth,
-Postgres branch parameters and supported extensions can be managed there, but
-parameter or extension changes still require the same approval and restart
-impact review as dashboard changes. Some extension activation paths require
+logging volume is acceptable. Branch parameter changes can be queued through
+`pscale branch resize --parameters <namespace.name=value>`; the
+`--parameters` flag is repeatable and can be combined with size or replica
+changes in the same request. Use
+`pscale branch resize status <database> <branch> --org <org> --format json` to
+inspect a queued change and
+`pscale branch resize cancel <database> <branch> --org <org> --format json` only
+with approval. When Terraform is the customer's source of truth, Postgres branch
+parameters and supported extensions can be managed there, but parameter or
+extension changes still require the same approval and restart impact review as
+CLI, dashboard, or API changes. Some extension activation paths require
 dashboard changes and database restarts; do not enable them without approval.
 
 ## Webhook recommendations for Postgres
