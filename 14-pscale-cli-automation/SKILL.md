@@ -16,6 +16,9 @@ conventions only**. Operational workflows (inventory, safety review, schema
 recommendations) use the other skills in this repo — start with
 `../00-safe-orchestrator/SKILL.md` for a full assessment.
 
+Use `pscale` **0.292.0 or later** for the automation features below:
+`pscale sql`, `pscale agent-guide`, and structured JSON auth onboarding.
+
 ## Two AGENTS.md files (do not confuse them)
 
 | Document | Where | Purpose |
@@ -46,6 +49,9 @@ browser; use `pscale auth login --format json`.
 - Use **`pscale sql`**, not `pscale shell` (shell requires a TTY).
 - Default SQL role is **reader**; pass `--role admin` (or writer/readwriter) for
   writes. Match `pscale shell` semantics for `--role` and `--replica`.
+- `pscale sql` blocks destructive statements (`DELETE`, `DROP`, `TRUNCATE`) by
+  default. Re-run with `--force` only after explicit approval of the exact
+  statement and target.
 - **`--force`** is per subcommand only (e.g. `database delete … --force`, `pscale
   sql … --force`). There is no global `--force` or `PSCALE_FORCE`.
 - **`--format json` alone never skips confirmations** — add `--force` on the
