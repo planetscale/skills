@@ -112,6 +112,9 @@ Record:
 - Production/development branch status.
 - Branch protection and safe workflow state.
 - Size and cluster shape.
+  For Postgres Metal, note the instance family as part of the shape; storage-dense
+  `i8ge` sizes are available for workloads where local NVMe capacity is a
+  primary scaling constraint.
 
 ### Branches and schema workflow
 
@@ -131,6 +134,11 @@ For Postgres, record:
 - Whether schema changes are managed manually, through migrations, or through an ORM.
 - Whether a separate branch is used for migration testing.
 - Whether the team expects Vitess-style deploy requests; if yes, flag that Postgres branches do not use deploy requests in the same way.
+- For import or migration planning, whether a PlanetScale Discovery Tool report
+  exists and whether it has been reviewed through the public Migration Assessment
+  Tool for compatibility blockers, migration complexity, and next steps. Do not
+  upload or generate reports unless the operator explicitly asks for migration
+  assessment work.
 
 ### Observability
 

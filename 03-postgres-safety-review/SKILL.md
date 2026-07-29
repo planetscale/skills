@@ -25,6 +25,12 @@ Recommend:
 
 - Create or use a non-production branch for migration testing.
 - Run migration validation and application tests against that branch.
+- For imports or larger Postgres migrations, use the PlanetScale Discovery Tool
+  report with the public PlanetScale Migration Assessment Tool to identify
+  compatibility blockers, migration complexity, and recommended next steps
+  before choosing the migration path. The assessment runs client-side; still
+  treat the report as customer data and do not generate or upload one without
+  approval.
 - Treat production migration application as an explicit human-approved deployment step.
 - Use PITR/backup restore branches for incident recovery, not as an automatic rollback mechanism.
 
@@ -167,6 +173,16 @@ Recommend:
 - Document the exact application cutover procedure after restore.
 
 Do not restore or create emergency backups without approval. Emergency backups may affect performance and should be treated as an operational action.
+
+## Metal sizing and storage capacity
+
+For Postgres Metal databases, review whether the current instance family and
+cluster size match the workload's CPU, memory, and storage growth. When local
+NVMe capacity is the primary constraint, consider storage-dense `i8ge` Metal
+sizes before treating storage pressure as only a cleanup or backup-retention
+problem.
+
+Do not resize a database or change replica topology without approval.
 
 ## Connections, pooling, and network safety
 
