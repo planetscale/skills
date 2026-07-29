@@ -21,6 +21,12 @@ For the selected database and branch, inspect:
 - Top queries by execution count.
 - For Postgres, top queries by CPU usage (`sort=cpuTime` or
   `sort=percentCpuTime` on the Insights API).
+- Metric trends for the query patterns under review. In the dashboard, use the
+  query detail graph tab to plot the relevant metric over the selected time
+  range — total, CPU, and I/O time, rows read or returned, block cache hit
+  ratio, bytes returned, and other available metrics. Click query-table
+  sparklines to drill into the corresponding pattern with that metric already
+  selected.
 - Queries with errors.
 - Notable queries and active anomalies.
 - Query patterns affected by recent deploys.
