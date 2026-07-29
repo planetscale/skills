@@ -84,6 +84,9 @@ Review Insights for:
 - Queries with poor index usage.
 - For sharded databases, whether query patterns use relevant vindexes and how
   vindex usage changes after index or routing changes.
+- Queries with high bytes received, bytes received per query, or max bytes
+  received per query, which can indicate clients sending unusually large
+  statements or parameter payloads.
 - Unusual query volume.
 - Missing SQL comment tags.
 - Tag breakdowns when built-in metadata or SQLCommenter tags are present:

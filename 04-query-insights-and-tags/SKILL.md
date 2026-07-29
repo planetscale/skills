@@ -32,6 +32,12 @@ For the selected database and branch, inspect:
   by comparing API windows. Treat missing or declining relevant-vindex
   usage as an indexing or routing investigation input, not as proof that a
   new index is required.
+- For Vitess databases, request and response size metrics: bytes returned,
+  bytes returned per query, max bytes returned per query, bytes received,
+  bytes received per query, and max bytes received per query. Use high
+  inbound/request bytes to identify clients sending unusually large
+  statements or parameter payloads; use high outbound/response bytes to
+  identify result sets or query patterns driving network egress.
 
 ### Insights API surface
 
@@ -80,7 +86,10 @@ The response schema is shared across engines, but some fields are
 engine-specific: CPU/IO durations and block-cache statistics
 (`sum_cpu_duration_millis`, `blocks_read`, `block_cache_hit_ratio`, …) are
 populated for Postgres; shard queries, keyspaces, `tablet_type`, and
-routing-index (vindex) usage are populated for Vitess.
+routing-index (vindex) usage are populated for Vitess. Vitess Insights also
+surfaces request-size columns for bytes received from clients, including
+average and max bytes received per query; these pair with bytes returned
+columns to show both directions of query network traffic.
 
 ### Tag coverage
 

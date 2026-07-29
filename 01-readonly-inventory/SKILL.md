@@ -145,6 +145,9 @@ Record:
 - Query patterns with high latency, high rows read, high error rate, or high execution count.
 - Postgres CPU-heavy query patterns and Vitess vindex-usage data when exposed
   by the Insights interface in use.
+- For Vitess, query patterns with high bytes received, bytes received per
+  query, or max bytes received per query, especially when large client
+  statements or parameter payloads may explain ingress traffic.
 - Whether application deploy identifiers are visible in comments or tags.
 
 ### Recommendations

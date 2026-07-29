@@ -20,6 +20,9 @@ Recommend for every production database:
   when diagnosing CPU pressure.
 - For sharded Vitess, review vindex usage per query pattern and the usage
   trend after index or routing changes.
+- For Vitess, review request and response size metrics, including bytes
+  received and max bytes received per query, to find clients sending large
+  statements or parameter payloads.
 - Correlate regressions with deploys.
 - Use tags/comments to map queries back to code.
 - Use tag filtering/navigation in Query Insights: the tags API
