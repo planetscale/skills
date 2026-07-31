@@ -16,6 +16,8 @@ Prevent accidental or autonomous changes that can affect availability, safety, s
 Allowed without approval:
 
 - List databases, branches, keyspaces, webhooks, backups, roles, traffic budgets, schema recommendations, deploy requests, and Insights data.
+- Run read-only `pscale insights` diagnostics and read-only `pscale inspect`
+  health checks.
 - Inspect repository code.
 - Read schema metadata.
 - Read non-sensitive database metadata.

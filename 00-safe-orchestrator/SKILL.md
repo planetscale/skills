@@ -65,7 +65,8 @@ Master assessment progress:
 
 1. PlanetScale MCP insights-only server — autonomous analysis without query execution
 2. Full PlanetScale MCP with read-only scope — schema or limited read queries
-3. `pscale` CLI and `pscale api` — structured inventory and exact API state
+3. `pscale` CLI and `pscale api` — structured inventory, read-only
+   `pscale insights`/`pscale inspect` diagnostics, and exact API state
 4. Repository inspection — codebase analysis and instrumentation recommendations
 5. Direct SQL — read-only introspection only when operator grants database read access
 

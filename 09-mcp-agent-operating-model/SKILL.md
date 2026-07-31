@@ -17,6 +17,11 @@ Use the full PlanetScale MCP server only when the task explicitly requires datab
 
 The full MCP server has query execution tools. Treat write query tools as disabled unless the operator explicitly approves a specific non-production action or a carefully reviewed production action.
 
+When MCP is unavailable but CLI access exists, `pscale insights` provides
+read-only query, error, anomaly, and recommendation diagnostics, and
+`pscale inspect` provides live read-only database-health checks. Treat their
+output as evidence for the same proposal workflows, not as permission to mutate.
+
 ## AGENTS.md guidance
 
 Two different documents both named `AGENTS.md` serve different purposes:
@@ -50,6 +55,7 @@ Allowed by default:
 
 - Read Insights.
 - Read schema recommendations.
+- Run read-only `pscale insights` and `pscale inspect` diagnostics.
 - Read schema metadata.
 - Read existing webhooks and Traffic Control configuration.
 - Read branch metadata.

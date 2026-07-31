@@ -81,6 +81,9 @@ Review Insights for:
 - Slow queries.
 - Queries reading too many rows.
 - Erroring queries.
+- If CLI access is available, gather the same read-only evidence with
+  `pscale insights queries`, `pscale insights errors`, and
+  `pscale insights anomalies`.
 - Queries with poor index usage.
 - For sharded databases, whether query patterns use relevant vindexes and how
   vindex usage changes after index or routing changes.
@@ -110,6 +113,8 @@ Review open schema recommendations.
 
 For each recommendation, capture:
 
+- Source, including whether it came from MCP/API, dashboard, webhook, or
+  `pscale insights recommendations`.
 - Type: add index, remove redundant index, primary key exhaustion, unused table, legacy charset/collation, or other.
 - Affected table and keyspace.
 - Supporting query telemetry.

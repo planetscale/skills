@@ -74,6 +74,9 @@ Review:
 - High-frequency queries.
 - Erroring queries.
 - Active anomalies.
+- If CLI access is available, gather the same read-only evidence with
+  `pscale insights queries`, `pscale insights errors`, and
+  `pscale insights anomalies`.
 - Query tags.
 - Whether literal/raw query collection is enabled.
 
@@ -178,6 +181,11 @@ Check:
 - Live connection/session pressure through `pscale branch connections top`,
   including blockers and idle-in-transaction sessions when diagnosing active
   incidents.
+- Live database-health checks through read-only `pscale inspect` diagnostics:
+  `inspect all` for a combined report, or individual checks for locks,
+  long-running queries, table/index size, unused or redundant indexes, bloat,
+  vacuum stats, and replication slots. Capture findings as evidence; do not
+  cancel sessions, vacuum, reindex, or otherwise mutate without approval.
 - Whether private connectivity is configured.
 - Whether IP restrictions are configured.
 - Whether public access remains available unexpectedly.

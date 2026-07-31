@@ -18,6 +18,8 @@ Allowed by default:
 - Read webhook configuration.
 - Read schema recommendations.
 - Read Query Insights, anomalies, and query patterns through MCP or API.
+- Run read-only `pscale insights` and `pscale inspect` diagnostics when CLI
+  access is available.
 - Read traffic budgets and rules.
 - Read Postgres roles and non-secret role metadata.
 - Read backup schedules and restore metadata.
@@ -63,6 +65,18 @@ Verified interface notes (recheck against the docs when a command fails):
   session inventory works for Postgres and Vitess over a reserved
   administrative connection. Do not cancel queries or terminate connections
   unless the operator explicitly approves that operational action.
+- `pscale insights` — read-only CLI diagnostics for production traffic.
+  Use `insights queries`, `insights errors`, `insights anomalies`, and
+  `insights recommendations` to collect top query patterns, failing
+  patterns, anomaly correlations, and schema recommendations. Prefer
+  `--format json` for automation.
+- `pscale inspect` — live read-only point-in-time checks over the same
+  credential model as `pscale sql`. `inspect all` returns a combined health
+  report; individual checks cover table and index sizes, unused or redundant
+  indexes, long-running queries, locks, bloat, vacuum stats, replication
+  slots, and related database-health signals. Use `--format json` for agents;
+  individual checks may also support CSV. Do not treat an `inspect` finding as
+  approval to cancel, repair, vacuum, reindex, or otherwise mutate anything.
 - Query Insights is public API. Live query telemetry:
   `.../branches/{branch}/insights` (per-pattern statistics; supports
   `from`/`to`/`period`, `q`, `sort`, `dir`, `tablet_type`, `type`,
@@ -143,6 +157,8 @@ Record:
 - Whether complete/raw query collection is enabled.
 - Active anomalies.
 - Query patterns with high latency, high rows read, high error rate, or high execution count.
+- If CLI access is available, whether `pscale insights queries`, `errors`, and
+  `anomalies` agree with MCP/API evidence or expose additional evidence.
 - Postgres CPU-heavy query patterns and Vitess vindex-usage data when exposed
   by the Insights interface in use.
 - Whether application deploy identifiers are visible in comments or tags.
@@ -155,6 +171,8 @@ Record:
 - Recommendation type.
 - Affected table/query.
 - Proposed DDL or action.
+- Whether the recommendation was observed through MCP/API, dashboard, or
+  `pscale insights recommendations`.
 - Whether a branch/deploy workflow exists to evaluate it safely.
 - Whether the recommendation can be implemented as application code, ORM migration, or database DDL.
 

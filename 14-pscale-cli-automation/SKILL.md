@@ -2,9 +2,10 @@
 name: planetscale-pscale-cli-automation
 description: >-
   Use the PlanetScale CLI (pscale) from automated agents with --format json,
-  auth check, pscale sql, and per-command --force. Run before other PlanetScale
-  skills when driving pscale directly. Use when the user asks to automate
-  pscale, run CLI commands headless, or verify pscale auth from an agent.
+  auth check, pscale sql, read-only pscale insights/inspect diagnostics, and
+  per-command --force. Run before other PlanetScale skills when driving pscale
+  directly. Use when the user asks to automate pscale, run CLI commands
+  headless, diagnose database health, or verify pscale auth from an agent.
 ---
 
 # PlanetScale CLI automation
@@ -63,6 +64,25 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
+
+## Read-only diagnostics
+
+For database-health evidence, prefer the built-in read-only diagnostics before
+ad hoc SQL:
+
+- `pscale insights` analyzes production traffic server-side. Use
+  `insights queries`, `insights errors`, `insights anomalies`, and
+  `insights recommendations` to gather top query patterns, failing patterns,
+  anomaly correlations, and schema recommendations.
+- `pscale inspect` runs live point-in-time checks over a read-only connection
+  with the same credential model as `pscale sql`. Use `inspect all` for a
+  combined report or individual checks such as locks, table sizes, index
+  health, bloat, vacuum stats, long-running queries, or replication slots.
+
+Both command groups support `--format json` for agents and scripts; individual
+`inspect` checks can also emit CSV. Confirm exact subcommand arguments with the
+current CLI (`pscale agent-guide --format json` and `pscale <group> --help`)
+instead of relying on memorized syntax.
 
 ## MCP vs CLI
 

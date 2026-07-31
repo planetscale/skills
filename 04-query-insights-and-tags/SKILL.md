@@ -25,6 +25,9 @@ For the selected database and branch, inspect:
 - Notable queries and active anomalies.
 - Query patterns affected by recent deploys.
 - Query patterns attached to schema recommendations.
+- If CLI access is available, compare MCP/API evidence with read-only
+  `pscale insights queries`, `pscale insights errors`,
+  `pscale insights anomalies`, and `pscale insights recommendations` output.
 - For sharded Vitess databases, vindex usage for each query pattern: the
   percentage of traffic using relevant vindexes and the vindex-usage trend
   over time. The API exposes per-pattern `index_usages` and
@@ -70,6 +73,21 @@ service token or OAuth token with `read_databases`/`read_database`.
   without client-side aggregation.
 - `/insights/{fingerprint}/traffic/budgets` — the Traffic Control budgets
   and rules that affect a fingerprint (Postgres).
+
+### Insights CLI surface
+
+The `pscale insights` command group provides a read-only CLI surface for the
+same diagnosis loop:
+
+- `insights queries` — top queries ranked by total time, count, p99 latency,
+  rows read, and related metrics.
+- `insights errors` — failing query patterns with error messages.
+- `insights anomalies` — resource anomalies and correlated query patterns.
+- `insights recommendations` — schema recommendations with ready-to-apply DDL.
+
+Use `--format json` for automation. Treat CLI output as evidence for the same
+tables and recommendations this skill produces; do not apply schema changes or
+change Traffic Control from `pscale insights` output without explicit approval.
 
 Aggregates cover the requested window. Duration fields use names like
 `sum_total_duration_millis`, with explicit share-of-window percent fields

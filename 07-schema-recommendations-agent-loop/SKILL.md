@@ -14,10 +14,14 @@ Use PlanetScale schema recommendations as high-quality input to agents. Convert 
 Collect:
 
 - Open schema recommendations.
+- Source of the recommendation: MCP/API, dashboard, webhook, or
+  `pscale insights recommendations`.
 - Recommendation type.
 - Affected table, keyspace, schema, and query pattern.
 - Suggested DDL.
 - Supporting Insights evidence.
+- When CLI access is available, supporting evidence from `pscale insights
+  queries` or related read-only diagnostics.
 - Application repository and migration system.
 - Engine: Vitess or Postgres.
 - Target branch.

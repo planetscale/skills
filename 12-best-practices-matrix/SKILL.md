@@ -26,6 +26,9 @@ Recommend for every production database:
   (`insights/tags`, `insights/tags/summaries`) on both engines, plus
   `tag:key:value` filtering and per-execution tag drill-down in the Vitess
   dashboard.
+- When CLI access is available, use read-only `pscale insights queries`,
+  `errors`, `anomalies`, and `recommendations` as a scriptable evidence
+  source alongside MCP/API.
 - Use anomalies as alert and automation inputs.
 
 ### Webhooks
@@ -64,6 +67,8 @@ Recommend:
 
 - Triage open recommendations.
 - Correlate with code and Insights.
+- Accept `pscale insights recommendations` as a read-only source of
+  recommendation data when CLI access is available.
 - Convert into migrations or branch changes.
 - Test before production.
 - Apply only through approved workflow.
@@ -153,6 +158,9 @@ that source of truth aligned with approved dashboard/API changes.
 Recommend inspecting `pscale branch connections top` during active connection
 pressure incidents to identify sessions, blockers, and idle-in-transaction
 roots without relying on normal database connection capacity.
+Also recommend read-only `pscale inspect` health checks for point-in-time
+evidence such as locks, long-running queries, table/index size, unused or
+redundant indexes, bloat, vacuum stats, and replication slots.
 
 ## Output
 
