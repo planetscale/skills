@@ -138,13 +138,19 @@ Recommend where connection churn or serverless/edge behavior creates pressure, s
 
 ### Private connectivity and IP restrictions
 
-Recommend for customers requiring private network posture or reduced public exposure. Treat changes as production-risking.
+Recommend for customers requiring private network posture or reduced public
+exposure. For PlanetScale Postgres, record rule descriptions and whether
+rules apply globally or are scoped to specific roles/schemas. Treat changes
+as production-risking.
 
 ### Extensions
 
 Recommend only when use case is clear and restart/activation impact is accepted.
 Include `auto_explain` when automatic plan logging for slow queries would
 materially improve diagnosis and the resulting log volume is acceptable.
+Include `roaringbitmap` when compressed bitmap set operations, cardinality
+checks, or compatibility with an existing bitmap-heavy workload are clear
+requirements.
 If Terraform manages Postgres branch parameters or supported extensions, keep
 that source of truth aligned with approved dashboard/API changes.
 

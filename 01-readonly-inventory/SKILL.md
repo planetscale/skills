@@ -20,6 +20,8 @@ Allowed by default:
 - Read Query Insights, anomalies, and query patterns through MCP or API.
 - Read traffic budgets and rules.
 - Read Postgres roles and non-secret role metadata.
+- Read Postgres IP restriction rule metadata, including CIDR ranges,
+  descriptions, and role/schema scoping.
 - Read backup schedules and restore metadata.
 - Read branch schema.
 - Inspect live connection/session metadata with the Connections CLI view.
@@ -78,7 +80,11 @@ Verified interface notes (recheck against the docs when a command fails):
   role by ID, not name (`pscale role get <db> <branch> <role-id>`).
 - IP restrictions: database-level
   `organizations/{org}/databases/{db}/cidrs`. Branch-level IP-restriction
-  paths are not valid.
+  paths are not valid. Rules may apply to all roles/schemas or be scoped
+  by role and/or schema; role-scoped rules use the role username prefix
+  shown in PlanetScale, not the descriptive role name or full
+  branch-suffixed username. Capture rule descriptions when present because
+  they are operator-maintained context for ownership and intent.
 - Schema recommendations: database-level
   `.../databases/{db}/schema-recommendations` (the branch-level path is
   not valid). Requesting `page=2` currently returns 404 even when the
@@ -192,7 +198,8 @@ For Postgres only, record:
 - Whether PgBouncer is used for appropriate workloads.
 - Whether live connections show blockers, idle-in-transaction sessions, or
   connection saturation during an active incident.
-- Whether private connectivity and IP restrictions are configured.
+- Whether private connectivity and IP restrictions are configured,
+  including IP restriction descriptions and any role/schema scoping.
 - Whether backup retention and PITR meet the customer’s recovery expectations.
 
 ### Vitess safety

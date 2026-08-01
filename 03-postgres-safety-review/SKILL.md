@@ -179,7 +179,8 @@ Check:
   including blockers and idle-in-transaction sessions when diagnosing active
   incidents.
 - Whether private connectivity is configured.
-- Whether IP restrictions are configured.
+- Whether IP restrictions are configured, including descriptions and
+  role/schema scoping.
 - Whether public access remains available unexpectedly.
 
 Recommend:
@@ -189,12 +190,18 @@ Recommend:
 - Use AWS PrivateLink or GCP Private Service Connect for private network requirements.
 - Use IP restrictions to reduce public exposure.
 - Be explicit that private connectivity does not automatically block public access; IP restrictions or equivalent controls are required for private-only posture.
+- Add descriptions to IP restriction rules so owners can understand the
+  intended workload, source network, and review context. Use role/schema
+  scoped rules when different application roles or schemas need different
+  network posture; leave role/schema empty only when the CIDR policy is
+  intentionally global.
 
 Do not change network restrictions without approval. Network changes can break application connectivity.
 
 ## Extensions
 
-Review enabled and available extensions relevant to safety and observability:
+Review enabled and available extensions relevant to safety, observability,
+and workload or migration compatibility:
 
 - `pginsights`
 - `pg_strict`
@@ -204,6 +211,8 @@ Review enabled and available extensions relevant to safety and observability:
 - `pg_cron`
 - `pg_partman_bgw`
 - `pg_hint_plan`
+- `roaringbitmap`, if compressed bitmap set operations are part of the
+  workload or migration requirements
 - TimescaleDB, if time-series features are relevant
 
 Recommend extensions only when use case is clear. `auto_explain` is available
