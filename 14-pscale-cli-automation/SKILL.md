@@ -64,6 +64,43 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Operational CLI surfaces to classify correctly
+
+The commands below are useful in automation, but they are not all equally safe:
+
+### Vitess read-only regions
+
+- Read-only inventory:
+  `pscale keyspace read-only-regions <database> <branch> <keyspace>` lists each
+  read-only region's slug, cluster size, and replica count.
+- Credential creation:
+  `pscale password create <database> <branch> <name> --read-only-region <region>`
+  creates a password pinned to that read-only region. This emits new
+  credentials and requires explicit approval.
+- Dumps:
+  `pscale database dump <database> <branch> --read-only-region <region>` reads
+  from the selected region instead of the primary. Treat dumps as data-export
+  operations and confirm scope before running them.
+
+Use a region slug, display name, or ID for `--read-only-region`.
+`--read-only-region` cannot be combined with `--replica`; for dumps, it also
+cannot be combined with `--rdonly`.
+
+### Vitess VTGates
+
+- Read-only inventory:
+  `pscale branch vtgate show <database> <branch>` shows the current VTGate
+  size, count, and autoscaling settings.
+- Read-only status:
+  `pscale branch vtgate resize status <database> <branch>` shows the latest
+  resize request and state.
+- Mutations:
+  `pscale branch vtgate resize <database> <branch>` queues changes such as
+  `--vtgate-size`, `--vtgate-count`, `--vtgate-max-count`,
+  `--vtgate-autoscaling`, and `--vtgate-target-cpu-utilization`;
+  `pscale branch vtgate resize cancel <database> <branch>` cancels a queued
+  resize. Both require approval and a monitoring plan.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide

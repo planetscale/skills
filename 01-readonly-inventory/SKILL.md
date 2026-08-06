@@ -15,6 +15,7 @@ Allowed by default:
 
 - List organizations, databases, branches, keyspaces, regions, and sizes.
 - Read branch metadata.
+- Read Vitess read-only region topology and VTGate sizing/status.
 - Read webhook configuration.
 - Read schema recommendations.
 - Read Query Insights, anomalies, and query patterns through MCP or API.
@@ -63,6 +64,14 @@ Verified interface notes (recheck against the docs when a command fails):
   session inventory works for Postgres and Vitess over a reserved
   administrative connection. Do not cancel queries or terminate connections
   unless the operator explicitly approves that operational action.
+- `pscale keyspace read-only-regions <database> <branch> <keyspace>` lists
+  Vitess read-only regions with each region's slug, cluster size, and replica
+  count. This is inventory; creating region-scoped passwords or changing
+  read-only-region topology is not.
+- `pscale branch vtgate show <database> <branch>` and
+  `pscale branch vtgate resize status <database> <branch>` are read-only ways
+  to capture Vitess VTGate size/count/autoscaling configuration and pending
+  resize state. Queueing, canceling, or changing a resize requires approval.
 - Query Insights is public API. Live query telemetry:
   `.../branches/{branch}/insights` (per-pattern statistics; supports
   `from`/`to`/`period`, `q`, `sort`, `dir`, `tablet_type`, `type`,
@@ -123,6 +132,9 @@ For Vitess, record:
 - Deploy request approval setting.
 - Pending schema changes.
 - Whether branch strategy has a staging branch with safe migrations enabled.
+- Read-only region topology by keyspace, including region slug, cluster size,
+  and replica count.
+- VTGate size, count, autoscaling settings, and latest resize-request state.
 
 For Postgres, record:
 
@@ -190,6 +202,8 @@ For Postgres only, record:
 - Whether app roles are least-privilege.
 - Whether pg_strict is enabled for application roles.
 - Whether PgBouncer is used for appropriate workloads.
+- Whether dedicated replica PgBouncers use availability-zone affinity when the
+  application's locality and failover requirements justify it.
 - Whether live connections show blockers, idle-in-transaction sessions, or
   connection saturation during an active incident.
 - Whether private connectivity and IP restrictions are configured.

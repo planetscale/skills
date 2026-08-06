@@ -58,7 +58,9 @@ Always requires explicit approval:
 - Change backup schedule or retention.
 - Create restore branch.
 - Create backup beyond automatic backups.
-- Change branch size or replica topology.
+- Change branch size, VTGate size/count/autoscaling, read-only-region cluster
+  shape, or replica topology.
+- Queue or cancel a VTGate resize.
 - Edit repository files or dependencies.
 
 ### Class D: production data/availability impacting

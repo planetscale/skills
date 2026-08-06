@@ -175,6 +175,9 @@ Check:
 - Whether app uses direct port 5432 or PgBouncer port 6432.
 - Whether connection pool size matches runtime and deployment model.
 - Whether serverless or edge environments can create connection storms.
+- Whether dedicated replica PgBouncers target primary, replica, or
+  replica-with-availability-zone-affinity, and whether affinity still matches
+  the application's locality and failover requirements.
 - Live connection/session pressure through `pscale branch connections top`,
   including blockers and idle-in-transaction sessions when diagnosing active
   incidents.
@@ -186,11 +189,17 @@ Recommend:
 
 - Use PgBouncer for high-churn application connections where transaction-pooling limitations are acceptable.
 - Use direct connections for session-dependent features that PgBouncer transaction mode cannot support.
+- For dedicated replica PgBouncers, enable or disable connection availability
+  zone affinity deliberately: it can now be switched after creation, but it
+  changes connection routing behavior and should be reviewed like other pooling
+  or replica-target changes.
 - Use AWS PrivateLink or GCP Private Service Connect for private network requirements.
 - Use IP restrictions to reduce public exposure.
 - Be explicit that private connectivity does not automatically block public access; IP restrictions or equivalent controls are required for private-only posture.
 
-Do not change network restrictions without approval. Network changes can break application connectivity.
+Do not change network restrictions, PgBouncer targets, or PgBouncer affinity
+without approval. Network and pooling changes can break application
+connectivity or shift traffic unexpectedly.
 
 ## Extensions
 

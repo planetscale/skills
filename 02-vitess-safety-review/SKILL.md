@@ -152,6 +152,46 @@ If the database is sharded, review:
 
 Recommend an agent-safe sharding review only as a proposal. Never reshard, change vschema, or alter routing automatically.
 
+### Read-only regions
+
+Review read-only-region topology per keyspace:
+
+- Region slug, cluster size, and replica count from
+  `pscale keyspace read-only-regions <database> <branch> <keyspace>`.
+- Whether read-heavy, reporting, analytics, or regional workloads have an
+  explicit replica strategy.
+- Whether any runbooks or automation use region-scoped passwords when they need
+  a fixed read-only region rather than nearest-replica routing.
+- Whether dumps or diagnostics that intentionally target a specific read-only
+  region use `--read-only-region <region>` instead of primary reads.
+
+Recommend:
+
+- Prefer replicas or read-only regions for non-critical read traffic and agent
+  diagnostics when the task does not require primary-read semantics.
+- Use a region slug, display name, or ID consistently in automation, and record
+  the chosen identifier in runbooks.
+- Do not combine `--read-only-region` with `--replica`; for dumps, do not
+  combine it with `--rdonly`.
+- Treat creating region-scoped passwords and changing read-only-region cluster
+  size or replica count as approval-required operational changes.
+
+### VTGate capacity
+
+Review VTGate configuration on production branches:
+
+- Current VTGate size, count, and autoscaling settings from
+  `pscale branch vtgate show <database> <branch>`.
+- Latest resize request state from
+  `pscale branch vtgate resize status <database> <branch>` when a resize may be
+  queued or in progress.
+- Whether recent anomalies, connection pressure, or query volume suggest VTGate
+  capacity review before database-size or schema recommendations.
+
+Recommend resizing VTGates only as an explicit proposed change with expected
+effect, risk, rollback/cancel plan, and post-change monitoring. Queueing,
+canceling, or altering a VTGate resize is not a read-only assessment action.
+
 ## Webhook recommendations for Vitess
 
 Evaluate and recommend webhooks for:

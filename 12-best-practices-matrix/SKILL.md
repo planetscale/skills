@@ -109,6 +109,22 @@ Recommend production, staging, and short-lived development branches with safe mi
 
 Recommend when query patterns or growth suggest shard-awareness problems. Do not reshard automatically.
 
+### Read-only regions
+
+Recommend reviewing Vitess read-only-region topology per keyspace for
+read-heavy, reporting, analytics, regional, dump, and agent diagnostic
+workloads. Prefer explicit region-scoped routing only when a fixed read-only
+region is required; otherwise nearest-replica routing may be more appropriate.
+Creating region-scoped passwords or changing read-only-region cluster shape
+requires approval.
+
+### VTGate capacity
+
+Recommend reviewing VTGate size, count, autoscaling settings, and pending
+resize state when connection pressure, traffic growth, or anomalies suggest
+gateway capacity may be a bottleneck. VTGate resize, cancel, and autoscaling
+changes require approval and post-change monitoring.
+
 ## Postgres-specific recommendations
 
 ### User-defined roles
@@ -135,6 +151,10 @@ policies there so backup posture changes are reviewed as infrastructure code.
 ### PgBouncer and connection pooling
 
 Recommend where connection churn or serverless/edge behavior creates pressure, subject to transaction-pooling limitations.
+For dedicated replica PgBouncers, review whether availability-zone affinity is
+enabled and whether it matches locality and failover goals. Switching affinity
+after creation is supported, but it changes routing behavior and requires
+approval.
 
 ### Private connectivity and IP restrictions
 
