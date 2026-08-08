@@ -34,6 +34,8 @@ Check:
 - Whether teams use gated deployments for cutover control.
 - Whether “deploy instantly” is used and whether the team understands it removes the gated-deployment/revert shape.
 - Whether cutover is regularly delayed by long-running transactions.
+- Whether deploy requests are ever run in the parallel lane, and whether the
+  concurrent changes touch different tables.
 - Whether deploy request events are subscribed to via webhooks.
 
 Recommend:
@@ -46,6 +48,10 @@ Recommend:
   approval permission.
 - Prefer normal safe deployments over instant deployments unless the migration is known to be instant-safe and the rollback story is acceptable.
 - Use gated deployment when cutover timing matters.
+- Use parallel deploy requests only for independent Vitess changes that touch
+  different tables. Treat parallel deploys as a load-management decision: avoid
+  running two resource-intensive migrations at the same time, monitor database
+  load, and tune each deploy request's throttler settings independently.
 - Treat “force cutover now” as an operator-controlled action for delayed
   cutovers: it aggressively stops running transactions to complete schema
   cutover. Recommend reviewing the blocking workload and incident context

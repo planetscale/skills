@@ -64,6 +64,19 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Deploy request strategy flags
+
+Vitess deploy requests deploy serially by default. When a deploy request is
+explicitly approved for the parallel lane, use:
+
+```bash
+pscale deploy-request deploy <DATABASE_NAME> <DR_NUMBER> --strategy parallel --format json
+```
+
+Use parallel deploys only when the concurrent deploy requests touch different
+tables. They can increase database load, so avoid pairing two resource-intensive
+deploys and review each deploy request's throttler settings before execution.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide

@@ -56,8 +56,11 @@ Recommended path:
 3. Open a deploy request only after approval.
 4. Use deploy request review to inspect schema, shard impact, data-loss warnings, lint errors, and conflicts.
 5. Use normal safe migration path unless instant deployment is explicitly justified.
-6. Deploy only after approval.
-7. Monitor Insights and anomaly state after deployment.
+6. Choose serial deployment by default. Use `--strategy parallel` only when the
+   approved deploy request is independent of the active deploy, touches
+   different tables, and the operator accepts the extra database load risk.
+7. Deploy only after approval.
+8. Monitor Insights and anomaly state after deployment.
 
 Default output before approval: issue or PR with migration proposal, not a live deploy request.
 

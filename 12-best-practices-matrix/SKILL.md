@@ -78,6 +78,13 @@ Recommend for production branches and staging branches that accept deploy reques
 
 Recommend for schema changes into protected branches.
 
+### Parallel deploy discipline
+
+Recommend documenting when `--strategy parallel` may be used for Vitess deploy
+requests: only for changes that touch different tables, only when the expected
+database load is acceptable, and with independent throttler settings reviewed
+for each deploy request.
+
 ### Force cutover discipline
 
 Recommend documenting who may use "force cutover now" for deploy requests

@@ -124,6 +124,7 @@ For Vitess:
 - Deploy requests.
 - Approval requirements.
 - Gated deployment usage.
+- Parallel deploy strategy policy.
 - Schema revert runbook.
 
 For Postgres:

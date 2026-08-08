@@ -155,7 +155,11 @@ for the same fingerprint/recommendation ID).
   bound (e.g. "drop only indexes with zero reads in 30 days, confirmed
   via Insights at run time"). Where the org requires PR approval before
   deploy, an approved PR satisfies the review gate and the authorization
-  covers only the mechanical deploy.
+  covers only the mechanical deploy. Do not use the Vitess parallel deploy
+  lane unless the standing authorization explicitly allows
+  `--strategy parallel`; before using it, verify the active deploy touches
+  different tables, avoid pairing two resource-intensive migrations, and
+  record the throttler settings for both deploy requests.
 - **Branch hygiene** (weekly): delete development branches older than the
   authorized age bound with no open deploy request; never touch
   production or protected branches. 
