@@ -21,6 +21,7 @@ Allowed by default:
 - Read traffic budgets and rules.
 - Read Postgres roles and non-secret role metadata.
 - Read backup schedules and restore metadata.
+- Read backup policies, PgBouncer metadata, and database-level IP restrictions.
 - Read branch schema.
 - Inspect live connection/session metadata with the Connections CLI view.
 - Inspect repository files for frameworks, ORMs, migrations, SQL tagging, and connection config.
@@ -33,6 +34,9 @@ Not allowed without explicit approval:
 - Any create, update, delete, enable, disable, reset, deploy, restore, promote, enforce, or apply operation.
 - Any SQL mutation.
 - Any command that emits new credentials unless the operator explicitly asked for credential work.
+- Exporting authentication-attempt or audit reports that include client IPs,
+  credential identifiers, usernames, or other sensitive access evidence unless
+  the operator explicitly approved the scope and handling path.
 
 ## Interfaces and documentation grounding
 
@@ -59,6 +63,18 @@ Verified interface notes (recheck against the docs when a command fails):
 - `pscale webhook list <database> --org <org>` — the database is a
   positional argument. `pscale backup list <database> <branch>` requires
   the branch.
+- `pscale backup policy list <database>` and
+  `pscale backup policy show <database> <policy-id>` read scheduled backup
+  policy metadata. Create/update/delete backup-policy commands change recovery
+  posture and require approval.
+- `pscale pgbouncer list <database> <branch>` and
+  `pscale pgbouncer show <database> <branch> <name>` read dedicated PgBouncer
+  metadata for Postgres branches. Create, resize, cancel-resize, and delete
+  commands are connection-pooling changes and require approval.
+- `pscale database ip-restriction list <database>` and
+  `pscale database ip-restriction show <database> <entry-id>` read
+  Postgres database-level IP restrictions. Create, update, and delete
+  commands change network access and require approval.
 - `pscale branch connections top <database> <branch>` — live read-only
   session inventory works for Postgres and Vitess over a reserved
   administrative connection. Do not cancel queries or terminate connections
@@ -76,9 +92,9 @@ Verified interface notes (recheck against the docs when a command fails):
   `pscale traffic-control budget list`; use the API for inventory.
 - Postgres roles: list via `.../branches/{branch}/roles`; fetch a single
   role by ID, not name (`pscale role get <db> <branch> <role-id>`).
-- IP restrictions: database-level
-  `organizations/{org}/databases/{db}/cidrs`. Branch-level IP-restriction
-  paths are not valid.
+- IP restrictions: use `pscale database ip-restriction list/show` for the CLI
+  path or database-level `organizations/{org}/databases/{db}/cidrs` for the
+  API path. Branch-level IP-restriction paths are not valid.
 - Schema recommendations: database-level
   `.../databases/{db}/schema-recommendations` (the branch-level path is
   not valid). Requesting `page=2` currently returns 404 even when the
@@ -86,10 +102,9 @@ Verified interface notes (recheck against the docs when a command fails):
   `open_schema_recommendations_count` as the authoritative total, treat
   the returned page as a sample, and state in the report when the itemized
   list covers only part of the total.
-- PITR state and branch-level backup policies have no verified read path;
-  record backup posture from `pscale backup list` and the database-level
-  backup policy, and mark PITR "not assessed in this run" rather than
-  probing paths.
+- PITR state has no verified read path; record backup posture from
+  `pscale backup list` and `pscale backup policy list/show`, and mark PITR
+  "not assessed in this run" rather than probing paths.
 - List endpoints paginate; follow the pagination parameters until
   exhausted before reporting counts (except the schema-recommendations
   case above).

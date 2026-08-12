@@ -64,6 +64,23 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Classify newer resource commands before running them
+
+These command families are useful in automation, but only their read forms are
+safe default inventory:
+
+| Surface | Read-only forms | Approval-gated forms |
+|---------|-----------------|----------------------|
+| Dedicated Postgres PgBouncers | `pscale pgbouncer list/show` | `create`, `resize`, `resize cancel`, `delete`, or any target/affinity change |
+| Database-level Postgres IP restrictions | `pscale database ip-restriction list/show` | `create`, `update`, `delete` |
+| Scheduled backup policies | `pscale backup policy list/show` | `create`, `update`, `delete` |
+| Database settings | `pscale database show` | `pscale database update` for name, default branch, region restrictions, or similar settings |
+| Postgres authentication attempts | None by default; export only with approved scope | `pscale audit-log auth-attempts download` because it writes client IPs, credential identifiers, usernames, outcomes, and failure details to a report file |
+
+For report downloads, agree on the output path, retention, and redaction or
+summary rules before running the command. Do not paste raw report contents into
+logs, PRs, issues, or chat unless that destination is explicitly approved.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide

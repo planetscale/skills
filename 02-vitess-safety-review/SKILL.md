@@ -136,9 +136,13 @@ Check backup posture and restore runbooks.
 Recommend:
 
 - Verify automated backups exist.
+- Review scheduled backup policies with `pscale backup policy list/show`
+  where available.
 - Run a non-production restore drill periodically.
 - Document restore target, RPO/RTO expectation, and application cutover plan.
 - For sharded databases, document shard-aware restore expectations.
+- Treat `pscale backup policy create/update/delete` as a recovery-posture
+  change requiring approval, especially for production or sharded databases.
 
 ### Sharding and keyspace safety
 

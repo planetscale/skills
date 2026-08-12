@@ -150,6 +150,7 @@ Do not create budgets or enforce rules without approval.
 Check:
 
 - Automated backup schedule.
+- Scheduled backup policies via `pscale backup policy list/show`.
 - Retention window.
 - WAL/PITR availability.
 - Manual backups that prevent deletion.
@@ -160,6 +161,9 @@ Recommend:
 
 - Confirm default backups meet the customer’s RPO/RTO.
 - Increase retention or add backup schedules if the customer’s recovery window exceeds defaults.
+- Treat `pscale backup policy create/update/delete` as a backup-posture
+  change requiring named approval and review of retention, schedule, and
+  target branch or production scope.
 - If Terraform is the customer's source of truth, manage backup policies in
   Terraform so retention and schedule changes are reviewed with the rest of
   the infrastructure code.
@@ -174,23 +178,42 @@ Check:
 
 - Whether app uses direct port 5432 or PgBouncer port 6432.
 - Whether connection pool size matches runtime and deployment model.
+- Dedicated PgBouncer topology from `pscale pgbouncer list/show`: target
+  (`primary`, `replica`, or affinity mode), size, replica count, and current
+  resize state.
 - Whether serverless or edge environments can create connection storms.
 - Live connection/session pressure through `pscale branch connections top`,
   including blockers and idle-in-transaction sessions when diagnosing active
   incidents.
 - Whether private connectivity is configured.
-- Whether IP restrictions are configured.
+- Whether IP restrictions are configured via
+  `pscale database ip-restriction list/show` or the database-level API.
 - Whether public access remains available unexpectedly.
+- Authentication-attempt patterns when investigating login failures or
+  unexpected access, using `pscale audit-log auth-attempts download` only
+  after the operator approves the time window, filters, storage path, and
+  handling of client IPs and credential identifiers.
 
 Recommend:
 
 - Use PgBouncer for high-churn application connections where transaction-pooling limitations are acceptable.
 - Use direct connections for session-dependent features that PgBouncer transaction mode cannot support.
+- Use dedicated PgBouncers when branch-level pooling needs explicit sizing,
+  primary/replica targeting, or replica availability-zone affinity. Create,
+  resize, cancel resize, or delete them only through an approved change plan.
 - Use AWS PrivateLink or GCP Private Service Connect for private network requirements.
 - Use IP restrictions to reduce public exposure.
+- Treat IP-restriction create/update/delete commands as network access changes
+  that can interrupt applications and must name the CIDRs, role scope, and
+  rollback entry.
 - Be explicit that private connectivity does not automatically block public access; IP restrictions or equivalent controls are required for private-only posture.
 
 Do not change network restrictions without approval. Network changes can break application connectivity.
+
+Do not export or share raw authentication-attempt reports without approval.
+Summaries should aggregate by outcome, branch, connection path, and approved
+time window unless specific client IPs or usernames are required for the
+investigation.
 
 ## Extensions
 

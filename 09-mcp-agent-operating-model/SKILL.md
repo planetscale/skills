@@ -40,7 +40,9 @@ targeting section to `AGENTS.md` or equivalent project instructions:
 - Production branch name.
 - Whether agents may use MCP insights-only or full MCP.
 - Whether write queries are forbidden.
-- Required approval protocol for schema, Traffic Control, webhooks, roles, and network changes.
+- Required approval protocol for schema, Traffic Control, webhooks, roles,
+  backup policies, PgBouncers, network changes, database setting changes, and
+  sensitive access-report exports.
 
 Do not edit `AGENTS.md` without approval.
 
@@ -52,6 +54,7 @@ Allowed by default:
 - Read schema recommendations.
 - Read schema metadata.
 - Read existing webhooks and Traffic Control configuration.
+- Read existing backup policies, PgBouncers, and database-level IP restrictions.
 - Read branch metadata.
 - Inspect repository code.
 - Correlate query patterns with code.
@@ -80,6 +83,12 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 - Rotate credentials.
 - Change roles.
 - Change IP restrictions or private connectivity.
+- Create, resize, retarget, or delete dedicated PgBouncers.
+- Create, update, or delete backup policies.
+- Run `pscale database update` or equivalent database-setting changes.
+- Export authentication-attempt reports unless the operator approved the
+  exact scope, time window, output path, and handling rules for client IPs and
+  credential identifiers.
 - Restore or promote branches.
 
 ## Agent loops
@@ -141,8 +150,9 @@ for the same fingerprint/recommendation ID).
   gather affected patterns, classify probable cause, post triage note to
   the incident channel. Output: triage note.
 - **Posture drift check** (daily): diff current safe-migrations flags,
-  webhook config, role list, and backup schedule against the last
-  assessment report; report any drift. Output: report.
+  webhook config, role list, backup policies, PgBouncer inventory, and IP
+  restrictions against the last assessment report; report any drift. Output:
+  report.
 
 ### Tier 2 — execute the review-gate action (standing authorization required)
 

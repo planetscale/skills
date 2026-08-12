@@ -129,16 +129,34 @@ Recommend for resource isolation of agents, exports, reports, workers, integrati
 ### Backups and PITR
 
 Recommend verifying retention and restore drill coverage.
-If Terraform is the customer's source of truth, recommend managing backup
-policies there so backup posture changes are reviewed as infrastructure code.
+Use `pscale backup policy list/show` to inventory scheduled backup policies
+where CLI access is available. If Terraform is the customer's source of truth,
+recommend managing backup policies there so backup posture changes are
+reviewed as infrastructure code; otherwise, use the CLI/dashboard/API through
+the same approval process.
 
 ### PgBouncer and connection pooling
 
-Recommend where connection churn or serverless/edge behavior creates pressure, subject to transaction-pooling limitations.
+Recommend where connection churn or serverless/edge behavior creates pressure,
+subject to transaction-pooling limitations. For dedicated PgBouncers, inventory
+target, size, replica count, affinity, and resize state with
+`pscale pgbouncer list/show`; create, resize, retarget, and delete through a
+named change plan.
 
 ### Private connectivity and IP restrictions
 
-Recommend for customers requiring private network posture or reduced public exposure. Treat changes as production-risking.
+Recommend for customers requiring private network posture or reduced public
+exposure. Inventory database-level IP restrictions with
+`pscale database ip-restriction list/show` or the API, and treat
+create/update/delete as production-risking network changes.
+
+### Authentication-attempt evidence
+
+For Postgres authentication failures or access investigations, an Organization
+Administrator can export authentication attempts with
+`pscale audit-log auth-attempts download`. Recommend it only when the
+investigation requires connection-layer evidence; define the time window,
+filters, storage path, and redaction/summary handling before export.
 
 ### Extensions
 
