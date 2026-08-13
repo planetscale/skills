@@ -19,6 +19,8 @@ Allowed without approval:
 - Inspect repository code.
 - Read schema metadata.
 - Read non-sensitive database metadata.
+- Fetch Insights tag summaries and query samples, while treating full sample
+  SQL and tag values as potentially sensitive report material.
 - Produce reports and proposed change sets.
 
 ### Class B: state-creating proposals
@@ -56,6 +58,10 @@ Always requires explicit approval:
 - Change connection pooling behavior.
 - Change IP restrictions, PrivateLink, PSC, or public access.
 - Change backup schedule or retention.
+- Dismiss a schema recommendation.
+- Change Vitess keyspace size, replica topology, VTGate size/count,
+  autoscaling, or safe-migration settings through dashboard, API, CLI, or
+  Terraform.
 - Create restore branch.
 - Create backup beyond automatic backups.
 - Change branch size or replica topology.

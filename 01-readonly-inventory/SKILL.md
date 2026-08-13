@@ -25,8 +25,9 @@ Allowed by default:
 - Inspect live connection/session metadata with the Connections CLI view.
 - Inspect repository files for frameworks, ORMs, migrations, SQL tagging, and connection config.
 - Inspect Terraform or other infrastructure-as-code definitions for
-  PlanetScale roles, backups, backup policies, Postgres parameters, and
-  supported extensions.
+  PlanetScale roles, backups, backup policies, Postgres parameters,
+  supported extensions, Vitess keyspaces, VTGate settings, and safe
+  migrations.
 
 Not allowed without explicit approval:
 
@@ -72,6 +73,13 @@ Verified interface notes (recheck against the docs when a command fails):
   executions), `insights/{fingerprint}/summary`, and
   `insights/{fingerprint}/traffic/budgets`. The `query-patterns` path
   returns generated report metadata, not live patterns.
+- The CLI can inspect Insights tags and samples without writing:
+  `pscale insights tags <database> <branch>`,
+  `pscale insights tags show <database> <branch> <name>`,
+  `pscale insights tags summaries <database> <branch> --tags <key>`, and
+  `pscale insights queries samples <database> <branch> <fingerprint>
+  --keyspace <keyspace>`. Treat query samples as potentially sensitive
+  because they include full SQL, duration, and query tags.
 - Traffic budgets: `.../branches/{branch}/traffic/budgets`. The CLI has no
   `pscale traffic-control budget list`; use the API for inventory.
 - Postgres roles: list via `.../branches/{branch}/roles`; fetch a single
@@ -205,6 +213,9 @@ For Vitess only, record:
 - Gated deployment usage.
 - Schema revert availability.
 - Branch and keyspace topology.
+- VTGate size, count, autoscaling, max count, and target CPU configuration.
+- Whether Vitess keyspace, VTGate, or safe-migration settings are managed by
+  Terraform.
 - Sharding/vschema status.
 - Whether sharded query patterns use relevant vindexes.
 - Backups and restore posture.

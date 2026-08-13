@@ -71,6 +71,25 @@ service token or OAuth token with `read_databases`/`read_database`.
 - `/insights/{fingerprint}/traffic/budgets` — the Traffic Control budgets
   and rules that affect a fingerprint (Postgres).
 
+### Insights CLI surface
+
+When using `pscale`, prefer the native Insights commands over ad hoc API
+paths:
+
+- `pscale insights tags <database> <branch>` lists tag keys.
+- `pscale insights tags show <database> <branch> <name>` inspects one tag.
+- `pscale insights tags summaries <database> <branch> --tags <key>` groups
+  query statistics by one or more tag keys.
+- `pscale insights queries samples <database> <branch> <fingerprint>
+  --keyspace <keyspace>` fetches recent samples for a query pattern. Use the
+  fingerprint and keyspace returned by `pscale insights queries`.
+
+Query samples include full SQL, duration, and query tags. Treat them as
+sensitive observability evidence: summarize patterns and measurements in
+reports, and avoid copying literal SQL or tag values that may contain secrets,
+PII, tenant identifiers, access tokens, or other customer data unless the
+operator explicitly approved that disclosure path.
+
 Aggregates cover the requested window. Duration fields use names like
 `sum_total_duration_millis`, with explicit share-of-window percent fields
 (`sum_total_duration_percent`); both totals and percentages are reliable
@@ -94,10 +113,12 @@ For each expensive or anomalous query, determine:
 - Are tags consistent across frameworks and languages?
 - Use the tags API to answer these questions: `/insights/tags` shows which
   keys and values are present, and `/insights/tags/summaries?tags=...`
-  attributes load per tag value. In the Vitess dashboard, filter the query
-  table with `tag:key:value` and drill into query details to see tags on
-  individual executions. Built-in query metadata and SQLCommenter tags are
-  both valid attribution sources.
+  attributes load per tag value. With the CLI, use `pscale insights tags`
+  and `pscale insights tags summaries` for the same read-only tag
+  inventory. In the Vitess dashboard, filter the query table with
+  `tag:key:value` and drill into query details to see tags on individual
+  executions. Built-in query metadata and SQLCommenter tags are both valid
+  attribution sources.
 
 ### Raw query collection
 
@@ -213,6 +234,8 @@ Recommend a repository PR when the expensive query is caused by N+1, missing pag
 Do not:
 
 - Enable raw query collection.
+- Paste full query samples containing sensitive literals or tag values into
+  public/shared reports.
 - Add tags to code.
 - Change Traffic Control budgets.
 - Apply schema recommendations.

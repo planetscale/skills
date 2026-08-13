@@ -24,8 +24,12 @@ Recommend for every production database:
 - Use tags/comments to map queries back to code.
 - Use tag filtering/navigation in Query Insights: the tags API
   (`insights/tags`, `insights/tags/summaries`) on both engines, plus
-  `tag:key:value` filtering and per-execution tag drill-down in the Vitess
-  dashboard.
+  `pscale insights tags` / `pscale insights tags summaries` from the CLI,
+  plus `tag:key:value` filtering and per-execution tag drill-down in the
+  Vitess dashboard.
+- Use `pscale insights queries samples` when pattern-level metrics are not
+  enough to understand an outlier, but treat full SQL samples and tag values
+  as sensitive evidence.
 - Use anomalies as alert and automation inputs.
 
 ### Webhooks
@@ -67,6 +71,8 @@ Recommend:
 - Convert into migrations or branch changes.
 - Test before production.
 - Apply only through approved workflow.
+- Dismiss recommendations only when they are stale, inapplicable, or
+  superseded, and record the reason.
 
 ## Vitess-specific recommendations
 
@@ -108,6 +114,18 @@ Recommend production, staging, and short-lived development branches with safe mi
 ### Sharding/keyspace review
 
 Recommend when query patterns or growth suggest shard-awareness problems. Do not reshard automatically.
+
+If Terraform is the customer's source of truth, recommend
+`planetscale_vitess_keyspace` for additional keyspaces or for importing the
+default keyspace to manage cluster size and extra replicas under review.
+
+### VTGate capacity
+
+Recommend reviewing VTGate size, count, autoscaling, max count, and target CPU
+utilization for production branches. If Terraform is the customer's source of
+truth, recommend managing these settings on `planetscale_vitess_branch`
+alongside safe migrations so capacity changes are reviewed as infrastructure
+code.
 
 ## Postgres-specific recommendations
 

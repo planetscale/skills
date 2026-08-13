@@ -14,6 +14,7 @@ Use PlanetScale schema recommendations as high-quality input to agents. Convert 
 Collect:
 
 - Open schema recommendations.
+- Recommendation number or ID.
 - Recommendation type.
 - Affected table, keyspace, schema, and query pattern.
 - Suggested DDL.
@@ -96,6 +97,20 @@ Block direct application when:
 - Dropping a table or index lacks owner confirmation.
 - The migration framework has a different schema source of truth.
 - The recommendation targets production and no branch/test plan exists.
+
+## Dismissing recommendations
+
+`pscale insights recommendations dismiss <database> <number> --reason
+"..."` changes recommendation state. Use it only after approval when the
+recommendation is confirmed stale, intentionally not applicable, already
+addressed by another tracked change, or not worth pursuing for a documented
+reason.
+
+Before proposing dismissal, record the recommendation number, affected table
+or query pattern, evidence reviewed, and the exact reason that should be
+attached. After an approved dismissal, read recommendations back and include
+the state change in the post-execution report. Never dismiss simply to clear a
+queue before triage.
 
 ## Output
 

@@ -64,6 +64,31 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Insights commands useful to agents
+
+Use the native CLI commands for read-only Insights work:
+
+```bash
+pscale insights queries <database> <branch> --org <org> --format json
+pscale insights tags <database> <branch> --org <org> --format json
+pscale insights tags show <database> <branch> <name> --org <org> --format json
+pscale insights tags summaries <database> <branch> --tags <key> --org <org> --format json
+pscale insights queries samples <database> <branch> <fingerprint> --keyspace <keyspace> --org <org> --format json
+```
+
+`pscale insights queries` includes the fingerprint and keyspace needed for
+`queries samples`. Query samples include full SQL, duration, and query tags, so
+treat their output as sensitive observability evidence and summarize rather
+than paste raw samples into shared reports.
+
+Schema recommendation dismissal is a mutation:
+
+```bash
+pscale insights recommendations dismiss <database> <number> --reason "not applicable" --org <org> --format json
+```
+
+Only run it after approval, with the exact recommendation number and reason.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide

@@ -24,6 +24,10 @@ Recommend enabling safe migrations when:
 
 Explain the tradeoff: safe migrations reject direct DDL on protected branches and force schema changes through deploy requests. That is a feature, but it can break teams relying on direct production DDL. Treat enablement as a behavior-changing change requiring approval.
 
+If Terraform is the source of truth, prefer managing Vitess branch
+`safe_migrations` there so branch behavior changes are reviewed as
+infrastructure code.
+
 ### Deploy requests
 
 Check:
@@ -89,6 +93,11 @@ Review Insights for:
 - Tag breakdowns when built-in metadata or SQLCommenter tags are present:
   `tag:key:value` filtering in the dashboard, and the `insights/tags` and
   `insights/tags/summaries` API endpoints for programmatic breakdowns.
+- CLI tag and sample inspection when automation is using `pscale`:
+  `pscale insights tags`, `pscale insights tags show`, `pscale insights
+  tags summaries`, and `pscale insights queries samples`. Treat samples as
+  sensitive evidence because they include full SQL, duration, and query
+  tags.
 - Deploy correlation data.
 
 Recommend enabling or improving application query tagging so Insights can attribute queries to app, route, controller, action, job, deployment SHA, and feature.
@@ -126,6 +135,10 @@ Recommend implementation path:
 - Benchmark or validate on a branch.
 - Deploy with safe migrations.
 - Monitor Insights and anomaly state after deployment.
+- Dismiss a recommendation with `pscale insights recommendations dismiss`
+  only when it is stale, intentionally not applicable, or superseded by a
+  tracked change. Include the reason and require the same approval as any
+  other state-changing recommendation workflow action.
 
 Do not apply recommendations directly.
 
@@ -149,8 +162,21 @@ If the database is sharded, review:
 - Cross-shard query patterns.
 - Whether schema deploy requests show per-shard impact.
 - Whether queries use shard-friendly access paths.
+- Whether Terraform manages additional keyspaces through
+  `planetscale_vitess_keyspace`, including cluster size and extra replicas,
+  or imports the default keyspace to keep size and replica topology under
+  review.
 
-Recommend an agent-safe sharding review only as a proposal. Never reshard, change vschema, or alter routing automatically.
+Recommend an agent-safe sharding review only as a proposal. Never reshard,
+create or resize keyspaces, change vschema, or alter routing automatically.
+
+### VTGate capacity and configuration
+
+Review VTGate size, count, autoscaling, max count, and target CPU
+utilization for production branches. If Terraform is the customer's source of
+truth, recommend managing those settings on `planetscale_vitess_branch` so
+VTGate changes are reviewed and applied consistently. Treat VTGate resizes or
+autoscaling changes as behavior-changing capacity work that requires approval.
 
 ## Webhook recommendations for Vitess
 
