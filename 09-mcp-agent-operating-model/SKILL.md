@@ -53,6 +53,8 @@ Allowed by default:
 - Read schema metadata.
 - Read existing webhooks and Traffic Control configuration.
 - Read branch metadata.
+- Read deletion-protection state.
+- Inspect deploy request queue, operations, and deployment details.
 - Inspect repository code.
 - Correlate query patterns with code.
 - File issues.
@@ -80,6 +82,8 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 - Rotate credentials.
 - Change roles.
 - Change IP restrictions or private connectivity.
+- Change deploy request throttler settings.
+- Disable deletion protection.
 - Restore or promote branches.
 
 ## Agent loops
@@ -158,7 +162,8 @@ for the same fingerprint/recommendation ID).
   covers only the mechanical deploy.
 - **Branch hygiene** (weekly): delete development branches older than the
   authorized age bound with no open deploy request; never touch
-  production or protected branches. 
+  production or deletion-protected branches, and never disable deletion
+  protection to make a branch eligible for hygiene deletion.
 - **Warn-budget gardener** (weekly): create warn-mode Traffic Control
   budgets for newly identified expensive slices matching the allowlist;
   report warn counts on existing budgets. Enforce mode is never entered

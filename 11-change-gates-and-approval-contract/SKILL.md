@@ -16,6 +16,7 @@ Prevent accidental or autonomous changes that can affect availability, safety, s
 Allowed without approval:
 
 - List databases, branches, keyspaces, webhooks, backups, roles, traffic budgets, schema recommendations, deploy requests, and Insights data.
+- Inspect deploy request queue, operations, deployment details, and deletion-protection state.
 - Inspect repository code.
 - Read schema metadata.
 - Read non-sensitive database metadata.
@@ -56,6 +57,8 @@ Always requires explicit approval:
 - Change connection pooling behavior.
 - Change IP restrictions, PrivateLink, PSC, or public access.
 - Change backup schedule or retention.
+- Enable deletion protection, or disable deletion protection on non-production targets.
+- Adjust deploy request throttler settings on non-production targets.
 - Create restore branch.
 - Create backup beyond automatic backups.
 - Change branch size or replica topology.
@@ -69,7 +72,9 @@ Requires explicit approval, named target confirmation, rollback plan, and ideall
 - Production DML.
 - Applying schema recommendation to production.
 - Queueing or applying Vitess deploy request to production.
+- Adjusting deploy request throttler settings for a production deploy request.
 - Promoting or restoring branches.
+- Disabling deletion protection on a production database or branch.
 - Deleting branches, databases, roles, webhooks, backups, or traffic rules.
 - Enforcing Traffic Control on production.
 - Changing production network access.

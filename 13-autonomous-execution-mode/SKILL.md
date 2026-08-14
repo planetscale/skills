@@ -54,7 +54,8 @@ containing:
   recommendations; deploy with revert window; additive only (ADD INDEX,
   ADD COLUMN NULL)". Invalid: "keep the schema optimized".
 - Numeric bounds where applicable: max changes per run, max branch age
-  for deletion, budget modes permitted (warn only vs enforce).
+  for deletion, deletion-protection handling, budget modes permitted
+  (warn only vs enforce), and deploy-request throttler bounds.
 - Expiry date. Expired authorization = report-only mode. Recommended
   review interval: 90 days.
 
@@ -78,7 +79,7 @@ Before the first mutation, produce and show an **execution plan**:
 
 1. **Order by dependency, then by risk.** Prerequisites first (e.g. stop the app's boot-time DDL before enabling safe migrations, add an index before dropping the one it replaces). Among independent changes, lowest-risk first so early failures cost the least.
 2. **Pre-flight each change.** Re-read the live state immediately before mutating (branch flags, recommendation state, webhook config). If the state no longer matches the report evidence, the change is **stale**: skip it, mark it `BLOCKED — state drift`, and continue with independent changes.
-3. **Safety prerequisites are steps, not assumptions.** Before any Class D DDL: confirm a backup completed within the retention window, confirm safe migrations or a deploy request is the vehicle where the engine supports it, and prefer revertible mechanisms (deploy requests with revert window, warn-mode before enforce-mode for Traffic Control).
+3. **Safety prerequisites are steps, not assumptions.** Before any Class D DDL: confirm a backup completed within the retention window, confirm safe migrations or a deploy request is the vehicle where the engine supports it, and prefer revertible mechanisms (deploy requests with revert window, warn-mode before enforce-mode for Traffic Control). Before any branch deletion, verify the branch is non-production, has no open deploy request, and is not deletion-protected unless the standing authorization explicitly names disabling protection.
 4. **One atomic change at a time.** Never batch unrelated mutations into one command. Never parallelize Class D steps.
 5. **Verify after each step.** Read the state back and confirm the expected effect before moving on. A change is not "done" when the command exits 0; it is done when the read-back matches the expected state.
 
@@ -89,7 +90,7 @@ The operator handed over control; visibility is what they get in return. Emit st
 - **Plan announcement** — numbered steps, each with target, exact command/interface, expected effect, rollback mechanism, and class. This is the last thing shown before execution begins.
 - **Per-step, before**: `[step 3/7] STARTING VIT-3a — deploy request: add idx_orders_on_user_id to storefront-demo/main (Class D, revert window available)`
 - **Per-step, after**: `[step 3/7] DONE — deploy request #4 deployed, index visible in schema read-back (took 2m 10s)`
-- **Long-running operations** (deploy requests, migrations, restores): poll and report progress at a sensible cadence, not just at completion. Include queue position/state transitions.
+- **Long-running operations** (deploy requests, migrations, restores): poll and report progress at a sensible cadence, not just at completion. Include deploy request queue position, operations, deployment progress, throttler state, and other state transitions when available.
 - **Skips and blocks**: report immediately with the reason (`BLOCKED — state drift`, `EXCLUDED — Class E`, `SKIPPED — prerequisite failed`), never silently.
 - **Run summary** — the post-execution report from the change-gates skill: what changed, when, evidence of success, warnings, rollback state, follow-up monitoring. Plus the acknowledgment quote and the autonomy level used.
 
@@ -107,6 +108,7 @@ Stop-the-line rules. When any of these fires, finish or safely abort the current
 4. **State drift on a production target** (someone else changed it mid-run) → halt the run.
 5. **Scope pressure** — anything needed that is outside the acknowledged scope → do not do it; report it.
 6. **Error on a destructive step** → never auto-retry. Retries are permitted only for idempotent reads and transient network failures on non-destructive calls.
+7. **Deletion protection blocks a destructive step** → halt that step. Do not disable protection unless the authorization explicitly names that target and action.
 
 After a halt: report state of every step (done / rolled back / blocked / not started), current database state, and what re-acknowledgment would be needed to resume. Never resume a halted run on the original acknowledgment.
 

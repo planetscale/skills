@@ -34,6 +34,8 @@ Check:
 - Whether teams use gated deployments for cutover control.
 - Whether “deploy instantly” is used and whether the team understands it removes the gated-deployment/revert shape.
 - Whether cutover is regularly delayed by long-running transactions.
+- Whether active deploy requests have clear queue, operation, deployment, and
+  throttler state when they are being monitored or tuned.
 - Whether deploy request events are subscribed to via webhooks.
 
 Recommend:
@@ -46,6 +48,10 @@ Recommend:
   approval permission.
 - Prefer normal safe deployments over instant deployments unless the migration is known to be instant-safe and the rollback story is acceptable.
 - Use gated deployment when cutover timing matters.
+- Use `pscale deploy-request queue`, `operations`, and `deployment` as
+  read-only evidence when diagnosing active deploys. Treat per-request
+  throttler updates as operational changes that require approval, especially
+  when production traffic is affected.
 - Treat “force cutover now” as an operator-controlled action for delayed
   cutovers: it aggressively stops running transactions to complete schema
   cutover. Recommend reviewing the blocking workload and incident context
@@ -71,8 +77,26 @@ Recommend a branch topology:
 - `staging` branch based from production with safe migrations enabled.
 - Short-lived development branches based from staging.
 - Deploy requests from development to staging, then staging to production when appropriate.
+- Deletion protection enabled on the database and on production or other
+  long-lived branches where accidental removal would be disruptive.
 
 Do not create branches without approval.
+
+### Deletion protection
+
+Check whether deletion protection is enabled on the database and on critical
+branches.
+
+Recommend:
+
+- Enable deletion protection for production databases, production branches, and
+  other long-lived branches that should not be removable in a single step.
+- If Terraform manages branches, keep `deletion_protected` in Terraform for
+  `planetscale_vitess_branch` resources so disabling protection is reviewed as
+  infrastructure code before a branch resource can be removed.
+
+Do not disable deletion protection or delete protected resources without
+explicit approval and target confirmation.
 
 ### Query Insights
 

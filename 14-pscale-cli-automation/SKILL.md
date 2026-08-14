@@ -50,6 +50,24 @@ browser; use `pscale auth login --format json`.
   sql … --force`). There is no global `--force` or `PSCALE_FORCE`.
 - **`--format json` alone never skips confirmations** — add `--force` on the
   destructive subcommand after explicit user approval.
+- A failed delete may be an intentional safety signal from deletion protection.
+  Do not disable protection or retry with a destructive workflow unless the
+  operator explicitly approved that target and action.
+
+## Deploy request inspection
+
+For Vitess deploy request monitoring, these commands are read-only and suitable
+for inventory or status reporting:
+
+```bash
+pscale deploy-request queue <database> --org <org> --format json
+pscale deploy-request operations <database> <number> --org <org> --format json
+pscale deploy-request deployment <database> <number> --org <org> --format json
+```
+
+`pscale deploy-request throttler update <database> <number> --ratio <percent>`
+changes live throttling for that deploy request. Treat it as an approved
+operational mutation, not as inspection.
 
 ## Typical workflow
 

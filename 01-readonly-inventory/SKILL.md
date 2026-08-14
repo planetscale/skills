@@ -22,11 +22,13 @@ Allowed by default:
 - Read Postgres roles and non-secret role metadata.
 - Read backup schedules and restore metadata.
 - Read branch schema.
+- Read database and branch deletion-protection state.
+- Inspect deploy request queue, operation, and deployment details.
 - Inspect live connection/session metadata with the Connections CLI view.
 - Inspect repository files for frameworks, ORMs, migrations, SQL tagging, and connection config.
 - Inspect Terraform or other infrastructure-as-code definitions for
-  PlanetScale roles, backups, backup policies, Postgres parameters, and
-  supported extensions.
+  PlanetScale roles, backups, backup policies, deletion protection, Postgres
+  parameters, and supported extensions.
 
 Not allowed without explicit approval:
 
@@ -74,6 +76,11 @@ Verified interface notes (recheck against the docs when a command fails):
   returns generated report metadata, not live patterns.
 - Traffic budgets: `.../branches/{branch}/traffic/budgets`. The CLI has no
   `pscale traffic-control budget list`; use the API for inventory.
+- Vitess deploy request inspection: `pscale deploy-request queue <database>`,
+  `pscale deploy-request operations <database> <number>`, and
+  `pscale deploy-request deployment <database> <number>` are read-only
+  inventory commands. `pscale deploy-request throttler update ...` is a
+  mutation and is outside read-only inventory.
 - Postgres roles: list via `.../branches/{branch}/roles`; fetch a single
   role by ID, not name (`pscale role get <db> <branch> <role-id>`).
 - IP restrictions: database-level
@@ -111,6 +118,7 @@ Record:
 - Region and cloud provider.
 - Production/development branch status.
 - Branch protection and safe workflow state.
+- Database and branch deletion-protection state.
 - Size and cluster shape.
 
 ### Branches and schema workflow
@@ -120,13 +128,17 @@ For Vitess, record:
 - Production branch.
 - Whether safe migrations are enabled for production and staging branches.
 - Open deploy requests.
+- Active deploy request queue position, operations, deployment progress, and
+  throttler settings when a deploy request is in flight.
 - Deploy request approval setting.
 - Pending schema changes.
+- Deletion-protection state for production and other long-lived branches.
 - Whether branch strategy has a staging branch with safe migrations enabled.
 
 For Postgres, record:
 
 - Branch list.
+- Deletion-protection state for production and other long-lived branches.
 - Whether branches were created from backup or empty.
 - Whether schema changes are managed manually, through migrations, or through an ORM.
 - Whether a separate branch is used for migration testing.

@@ -68,6 +68,16 @@ Recommend:
 - Test before production.
 - Apply only through approved workflow.
 
+### Deletion protection
+
+Recommend for production databases, production branches, and other long-lived
+branches where accidental deletion would be disruptive. If Terraform is the
+source of truth, manage branch deletion protection with `deletion_protected` on
+`planetscale_vitess_branch` and `planetscale_postgres_branch`; deleting a
+protected Terraform-managed branch should be a reviewed two-step change that
+first sets `deletion_protected = false` and applies before removing the
+resource.
+
 ## Vitess-specific recommendations
 
 ### Safe migrations
@@ -77,6 +87,8 @@ Recommend for production branches and staging branches that accept deploy reques
 ### Deploy requests
 
 Recommend for schema changes into protected branches.
+For active deploys, use deploy-request queue, operations, and deployment
+inspection as evidence before changing strategy or throttler settings.
 
 ### Force cutover discipline
 

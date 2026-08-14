@@ -17,6 +17,8 @@ Check:
 
 - Whether a development or test branch exists.
 - Whether branches are empty or restored from backup.
+- Whether deletion protection is enabled for the database and critical
+  branches.
 - Whether migrations are tested against a branch before production.
 - Whether application migrations are reversible or have a documented rollback strategy.
 - Whether production DDL is manually reviewed.
@@ -27,8 +29,14 @@ Recommend:
 - Run migration validation and application tests against that branch.
 - Treat production migration application as an explicit human-approved deployment step.
 - Use PITR/backup restore branches for incident recovery, not as an automatic rollback mechanism.
+- Enable deletion protection for production databases, production branches, and
+  other long-lived branches that should not be removable in a single step.
+- If Terraform manages branches, keep `deletion_protected` in Terraform for
+  `planetscale_postgres_branch` resources so disabling protection is reviewed
+  as infrastructure code before a branch resource can be removed.
 
-Do not create branches, run migrations, or restore backups without approval.
+Do not create branches, run migrations, disable deletion protection, delete
+protected resources, or restore backups without approval.
 
 ## Roles and least privilege
 

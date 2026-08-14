@@ -55,9 +55,12 @@ Recommended path:
 2. Apply the schema change to that branch only after approval.
 3. Open a deploy request only after approval.
 4. Use deploy request review to inspect schema, shard impact, data-loss warnings, lint errors, and conflicts.
-5. Use normal safe migration path unless instant deployment is explicitly justified.
-6. Deploy only after approval.
-7. Monitor Insights and anomaly state after deployment.
+5. When monitoring an active deploy request, use queue, operations, and
+   deployment inspection as read-only evidence before proposing any throttler
+   change.
+6. Use normal safe migration path unless instant deployment is explicitly justified.
+7. Deploy only after approval.
+8. Monitor Insights and anomaly state after deployment.
 
 Default output before approval: issue or PR with migration proposal, not a live deploy request.
 
