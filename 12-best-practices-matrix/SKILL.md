@@ -46,6 +46,8 @@ Recommend:
 
 - Use insights-only MCP for most autonomous analysis.
 - Use full MCP only with narrow scopes and read-only default.
+- Use OAuth for interactive MCP clients, and scoped service tokens for
+  headless/CI MCP clients where browser login is unavailable.
 - Put database targeting and safety rules in `AGENTS.md`.
 - Agents generate PRs/issues/change plans; humans approve database changes.
 

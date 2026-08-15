@@ -17,6 +17,19 @@ Use the full PlanetScale MCP server only when the task explicitly requires datab
 
 The full MCP server has query execution tools. Treat write query tools as disabled unless the operator explicitly approves a specific non-production action or a carefully reviewed production action.
 
+## MCP authentication
+
+PlanetScale MCP can authenticate with either interactive OAuth or a service
+token. Use OAuth for interactive, human-owned clients when browser login is
+available. For CI, scheduled automations, or other headless clients where
+browser login is not available, use a service token with only the permissions
+the MCP tools need.
+
+Do not put service token values in `AGENTS.md`, skill output, issue text, PR
+descriptions, or logs. Project instructions may name the intended auth method,
+required scopes, secret-manager location, and rotation owner, but must not
+include the token itself.
+
 ## AGENTS.md guidance
 
 Two different documents both named `AGENTS.md` serve different purposes:
@@ -39,6 +52,10 @@ targeting section to `AGENTS.md` or equivalent project instructions:
 - Engine: Vitess or Postgres.
 - Production branch name.
 - Whether agents may use MCP insights-only or full MCP.
+- MCP auth method for this project: OAuth for interactive use, or a service
+  token for approved headless/CI use.
+- Required MCP token scopes/permissions. Grant only the read or mutation
+  permissions needed by the allowed tools.
 - Whether write queries are forbidden.
 - Required approval protocol for schema, Traffic Control, webhooks, roles, and network changes.
 

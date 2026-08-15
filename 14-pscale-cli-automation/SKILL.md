@@ -67,7 +67,10 @@ for multi-keyspace databases.
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide
-  --format json` for the current URL).
+  --format json` for the current URL). Interactive clients may authenticate
+  with OAuth. CI, scheduled automations, and other headless clients may use a
+  service token; grant only the permissions the MCP tools need, and keep the
+  token value in a secret manager rather than project instructions or logs.
 - **Shell scripts and coding agents** — use `pscale` with `--format json` as above.
 
 ## When this skill is not enough
