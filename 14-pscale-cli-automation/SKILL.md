@@ -64,6 +64,24 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Vitess operational CLI surfaces
+
+Use these commands as documented CLI surfaces, while still applying the
+operation classes in `../11-change-gates-and-approval-contract/SKILL.md`:
+
+- Maintenance schedule inventory is read-only:
+  `pscale maintenance list <database> --org <org>`,
+  `pscale maintenance show <database> <schedule-id> --org <org>`, and
+  `pscale maintenance windows <database> <schedule-id> --org <org>`.
+- The database-level migration throttler can be inspected with
+  `pscale database throttler show <database> --org <org>`. Updating it with
+  `pscale database throttler update <database> --ratio <n> --org <org>`
+  changes the default throttle for new deploy requests and requires approval.
+- `pscale deploy-request force-cutover <database> <number> --org <org>` is
+  for a deploy request delayed by `in_progress_cutover`. It may stop running
+  transactions to complete schema cutover, so never run it without the
+  production-impact approval required by the change-gates skill.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide

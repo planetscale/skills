@@ -21,6 +21,8 @@ Allowed by default:
 - Read traffic budgets and rules.
 - Read Postgres roles and non-secret role metadata.
 - Read backup schedules and restore metadata.
+- Read Vitess maintenance schedules, deploy request status, and migration
+  throttler state.
 - Read branch schema.
 - Inspect live connection/session metadata with the Connections CLI view.
 - Inspect repository files for frameworks, ORMs, migrations, SQL tagging, and connection config.
@@ -63,6 +65,15 @@ Verified interface notes (recheck against the docs when a command fails):
   session inventory works for Postgres and Vitess over a reserved
   administrative connection. Do not cancel queries or terminate connections
   unless the operator explicitly approves that operational action.
+- `pscale maintenance list <database> --org <org>`,
+  `pscale maintenance show <database> <schedule-id> --org <org>`, and
+  `pscale maintenance windows <database> <schedule-id> --org <org>` —
+  read-only Vitess maintenance-schedule inventory, including upcoming and
+  past windows.
+- `pscale database throttler show <database> --org <org>` — read-only
+  inventory of the database-level Vitess migration throttler default for
+  new deploy requests. Updating the throttler changes deploy behavior and
+  requires approval.
 - Query Insights is public API. Live query telemetry:
   `.../branches/{branch}/insights` (per-pattern statistics; supports
   `from`/`to`/`period`, `q`, `sort`, `dir`, `tablet_type`, `type`,
@@ -203,6 +214,9 @@ For Vitess only, record:
 - Deploy request workflow.
 - Admin approval requirement.
 - Gated deployment usage.
+- Database-level migration throttler default and any active per-request
+  throttler overrides.
+- Upcoming and recent Vitess maintenance windows.
 - Schema revert availability.
 - Branch and keyspace topology.
 - Sharding/vschema status.

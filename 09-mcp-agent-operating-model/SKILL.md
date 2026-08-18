@@ -53,6 +53,7 @@ Allowed by default:
 - Read schema metadata.
 - Read existing webhooks and Traffic Control configuration.
 - Read branch metadata.
+- Read Vitess maintenance schedules and migration throttler state.
 - Inspect repository code.
 - Correlate query patterns with code.
 - File issues.
@@ -74,6 +75,9 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 - Execute write SQL against production.
 - Execute DDL directly against production branches.
 - Deploy a deploy request / apply schema to production.
+- Force cutover a delayed production deploy request.
+- Change migration throttler defaults or active production deploy request
+  throttler settings.
 - Merge pull requests.
 - Create webhooks.
 - Create or enforce Traffic Control budgets.

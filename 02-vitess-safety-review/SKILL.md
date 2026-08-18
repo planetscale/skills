@@ -34,6 +34,8 @@ Check:
 - Whether teams use gated deployments for cutover control.
 - Whether “deploy instantly” is used and whether the team understands it removes the gated-deployment/revert shape.
 - Whether cutover is regularly delayed by long-running transactions.
+- The database-level migration throttler default for new deploy requests,
+  and any active per-request throttler overrides on in-flight deploys.
 - Whether deploy request events are subscribed to via webhooks.
 
 Recommend:
@@ -46,11 +48,18 @@ Recommend:
   approval permission.
 - Prefer normal safe deployments over instant deployments unless the migration is known to be instant-safe and the rollback story is acceptable.
 - Use gated deployment when cutover timing matters.
+- Inspect the default Vitess migration throttler with
+  `pscale database throttler show <database>` when deploy load or cutover
+  behavior matters. Treat `pscale database throttler update <database> --ratio <n>`
+  as an approval-gated change because it becomes the default throttle for new
+  deploy requests.
 - Treat “force cutover now” as an operator-controlled action for delayed
   cutovers: it aggressively stops running transactions to complete schema
-  cutover. Recommend reviewing the blocking workload and incident context
-  before use, and only recommend the database-level aggressive cutover default
-  when frequent cutover blocking is understood and accepted.
+  cutover. The CLI form is `pscale deploy-request force-cutover <database> <number>`
+  for a deploy request delayed by `in_progress_cutover`. Recommend reviewing
+  the blocking workload and incident context before use, and only recommend the
+  database-level aggressive cutover default when frequent cutover blocking is
+  understood and accepted.
 
 ### Schema revert
 
@@ -139,6 +148,18 @@ Recommend:
 - Run a non-production restore drill periodically.
 - Document restore target, RPO/RTO expectation, and application cutover plan.
 - For sharded databases, document shard-aware restore expectations.
+
+### Maintenance windows
+
+Check scheduled Vitess maintenance with the CLI:
+
+- `pscale maintenance list <database>`
+- `pscale maintenance show <database> <schedule-id>`
+- `pscale maintenance windows <database> <schedule-id>`
+
+Recommend documenting which windows overlap high-traffic periods, schema
+deployments, or incident staffing constraints, and route `branch.start_maintenance`
+webhooks to the operational channel that owns those windows.
 
 ### Sharding and keyspace safety
 

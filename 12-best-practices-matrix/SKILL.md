@@ -76,14 +76,25 @@ Recommend for production branches and staging branches that accept deploy reques
 
 ### Deploy requests
 
-Recommend for schema changes into protected branches.
+Recommend for schema changes into protected branches. Include the
+database-level migration throttler default in the review because it becomes
+the default throttle for new deploy requests; changing it is an approval-gated
+behavior change.
+
+### Maintenance schedules
+
+Recommend inspecting Vitess maintenance schedules and upcoming/past windows
+from the CLI when assessing operational readiness. Correlate maintenance
+windows with deploy plans, webhook routing, incident staffing, and customer
+traffic patterns.
 
 ### Force cutover discipline
 
 Recommend documenting who may use "force cutover now" for deploy requests
 delayed by long-running transactions. It stops running transactions to finish
-schema cutover, so frequent use should trigger workload review before enabling
-aggressive cutover as the database default.
+schema cutover, so use of `pscale deploy-request force-cutover <database> <number>`
+on production requires production-impact approval. Frequent use should trigger
+workload review before enabling aggressive cutover as the database default.
 
 ### Admin approval
 
