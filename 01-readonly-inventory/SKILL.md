@@ -18,6 +18,7 @@ Allowed by default:
 - Read webhook configuration.
 - Read schema recommendations.
 - Read Query Insights, anomalies, and query patterns through MCP or API.
+- Read branch metrics time series and current values through API or CLI.
 - Read traffic budgets and rules.
 - Read Postgres roles and non-secret role metadata.
 - Read backup schedules and restore metadata.
@@ -72,6 +73,13 @@ Verified interface notes (recheck against the docs when a command fails):
   executions), `insights/{fingerprint}/summary`, and
   `insights/{fingerprint}/traffic/budgets`. The `query-patterns` path
   returns generated report metadata, not live patterns.
+- Branch metrics are public API for Vitess and Postgres:
+  `.../branches/{branch}/metrics` for historical time series and
+  `.../branches/{branch}/metrics/instant` for current values. Use a service
+  token with `read_branch` access or OAuth `read_branches`/`read_branch`
+  scope. The CLI equivalents are `pscale metrics show`, `pscale metrics
+  instant`, and `pscale metrics report` (requires `pscale` 0.321.0 or
+  later); use `--format json` or `--format csv` for automation.
 - Traffic budgets: `.../branches/{branch}/traffic/budgets`. The CLI has no
   `pscale traffic-control budget list`; use the API for inventory.
 - Postgres roles: list via `.../branches/{branch}/roles`; fetch a single
@@ -145,6 +153,10 @@ Record:
 - Query patterns with high latency, high rows read, high error rate, or high execution count.
 - Postgres CPU-heavy query patterns and Vitess vindex-usage data when exposed
   by the Insights interface in use.
+- Branch-level metrics relevant to the assessment window: query volume,
+  latency, errors, connections, storage capacity/usage, table storage, and
+  engine-specific utilization or tablet dimensions returned by the metrics
+  API/CLI.
 - Whether application deploy identifiers are visible in comments or tags.
 
 ### Recommendations

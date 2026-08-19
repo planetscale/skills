@@ -15,6 +15,11 @@ Use the PlanetScale MCP insights-only server when the task only needs Insights a
 
 Use the full PlanetScale MCP server only when the task explicitly requires database/schema access beyond Insights. Prefer read-only scopes.
 
+When the task needs branch metrics that are not exposed through MCP, use the
+PlanetScale metrics API or `pscale metrics --format json` with the narrowest
+read-only access available (`read_branch` for service tokens or
+`read_branches`/`read_branch` for OAuth).
+
 The full MCP server has query execution tools. Treat write query tools as disabled unless the operator explicitly approves a specific non-production action or a carefully reviewed production action.
 
 ## AGENTS.md guidance
@@ -49,6 +54,7 @@ Do not edit `AGENTS.md` without approval.
 Allowed by default:
 
 - Read Insights.
+- Read branch metrics.
 - Read schema recommendations.
 - Read schema metadata.
 - Read existing webhooks and Traffic Control configuration.
@@ -130,10 +136,12 @@ for the same fingerprint/recommendation ID).
   the deploy request. The reviewable unit is complete when a human can
   ship it with one merge/deploy action. Output: branch + PR + deploy
   request per recommendation.
-- **Regression watch** (hourly or per-deploy): compare top patterns
-  against a stored baseline (p50/p99, rows read, execution count); on
-  material regression, identify the deploy SHA from query tags and file
-  a report linking pattern to commit range. Output: report.
+- **Regression watch** (hourly or per-deploy): compare branch metrics and
+  top patterns against a stored baseline (p50/p99, rows read, execution
+  count, storage/connection/utilization metrics relevant to the engine); on
+  material regression, identify the deploy SHA from query tags and file a
+  report linking pattern or branch metric movement to the commit range.
+  Output: report.
 - **Tag coverage audit** (weekly): measure percentage of query time
   carrying tags; list untagged high-cost patterns with likely code
   paths; open or update a single tracking issue. Output: issue.

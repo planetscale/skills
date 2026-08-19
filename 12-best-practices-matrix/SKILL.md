@@ -11,10 +11,13 @@ Map database findings to recommended PlanetScale features. Use this to ensure th
 
 ## Cross-engine recommendations
 
-### Query Insights
+### Query Insights and branch metrics
 
 Recommend for every production database:
 
+- Use branch metrics (`pscale metrics report`, `show`, `instant`, or the
+  `/metrics` API) to establish workload, latency, error, connection, storage,
+  and engine-utilization trends for the review window.
 - Review slow, expensive, high-frequency, and erroring query patterns.
 - For Postgres, sort Insights by CPU (`sort=cpuTime` on the Insights API)
   when diagnosing CPU pressure.
@@ -26,6 +29,10 @@ Recommend for every production database:
   (`insights/tags`, `insights/tags/summaries`) on both engines, plus
   `tag:key:value` filtering and per-execution tag drill-down in the Vitess
   dashboard.
+- Use metrics dimensions for broader attribution where available: SQL query
+  and tag-level metrics, Vitess tablet/keyspace/shard/table-storage metrics,
+  and Postgres connection-pooling, CPU, memory, IOPS, WAL, replication, and
+  storage metrics.
 - Use anomalies as alert and automation inputs.
 
 ### Webhooks
@@ -46,6 +53,9 @@ Recommend:
 
 - Use insights-only MCP for most autonomous analysis.
 - Use full MCP only with narrow scopes and read-only default.
+- Use the metrics API or `pscale metrics --format json` when MCP does not
+  expose the branch metrics needed for a baseline or regression check; grant
+  only `read_branch`/`read_branches` access.
 - Put database targeting and safety rules in `AGENTS.md`.
 - Agents generate PRs/issues/change plans; humans approve database changes.
 

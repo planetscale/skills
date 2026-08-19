@@ -14,7 +14,7 @@ Run the complete PlanetScale safe best-practices skill pack end to end. Load and
 
 Default to read-only.
 
-You may inspect configuration, branches, query telemetry, recommendations, webhooks, roles, backups, traffic budgets, and repository code. You must not mutate PlanetScale, the database, the repository, the network posture, credentials, schema, production traffic controls, or automation endpoints without explicit approval of a named change set.
+You may inspect configuration, branches, query telemetry, branch metrics, recommendations, webhooks, roles, backups, traffic budgets, and repository code. You must not mutate PlanetScale, the database, the repository, the network posture, credentials, schema, production traffic controls, or automation endpoints without explicit approval of a named change set.
 
 Class C/D/E mutations require approval per `../11-change-gates-and-approval-contract/SKILL.md`. When in doubt, stop and add to the proposed change set instead of executing.
 
@@ -113,7 +113,7 @@ Deliverables: engine-specific safety gaps, workflow gaps, and proposed changes r
 
 Read and execute: `../04-query-insights-and-tags/SKILL.md`
 
-Deliverables: query risk table, tag coverage table, bad/high-cardinality tags, recommended tag schema, candidate Traffic Control slices, candidate schema and code changes.
+Deliverables: branch metrics baseline, query risk table, tag coverage table, bad/high-cardinality tags, recommended tag schema, candidate Traffic Control slices, candidate schema and code changes.
 
 ### Phase 4 — Traffic Control (Postgres only)
 

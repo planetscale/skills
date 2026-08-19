@@ -64,6 +64,28 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Read-only metrics commands
+
+`pscale metrics` requires `pscale` 0.321.0 or later and reads Vitess or
+Postgres branch metrics without mutating database state. Use it for
+automation-friendly branch baselines before drilling into Query Insights or
+live connection diagnostics.
+
+```bash
+pscale metrics show <database> <branch> --org <org> --metric queries --metric latency_p99 --period 1h --format json
+pscale metrics instant <database> <branch> --org <org> --metric planetscale_volume_usage_percentage --format json
+pscale metrics report <database> <branch> --org <org> --period 1d --format json
+```
+
+- `show` returns historical time series for one or more metrics.
+- `instant` returns current metric values such as capacity or usage gauges.
+- `report` returns an engine-aware grouped performance report; preserve the
+  `engine`, `period`, and section names when citing evidence.
+- Use `--format json` for structured automation, or `--format csv` when a
+  downstream script expects row-oriented samples.
+- For server-side query analysis, use `pscale insights`; for live
+  connection-level diagnostics, use `pscale inspect`.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide

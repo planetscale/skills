@@ -100,7 +100,8 @@ The report is plain markdown: headed sections, prose, and pipe tables. This is t
 Write 3-7 bullets. The first bullet states what the platform is currently
 doing for this database, factually and with measurements — for example:
 replica topology and failover posture, backup cadence and last successful
-backup, Insights collection volume, safety features active. This is not
+backup, branch metrics report window, Insights collection volume, safety
+features active. This is not
 praise; it is the operating baseline the rest of the report builds on.
 Then:
 
@@ -138,6 +139,8 @@ For Postgres:
 
 ### Observability
 
+- Branch metrics: workload, latency, errors, connections, storage, and
+  engine-specific utilization/capacity for the review window.
 - Query Insights state.
 - Anomalies.
 - Query tags.

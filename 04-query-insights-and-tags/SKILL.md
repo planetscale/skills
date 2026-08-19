@@ -1,13 +1,16 @@
 ---
 name: planetscale-query-insights-and-tags
-description: Use PlanetScale Insights and SQLCommenter-style query tags to attribute database load, identify risky queries, and prepare safe Traffic Control or schema recommendations.
+description: Use PlanetScale Insights, branch metrics, and SQLCommenter-style query tags to attribute database load, identify risky queries, and prepare safe Traffic Control or schema recommendations.
 ---
 
-# Query Insights and tags
+# Query Insights, branch metrics, and tags
 
 ## Purpose
 
-Use PlanetScale Insights to understand query behavior, then recommend SQLCommenter-compatible tags that make future diagnosis and Traffic Control possible. Do not change database settings or repository code without approval.
+Use PlanetScale Insights and branch metrics to understand query behavior and
+database-level resource trends, then recommend SQLCommenter-compatible tags
+that make future diagnosis and Traffic Control possible. Do not change
+database settings or repository code without approval.
 
 ## What to inspect
 
@@ -32,6 +35,26 @@ For the selected database and branch, inspect:
   by comparing API windows. Treat missing or declining relevant-vindex
   usage as an indexing or routing investigation input, not as proof that a
   new index is required.
+
+### Branch metrics
+
+Use branch metrics when the assessment needs database-level context beyond a
+single query pattern:
+
+- Time-series workload, latency, error, connection, storage, network, and
+  engine utilization metrics.
+- Current capacity or usage values, such as storage usage percentage or
+  connection capacity.
+- SQL query and tag-level metrics when a trend needs to be compared with
+  Query Insights or SQLCommenter tags.
+- Vitess tablet, keyspace, shard, fan-out, VTGate, and table-storage
+  dimensions when available.
+- Postgres CPU, memory, IOPS, WAL, replication, connection-pooling, and
+  backup-activity metrics when available.
+
+Start with branch metrics to establish the resource trend, then use Query
+Insights to attribute that trend to query fingerprints, tags, routes, jobs,
+or deploys.
 
 ### Insights API surface
 
@@ -81,6 +104,30 @@ engine-specific: CPU/IO durations and block-cache statistics
 (`sum_cpu_duration_millis`, `blocks_read`, `block_cache_hit_ratio`, …) are
 populated for Postgres; shard queries, keyspaces, `tablet_type`, and
 routing-index (vindex) usage are populated for Vitess.
+
+### Branch metrics API and CLI surface
+
+Branch metrics are read-only public API endpoints under
+`organizations/{org}/databases/{db}/branches/{branch}`, authorized by a
+service token with `read_branch` access or OAuth `read_branches`/`read_branch`
+scope:
+
+- `/metrics` — historical time series. Request one or more metric names and a
+  named `period` or explicit `from`/`to` range.
+- `/metrics/instant` — current metric values for capacity and utilization
+  checks.
+
+From the CLI, use `pscale metrics` with `pscale` 0.321.0 or later:
+
+```bash
+pscale metrics show <database> <branch> --org <org> --metric queries --metric latency_p99 --period 1h --format json
+pscale metrics instant <database> <branch> --org <org> --metric planetscale_volume_usage_percentage --format json
+pscale metrics report <database> <branch> --org <org> --period 1d --format json
+```
+
+Use `show` for targeted historical series, `instant` for current values, and
+`report` for an engine-aware branch performance report. The report differs by
+engine, so preserve the `engine`, `period`, and section names in evidence.
 
 ### Tag coverage
 
@@ -178,7 +225,7 @@ Recommend normalizing at the application boundary.
 For each top query pattern, produce:
 
 - Fingerprint or normalized query.
-- Current metrics.
+- Current Insights and branch metrics that explain the finding.
 - Current tags.
 - Missing tags.
 - Likely source in application code.
