@@ -129,6 +129,7 @@ For Vitess:
 For Postgres:
 
 - Branch migration workflow.
+- Primary/replica topology and switchover readiness.
 - Roles.
 - pg_strict.
 - Traffic Control.

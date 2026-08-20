@@ -80,7 +80,9 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 - Rotate credentials.
 - Change roles.
 - Change IP restrictions or private connectivity.
-- Restore or promote branches.
+- Restore, promote, or switch over branches.
+- Restart a Postgres branch through a switchover path when no replica is
+  available.
 
 ## Agent loops
 

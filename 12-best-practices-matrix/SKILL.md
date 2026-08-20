@@ -132,6 +132,13 @@ Recommend verifying retention and restore drill coverage.
 If Terraform is the customer's source of truth, recommend managing backup
 policies there so backup posture changes are reviewed as infrastructure code.
 
+### Switchovers and failover rehearsal
+
+Recommend documenting and rehearsing Postgres switchovers when applications
+need verified tolerance for primary movement. Include current primary/replica
+topology, candidate-replica selection criteria, expected connection impact, and
+the no-replica behavior where the branch restarts in place.
+
 ### PgBouncer and connection pooling
 
 Recommend where connection churn or serverless/edge behavior creates pressure, subject to transaction-pooling limitations.

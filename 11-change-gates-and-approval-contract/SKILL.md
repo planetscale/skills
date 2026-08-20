@@ -59,6 +59,8 @@ Always requires explicit approval:
 - Create restore branch.
 - Create backup beyond automatic backups.
 - Change branch size or replica topology.
+- Trigger a Postgres branch switchover on a non-production branch, including a
+  single-instance restart path.
 - Edit repository files or dependencies.
 
 ### Class D: production data/availability impacting
@@ -69,7 +71,9 @@ Requires explicit approval, named target confirmation, rollback plan, and ideall
 - Production DML.
 - Applying schema recommendation to production.
 - Queueing or applying Vitess deploy request to production.
-- Promoting or restoring branches.
+- Promoting, restoring, or switching over production branches.
+- Triggering a production Postgres switchover, including the no-replica case
+  where the branch is restarted in place.
 - Deleting branches, databases, roles, webhooks, backups, or traffic rules.
 - Enforcing Traffic Control on production.
 - Changing production network access.

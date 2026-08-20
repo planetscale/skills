@@ -30,6 +30,35 @@ Recommend:
 
 Do not create branches, run migrations, or restore backups without approval.
 
+## Primary movement and switchovers
+
+Postgres branches can perform an on-demand switchover to move the primary. Use
+this for planned primary movement or to verify that the application tolerates a
+primary change before depending on unplanned failover behavior.
+
+Check:
+
+- Current primary and replica topology.
+- Whether an eligible replica exists; without replicas, a switchover restarts
+  the single instance in place.
+- Whether the application, poolers, and connection retry behavior tolerate a
+  primary change or restart.
+- Whether a switchover runbook names the target branch, candidate replica if
+  any, expected client impact, monitoring, and rollback/escalation path.
+- Whether switchovers have been tested outside production.
+
+Recommend:
+
+- Rehearse switchovers on a non-production branch when possible.
+- Schedule production switchovers in a planned maintenance window unless they
+  are part of an approved incident procedure.
+- Prefer automatic candidate selection unless the operator has a specific
+  replica target and has confirmed its region and health.
+
+Do not trigger a switchover without approval. Production switchovers can move
+the primary or restart the branch and should be treated as availability-impacting
+operations.
+
 ## Roles and least privilege
 
 Check whether the application connects with the default role. Flag this as a safety gap.

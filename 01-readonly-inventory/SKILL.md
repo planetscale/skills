@@ -131,6 +131,9 @@ For Postgres, record:
 - Whether schema changes are managed manually, through migrations, or through an ORM.
 - Whether a separate branch is used for migration testing.
 - Whether the team expects Vitess-style deploy requests; if yes, flag that Postgres branches do not use deploy requests in the same way.
+- Primary and replica topology, including whether there is an eligible replica
+  for a planned switchover or whether a switchover would restart the single
+  instance in place.
 
 ### Observability
 
@@ -194,6 +197,8 @@ For Postgres only, record:
   connection saturation during an active incident.
 - Whether private connectivity and IP restrictions are configured.
 - Whether backup retention and PITR meet the customer’s recovery expectations.
+- Whether the team has rehearsed or documented primary switchovers for
+  planned work and failover-tolerance validation.
 
 ### Vitess safety
 

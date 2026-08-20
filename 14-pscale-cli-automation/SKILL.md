@@ -64,6 +64,18 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Operational commands with approval gates
+
+Some `pscale` commands are syntactically simple but operationally mutating. Load
+`../11-change-gates-and-approval-contract/SKILL.md` before running them.
+
+- `pscale branch switchover <database> <branch> --org <org>` moves a Postgres
+  branch primary on demand. Add `--candidate <replica-name>` only when the
+  operator has selected a specific eligible replica; otherwise PlanetScale
+  chooses an eligible replica automatically. On a branch without replicas, the
+  switchover path restarts the single instance in place. Requires `pscale`
+  0.322.0 or later.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide
