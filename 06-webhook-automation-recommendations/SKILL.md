@@ -112,7 +112,10 @@ Recommend only receivers that meet these requirements:
 1. Receive `branch.anomaly`.
 2. Verify signature.
 3. Queue job.
-4. Fetch anomaly details and relevant Insights query patterns.
+4. Fetch anomaly details and relevant Insights query patterns. When driving
+   `pscale`, use `pscale insights anomalies show <database> <branch>
+   <anomaly-id> --org <org>`; use `pscale insights errors show` for
+   error-fingerprint-triggered flows.
 5. Locate code path by SQLCommenter tags and repository search.
 6. Classify as schema, code, Traffic Control, or unknown.
 7. Generate report and optional PR.

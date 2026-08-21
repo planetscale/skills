@@ -78,7 +78,7 @@ Before the first mutation, produce and show an **execution plan**:
 
 1. **Order by dependency, then by risk.** Prerequisites first (e.g. stop the app's boot-time DDL before enabling safe migrations, add an index before dropping the one it replaces). Among independent changes, lowest-risk first so early failures cost the least.
 2. **Pre-flight each change.** Re-read the live state immediately before mutating (branch flags, recommendation state, webhook config). If the state no longer matches the report evidence, the change is **stale**: skip it, mark it `BLOCKED — state drift`, and continue with independent changes.
-3. **Safety prerequisites are steps, not assumptions.** Before any Class D DDL: confirm a backup completed within the retention window, confirm safe migrations or a deploy request is the vehicle where the engine supports it, and prefer revertible mechanisms (deploy requests with revert window, warn-mode before enforce-mode for Traffic Control).
+3. **Safety prerequisites are steps, not assumptions.** Before any Class D DDL: confirm a backup completed within the retention window, confirm safe migrations or a deploy request is the vehicle where the engine supports it, and prefer revertible mechanisms (deploy requests with revert window, warn-mode before enforce-mode for Traffic Control). Instant Vitess deployments have no schema revert window, so do not present deploy-request revert as their rollback plan.
 4. **One atomic change at a time.** Never batch unrelated mutations into one command. Never parallelize Class D steps.
 5. **Verify after each step.** Read the state back and confirm the expected effect before moving on. A change is not "done" when the command exits 0; it is done when the read-back matches the expected state.
 
@@ -90,6 +90,9 @@ The operator handed over control; visibility is what they get in return. Emit st
 - **Per-step, before**: `[step 3/7] STARTING VIT-3a — deploy request: add idx_orders_on_user_id to storefront-demo/main (Class D, revert window available)`
 - **Per-step, after**: `[step 3/7] DONE — deploy request #4 deployed, index visible in schema read-back (took 2m 10s)`
 - **Long-running operations** (deploy requests, migrations, restores): poll and report progress at a sensible cadence, not just at completion. Include queue position/state transitions.
+- **Blocked deploy queues**: `pscale deploy-request unblock` is an operational
+  mutation after a failed deploy or revert. Use it only when it is in the
+  acknowledged scope, and report it as its own step with verification.
 - **Skips and blocks**: report immediately with the reason (`BLOCKED — state drift`, `EXCLUDED — Class E`, `SKIPPED — prerequisite failed`), never silently.
 - **Run summary** — the post-execution report from the change-gates skill: what changed, when, evidence of success, warnings, rollback state, follow-up monitoring. Plus the acknowledgment quote and the autonomy level used.
 
@@ -125,6 +128,10 @@ Maintain an append-only run log for the whole session: timestamp, step ID, comma
 - `../11-change-gates-and-approval-contract/SKILL.md` — the class definitions and pre/post-execution checklists still apply verbatim; a valid risk acknowledgment substitutes for per-change approval within scope. Class E rules are unchanged.
 - `../00-safe-orchestrator/SKILL.md` — when a valid acknowledgment accompanies the assessment request ("run the audit and fix what you find, I accept the risk"), run the full assessment first, present the report and execution plan, then proceed directly into execution under this skill without stopping for approval.
 - `../07-schema-recommendations-agent-loop/SKILL.md` — in autonomous mode the loop may carry recommendations all the way through branch, deploy request, and deploy, using gated deployments where cutover timing matters.
+- Branch hygiene must skip deletion-protected branches unless the authorization
+  explicitly names toggling deletion protection and then deleting the branch.
+- Credential maintenance must distinguish password metadata/IP allowlist
+  updates from rotation or deletion; both still need to be named in scope.
 
 ## Required refusal behavior
 

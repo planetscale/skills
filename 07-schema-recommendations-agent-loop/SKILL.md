@@ -55,9 +55,18 @@ Recommended path:
 2. Apply the schema change to that branch only after approval.
 3. Open a deploy request only after approval.
 4. Use deploy request review to inspect schema, shard impact, data-loss warnings, lint errors, and conflicts.
-5. Use normal safe migration path unless instant deployment is explicitly justified.
+5. Use normal safe migration path unless instant deployment is explicitly
+   justified. If the dashboard **Prefer instant** setting is enabled, remember
+   that it changes the human dashboard default only; CLI/API deploys still
+   require explicit `--instant` or `instant_ddl`.
 6. Deploy only after approval.
 7. Monitor Insights and anomaly state after deployment.
+
+If a Vitess deploy queue is blocked after a failed deploy or revert, treat
+`pscale deploy-request unblock` as an operational mutation that requires the
+same explicit approval as other deploy-request state changes. Updating
+auto-apply or auto-delete-branch on an existing deploy request is also a gated
+mutation.
 
 Default output before approval: issue or PR with migration proposal, not a live deploy request.
 

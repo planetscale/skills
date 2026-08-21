@@ -20,6 +20,7 @@ Allowed by default:
 - Read Query Insights, anomalies, and query patterns through MCP or API.
 - Read traffic budgets and rules.
 - Read Postgres roles and non-secret role metadata.
+- Read Vitess password metadata and IP allowlists without emitting secrets.
 - Read backup schedules and restore metadata.
 - Read branch schema.
 - Inspect live connection/session metadata with the Connections CLI view.
@@ -70,12 +71,30 @@ Verified interface notes (recheck against the docs when a command fails):
   `insights/errors`, `insights/anomalies`, `insights/tags`,
   `insights/tags/summaries`, `insights/{fingerprint}` (individual
   executions), `insights/{fingerprint}/summary`, and
-  `insights/{fingerprint}/traffic/budgets`. The `query-patterns` path
-  returns generated report metadata, not live patterns.
-- Traffic budgets: `.../branches/{branch}/traffic/budgets`. The CLI has no
-  `pscale traffic-control budget list`; use the API for inventory.
+  `insights/{fingerprint}/traffic/budgets`. Use
+  `pscale insights errors show <database> <branch> <fingerprint> --org <org>`
+  and `pscale insights anomalies show <database> <branch> <anomaly-id>
+  --org <org>` for single-fingerprint or anomaly drill-down from the CLI.
+  The `query-patterns` path and `pscale branch query-patterns list/show`
+  return generated report metadata, not live patterns.
+- Traffic budgets: use `pscale traffic-control budget list <database>
+  <branch> --org <org>` for branch inventory, or add
+  `--fingerprint <fingerprint>` to see budgets with a rule for a query
+  fingerprint. The API path is
+  `.../branches/{branch}/traffic/budgets`.
 - Postgres roles: list via `.../branches/{branch}/roles`; fetch a single
-  role by ID, not name (`pscale role get <db> <branch> <role-id>`).
+  role by ID, not name (`pscale role get <db> <branch> <role-id>`). Use
+  `pscale role default <database> <branch>` to inspect the branch default
+  role without rotating or exposing credentials.
+- Vitess branch passwords: use `pscale password show <database> <branch>
+  <password-id>` or `--name <name>` for non-secret metadata and IP allowlist
+  review. Do not run commands that emit, reset, or rotate credentials during
+  inventory.
+- Branch and database defaults: use read-only commands such as
+  `pscale database aggressive-cutover show <database>` and
+  `pscale branch extensions list <database> <branch>` when relevant to the
+  engine. Renames, deletion-protection toggles, and aggressive-cutover changes
+  are mutations and are outside inventory.
 - IP restrictions: database-level
   `organizations/{org}/databases/{db}/cidrs`. Branch-level IP-restriction
   paths are not valid.
@@ -111,6 +130,7 @@ Record:
 - Region and cloud provider.
 - Production/development branch status.
 - Branch protection and safe workflow state.
+- Deletion-protection state and branch naming conventions.
 - Size and cluster shape.
 
 ### Branches and schema workflow
@@ -143,6 +163,8 @@ Record:
 - Whether complete/raw query collection is enabled.
 - Active anomalies.
 - Query patterns with high latency, high rows read, high error rate, or high execution count.
+- Generated query-pattern reports when present; distinguish report metadata
+  from live Insights query patterns.
 - Postgres CPU-heavy query patterns and Vitess vindex-usage data when exposed
   by the Insights interface in use.
 - Whether application deploy identifiers are visible in comments or tags.
@@ -175,6 +197,8 @@ Record:
 For Postgres only, record:
 
 - Existing budgets and rules.
+- Budget inventory source: CLI budget list, optionally filtered by
+  fingerprint, or the verified API path.
 - Budget modes: off, warn, enforce.
 - Limits: rate, capacity, burst, concurrency, warning threshold.
 - Rules by fingerprint, keyspace, query kind, or tags.
@@ -187,6 +211,8 @@ For Postgres only, record:
 
 - Application role usage.
 - Whether apps use the default role.
+- Default role evidence from `pscale role default` when CLI access is
+  available.
 - Whether app roles are least-privilege.
 - Whether pg_strict is enabled for application roles.
 - Whether PgBouncer is used for appropriate workloads.

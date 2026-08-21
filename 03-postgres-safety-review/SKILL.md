@@ -32,7 +32,10 @@ Do not create branches, run migrations, or restore backups without approval.
 
 ## Roles and least privilege
 
-Check whether the application connects with the default role. Flag this as a safety gap.
+Check whether the application connects with the default role. Use
+`pscale role default <database> <branch>` when CLI access is available so the
+default can be inspected without rotating or exposing credentials. Flag
+application use of the default role as a safety gap.
 
 Recommend:
 
@@ -137,6 +140,9 @@ For Postgres, recommend Traffic Control when the database has any of these patte
 
 Default recommendation:
 
+- Inventory current budgets with `pscale traffic-control budget list
+  <database> <branch> --org <org>`, optionally adding
+  `--fingerprint <fingerprint>` for a known offender.
 - Start budgets in `warn` mode.
 - Use query tags where possible.
 - Use fingerprint-specific rules for known offenders.
@@ -206,6 +212,8 @@ Review enabled and available extensions relevant to safety and observability:
 - `pg_hint_plan`
 - TimescaleDB, if time-series features are relevant
 
+Use `pscale branch extensions list <database> <branch>` to list extensions
+available on the branch's cluster image before recommending activation.
 Recommend extensions only when use case is clear. `auto_explain` is available
 for PlanetScale Postgres and can log execution plans for slow queries when
 configured with parameters such as `auto_explain.log_min_duration`; recommend

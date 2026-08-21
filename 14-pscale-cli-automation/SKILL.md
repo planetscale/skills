@@ -64,6 +64,59 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Current command surfaces to prefer
+
+Use the highest-level `pscale` subcommand before falling back to `pscale api`.
+These commands are useful in automated assessments when available in the local
+CLI:
+
+Read-only inventory and drill-down:
+
+- `pscale traffic-control budget list <database> <branch> --org <org>
+  [--fingerprint <fingerprint>]` — list Postgres Traffic Control budgets, or
+  budgets with a rule for one query fingerprint.
+- `pscale branch query-patterns list <database> <branch> --org <org>` and
+  `pscale branch query-patterns show <database> <branch> <report-id>
+  --org <org>` — inspect generated query-pattern reports.
+- `pscale role default <database> <branch> --org <org>` — view the default
+  Postgres role without rotating credentials.
+- `pscale password show <database> <branch> <password-id> --org <org>` or
+  `--name <name>` — inspect Vitess password metadata and IP allowlists without
+  rotating or emitting the secret.
+- `pscale insights errors show <database> <branch> <fingerprint> --org <org>`
+  and `pscale insights anomalies show <database> <branch> <anomaly-id>
+  --org <org>` — inspect one Insights error fingerprint or anomaly.
+- `pscale database aggressive-cutover show <database> --org <org>` — inspect
+  the Vitess aggressive-cutover default for future deploy requests.
+- `pscale branch extensions list <database> <branch> --org <org>` — list
+  Postgres extensions available on the branch cluster image.
+- `pscale org member list --org <org>` and
+  `pscale org member show <email-or-user-id> --org <org>` — inspect
+  organization membership when the operator's requested scope includes org
+  administration.
+
+Mutation or destructive commands require the approval contract in
+`../11-change-gates-and-approval-contract/SKILL.md` before execution:
+
+- `pscale branch query-patterns delete <database> <branch> <report-id>
+  --org <org>`.
+- `pscale password update <database> <branch> --name <name> --cidrs <cidrs>
+  --org <org>`; this changes metadata/IP allowlists but does not rotate the
+  secret.
+- `pscale keyspace delete <database> <branch> <keyspace> --org <org>`.
+- `pscale deploy-request unblock <database> <number> --org <org>` and
+  `pscale deploy-request update <database> <number> ... --org <org>`.
+- `pscale database aggressive-cutover enable <database> --org <org>`.
+- `pscale branch update <database> <branch> --new-name <name>
+  --deletion-protected --org <org>`; only flags passed are sent.
+- `pscale org member update <email-or-user-id> --role <role> --org <org>` and
+  `pscale org member remove <email-or-user-id> --org <org>`.
+
+Dashboard-only defaults can affect what humans do even when automation uses the
+CLI. The Vitess **Prefer instant** setting changes the dashboard deploy button
+default when instant deployment is available; CLI/API deploys still require
+explicit `--instant` or `instant_ddl`.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide

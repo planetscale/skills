@@ -16,6 +16,9 @@ Run this skill only for PlanetScale Postgres.
 Before recommending rules, inspect:
 
 - Current budgets and rules.
+- Use `pscale traffic-control budget list <database> <branch> --org <org>` for
+  budget inventory; add `--fingerprint <fingerprint>` when investigating which
+  budgets contain a rule for a known query fingerprint.
 - Insights query patterns.
 - Current query tags.
 - Application routes and jobs.

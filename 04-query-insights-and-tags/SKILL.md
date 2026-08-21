@@ -25,6 +25,9 @@ For the selected database and branch, inspect:
 - Notable queries and active anomalies.
 - Query patterns affected by recent deploys.
 - Query patterns attached to schema recommendations.
+- Generated query-pattern reports when they exist; keep those separate from
+  live Insights patterns because reports are report artifacts, not the live
+  pattern list.
 - For sharded Vitess databases, vindex usage for each query pattern: the
   percentage of traffic using relevant vindexes and the vindex-usage trend
   over time. The API exposes per-pattern `index_usages` and
@@ -58,10 +61,13 @@ service token or OAuth token with `read_databases`/`read_database`.
 - `/insights/errors` — error fingerprints with counts and messages (`q`
   searches the error message; sort by `count`, `lastRun`, `totalTime`, or
   `timePerQuery`). `/insights/errors/{fingerprint}` lists the failing
-  executions behind one error fingerprint.
+  executions behind one error fingerprint. From the CLI, use
+  `pscale insights errors show <database> <branch> <fingerprint> --org <org>`
+  for that drill-down.
 - `/insights/anomalies` and `/insights/anomalies/{id}` — anomaly windows
   with per-query correlation coefficients identifying which patterns moved
-  with the anomaly.
+  with the anomaly. From the CLI, use
+  `pscale insights anomalies show <database> <branch> <anomaly-id> --org <org>`.
 - `/insights/tags` — tag keys with observed values (`values_limit`,
   `literal_values_only`, and `fingerprint`/`keyspace` filters);
   `/insights/tags/{tag}` for a single key. `/insights/tags/summaries`
@@ -70,6 +76,10 @@ service token or OAuth token with `read_databases`/`read_database`.
   without client-side aggregation.
 - `/insights/{fingerprint}/traffic/budgets` — the Traffic Control budgets
   and rules that affect a fingerprint (Postgres).
+
+Generated query-pattern reports are managed separately from live Insights:
+`pscale branch query-patterns list/show` inspect report artifacts, while
+`pscale branch query-patterns delete` removes a report and requires approval.
 
 Aggregates cover the requested window. Duration fields use names like
 `sum_total_duration_millis`, with explicit share-of-window percent fields
@@ -185,6 +195,8 @@ For each top query pattern, produce:
 - Whether it is a schema recommendation candidate.
 - Whether it is a Traffic Control candidate.
 - Whether it is an application optimization candidate.
+- Evidence source: live Insights pattern, single error/anomaly drill-down, or
+  generated query-pattern report.
 
 ## Recommendation classes
 

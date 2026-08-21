@@ -78,12 +78,20 @@ Recommend for production branches and staging branches that accept deploy reques
 
 Recommend for schema changes into protected branches.
 
+Track instant-deploy posture separately from normal deploy-request usage. The
+dashboard **Prefer instant** setting defaults the dashboard button to instant
+when available, but CLI/API deploys still require explicit `--instant` or
+`instant_ddl`. Instant deployments skip online migration, cannot be reverted,
+take a brief metadata lock, and can kill queries holding table locks.
+
 ### Force cutover discipline
 
 Recommend documenting who may use "force cutover now" for deploy requests
 delayed by long-running transactions. It stops running transactions to finish
 schema cutover, so frequent use should trigger workload review before enabling
-aggressive cutover as the database default.
+aggressive cutover as the database default. Inspect the current default with
+`pscale database aggressive-cutover show`; enabling it changes future deploy
+requests, not a migration already delayed at cutover.
 
 ### Admin approval
 
@@ -147,6 +155,8 @@ Include `auto_explain` when automatic plan logging for slow queries would
 materially improve diagnosis and the resulting log volume is acceptable.
 If Terraform manages Postgres branch parameters or supported extensions, keep
 that source of truth aligned with approved dashboard/API changes.
+Use `pscale branch extensions list` to discover extensions available on a
+branch's cluster image before recommending activation.
 
 ### Live connections
 

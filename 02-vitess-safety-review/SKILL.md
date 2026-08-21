@@ -32,7 +32,9 @@ Check:
 - Whether administrator approval is required.
 - Whether deploy requests are reviewed for data loss, conflicts, lint errors, foreign key problems, charset issues, and shard impact.
 - Whether teams use gated deployments for cutover control.
-- Whether “deploy instantly” is used and whether the team understands it removes the gated-deployment/revert shape.
+- Whether “deploy instantly” is used, whether the dashboard **Prefer instant**
+  default is enabled, and whether the team understands instant deployment
+  removes the gated-deployment/revert shape.
 - Whether cutover is regularly delayed by long-running transactions.
 - Whether deploy request events are subscribed to via webhooks.
 
@@ -44,13 +46,22 @@ Recommend:
   the admin who opens a deploy request can also approve it. If the goal is to keep agents from
   self-approving, give the agent a separate user, or a service token without deploy request
   approval permission.
-- Prefer normal safe deployments over instant deployments unless the migration is known to be instant-safe and the rollback story is acceptable.
+- Prefer normal safe deployments over instant deployments unless the migration
+  is known to be instant-safe and the rollback story is acceptable. Instant
+  deployments skip the online migration flow, cannot be reverted, take a brief
+  metadata lock, and kill queries holding locks on the table.
+- Treat the dashboard **Prefer instant** setting as a safety-affecting default:
+  it changes the dashboard button default only. CLI and API deploys still
+  require explicit `--instant` or `instant_ddl`.
 - Use gated deployment when cutover timing matters.
 - Treat “force cutover now” as an operator-controlled action for delayed
   cutovers: it aggressively stops running transactions to complete schema
   cutover. Recommend reviewing the blocking workload and incident context
   before use, and only recommend the database-level aggressive cutover default
-  when frequent cutover blocking is understood and accepted.
+  when frequent cutover blocking is understood and accepted. Use
+  `pscale database aggressive-cutover show <database>` to inspect that default;
+  `enable` changes the default for future deploy requests, not an already
+  delayed migration.
 
 ### Schema revert
 
@@ -59,7 +70,9 @@ Check whether the team knows the revert window and whether their incident runboo
 Recommend documenting:
 
 - How to identify a bad schema migration.
-- How to revert within the supported window.
+- How to revert within the supported window for non-instant deploy requests.
+- Which migrations were deployed instantly and therefore have no schema revert
+  window.
 - Who is authorized to revert.
 - Which application deploy should be rolled back together with the schema revert.
 
@@ -151,6 +164,11 @@ If the database is sharded, review:
 - Whether queries use shard-friendly access paths.
 
 Recommend an agent-safe sharding review only as a proposal. Never reshard, change vschema, or alter routing automatically.
+
+Treat `pscale keyspace delete` as a destructive operator action only. Agents
+may inventory keyspaces and propose cleanup, but must not delete keyspaces
+without the production-data approval path in
+`../11-change-gates-and-approval-contract/SKILL.md`.
 
 ## Webhook recommendations for Vitess
 

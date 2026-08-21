@@ -52,6 +52,11 @@ Allowed by default:
 - Read schema recommendations.
 - Read schema metadata.
 - Read existing webhooks and Traffic Control configuration.
+- Read Traffic Control budgets with `pscale traffic-control budget list`,
+  generated query-pattern reports with `pscale branch query-patterns list/show`,
+  Insights error/anomaly drill-downs, Postgres default-role metadata, Vitess
+  password metadata, Postgres extension availability, and aggressive-cutover
+  state when the CLI is the available interface.
 - Read branch metadata.
 - Inspect repository code.
 - Correlate query patterns with code.
@@ -78,8 +83,12 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 - Create webhooks.
 - Create or enforce Traffic Control budgets.
 - Rotate credentials.
+- Update password names or IP allowlists.
 - Change roles.
 - Change IP restrictions or private connectivity.
+- Rename branches or change deletion protection.
+- Unblock deploy queues, update deploy-request flags, enable aggressive
+  cutover, or delete keyspaces.
 - Restore or promote branches.
 
 ## Agent loops
@@ -96,7 +105,9 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 ### Anomaly loop
 
 1. Receive or inspect anomaly.
-2. Gather affected query patterns and tags.
+2. Gather affected query patterns and tags. When using the CLI, drill into a
+   single anomaly with `pscale insights anomalies show`; use
+   `pscale insights errors show` for error fingerprints.
 3. Identify source route/job/deploy.
 4. Produce incident note and proposed remediation.
 5. If code fix is obvious, open PR.
@@ -141,7 +152,8 @@ for the same fingerprint/recommendation ID).
   gather affected patterns, classify probable cause, post triage note to
   the incident channel. Output: triage note.
 - **Posture drift check** (daily): diff current safe-migrations flags,
-  webhook config, role list, and backup schedule against the last
+  webhook config, role list, backup schedule, aggressive-cutover default,
+  deletion-protection state, and other branch safety metadata against the last
   assessment report; report any drift. Output: report.
 
 ### Tier 2 — execute the review-gate action (standing authorization required)
@@ -158,14 +170,16 @@ for the same fingerprint/recommendation ID).
   covers only the mechanical deploy.
 - **Branch hygiene** (weekly): delete development branches older than the
   authorized age bound with no open deploy request; never touch
-  production or protected branches. 
+  production, protected, or deletion-protected branches.
 - **Warn-budget gardener** (weekly): create warn-mode Traffic Control
   budgets for newly identified expensive slices matching the allowlist;
   report warn counts on existing budgets. Enforce mode is never entered
   autonomously unless the authorization names the specific budget.
 - **Credential expiry enforcement** (daily): delete or flag passwords
   past the authorized max age, only where the authorization lists the
-  affected roles and a rotation runbook exists.
+  affected roles and a rotation runbook exists. Treat `pscale password update`
+  as metadata/IP allowlist maintenance, not rotation, but still require it to
+  be listed in the authorization.
 
 ### Loop anti-patterns
 

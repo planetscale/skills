@@ -16,6 +16,9 @@ Prevent accidental or autonomous changes that can affect availability, safety, s
 Allowed without approval:
 
 - List databases, branches, keyspaces, webhooks, backups, roles, traffic budgets, schema recommendations, deploy requests, and Insights data.
+- Inspect generated query-pattern reports, Insights error fingerprints and
+  anomalies, default Postgres roles, Vitess password metadata, Postgres
+  extension availability, aggressive-cutover state, and organization members.
 - Inspect repository code.
 - Read schema metadata.
 - Read non-sensitive database metadata.
@@ -51,7 +54,8 @@ Always requires explicit approval:
 - Enable raw query collection.
 - Enable/disable extensions or settings that require restart.
 - Create/update/delete role.
-- Reset passwords.
+- Reset passwords, rotate credentials, or update password metadata/IP
+  allowlists.
 - Change pg_strict settings.
 - Change connection pooling behavior.
 - Change IP restrictions, PrivateLink, PSC, or public access.
@@ -59,6 +63,12 @@ Always requires explicit approval:
 - Create restore branch.
 - Create backup beyond automatic backups.
 - Change branch size or replica topology.
+- Rename branches or toggle database or branch deletion protection.
+- Enable or disable the Vitess aggressive-cutover default for future deploy
+  requests.
+- Unblock a deploy request queue or update deploy request flags such as
+  auto-apply or auto-delete-branch.
+- Update organization member roles.
 - Edit repository files or dependencies.
 
 ### Class D: production data/availability impacting
@@ -70,10 +80,13 @@ Requires explicit approval, named target confirmation, rollback plan, and ideall
 - Applying schema recommendation to production.
 - Queueing or applying Vitess deploy request to production.
 - Promoting or restoring branches.
-- Deleting branches, databases, roles, webhooks, backups, or traffic rules.
+- Deleting branches, databases, roles, webhooks, backups, keyspaces, generated
+  query-pattern reports, organization members, or traffic rules.
 - Enforcing Traffic Control on production.
 - Changing production network access.
 - Rotating production credentials.
+- Enabling a dashboard or database default that makes future production deploy
+  requests more aggressive, such as Prefer instant or aggressive cutover.
 - Emergency backup during high load.
 
 ### Class E: never autonomous
