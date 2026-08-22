@@ -74,6 +74,18 @@ Recommend a branch topology:
 
 Do not create branches without approval.
 
+### Live connections
+
+During active incidents or connection-pressure reviews, inspect live Vitess
+sessions with `pscale branch connections top` or the dashboard Connections
+page. Use the dashboard to search and sort sessions, filter sleeping sessions,
+and inspect query state, duration, and connection details when that evidence is
+needed for triage.
+
+Do not cancel queries or terminate connections from the dashboard without
+explicit approval for the named branch/session; those actions can interrupt
+application work.
+
 ### Query Insights
 
 Review Insights for:

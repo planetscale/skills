@@ -31,6 +31,11 @@ an engineer's assessment, not marketing copy.
 - **Operational costs are stated inline as facts**, not softened:
   "literal values become visible to the observability pipeline" is a
   property of the feature, stated once, without reassurance.
+- **Monetary price, SKU, and region-rate facts use live pricing evidence.**
+  When the report includes PlanetScale price or rate information, cite the
+  public read-only pricing catalog query (`public.planetscale_prices`) and
+  timestamp. Do not rely on memorized prices, calculator screenshots, or
+  unsourced estimates.
 - **Every recommendation cites the specific finding it addresses** —
   fingerprint, metric, event count, time window. A recommendation without
   a measurement attached is incomplete.
@@ -91,7 +96,7 @@ The report is plain markdown: headed sections, prose, and pipe tables. This is t
 - Branches reviewed:
 - Engine:
 - Repository reviewed:
-- Interfaces used:
+- Interfaces used, including pricing catalog queries if monetary facts are stated:
 - Time window:
 - Changes applied: none
 

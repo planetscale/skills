@@ -22,7 +22,10 @@ Allowed by default:
 - Read Postgres roles and non-secret role metadata.
 - Read backup schedules and restore metadata.
 - Read branch schema.
-- Inspect live connection/session metadata with the Connections CLI view.
+- Inspect live connection/session metadata with the Connections CLI view or
+  dashboard Connections page.
+- Read the public PlanetScale pricing catalog when a report needs current
+  SKU, region, or monthly-rate facts.
 - Inspect repository files for frameworks, ORMs, migrations, SQL tagging, and connection config.
 - Inspect Terraform or other infrastructure-as-code definitions for
   PlanetScale roles, backups, backup policies, Postgres parameters, and
@@ -63,6 +66,15 @@ Verified interface notes (recheck against the docs when a command fails):
   session inventory works for Postgres and Vitess over a reserved
   administrative connection. Do not cancel queries or terminate connections
   unless the operator explicitly approves that operational action.
+- The dashboard Connections page can also inspect live Postgres and Vitess
+  sessions, including live queries, states, durations, connection details,
+  sleeping Vitess sessions, and blocked Postgres queries. Dashboard cancel
+  query and terminate connection controls are not read-only; treat them as
+  approval-gated operational actions.
+- Pricing catalog: when an assessment needs live PlanetScale SKU, region, or
+  monthly-rate facts, use the public read-only Postgres table
+  `public.planetscale_prices`. Get the connection URI from the pricing page or
+  the agent-friendly `pricing.md`, and cite the query and timestamp as evidence.
 - Query Insights is public API. Live query telemetry:
   `.../branches/{branch}/insights` (per-pattern statistics; supports
   `from`/`to`/`period`, `q`, `sort`, `dir`, `tablet_type`, `type`,
@@ -111,7 +123,9 @@ Record:
 - Region and cloud provider.
 - Production/development branch status.
 - Branch protection and safe workflow state.
-- Size and cluster shape.
+- Size and cluster shape. If the report states SKU availability or monthly
+  rates, cite the pricing catalog instead of memorized prices or calculator
+  screenshots.
 
 ### Branches and schema workflow
 

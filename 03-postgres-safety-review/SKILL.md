@@ -178,6 +178,8 @@ Check:
 - Live connection/session pressure through `pscale branch connections top`,
   including blockers and idle-in-transaction sessions when diagnosing active
   incidents.
+- Live sessions in the dashboard Connections page when a human or browser
+  workflow is already part of the assessment, especially blocked-query details.
 - Whether private connectivity is configured.
 - Whether IP restrictions are configured.
 - Whether public access remains available unexpectedly.
@@ -191,6 +193,9 @@ Recommend:
 - Be explicit that private connectivity does not automatically block public access; IP restrictions or equivalent controls are required for private-only posture.
 
 Do not change network restrictions without approval. Network changes can break application connectivity.
+Do not cancel running queries or terminate connections from the dashboard
+without explicit approval for the named branch/session; those actions can
+interrupt application work.
 
 ## Extensions
 

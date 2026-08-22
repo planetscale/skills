@@ -40,6 +40,13 @@ Recommend for operational events:
 - Schema recommendations where available.
 - Deploy request lifecycle for Vitess.
 
+### Pricing evidence
+
+When a recommendation or current-state section states PlanetScale SKU,
+region, or monthly-rate information, source it from the public read-only
+pricing catalog (`public.planetscale_prices`) and cite the query timestamp.
+Do not use memorized prices or screenshots as evidence.
+
 ### MCP and agents
 
 Recommend:
@@ -150,9 +157,12 @@ that source of truth aligned with approved dashboard/API changes.
 
 ### Live connections
 
-Recommend inspecting `pscale branch connections top` during active connection
-pressure incidents to identify sessions, blockers, and idle-in-transaction
-roots without relying on normal database connection capacity.
+Recommend inspecting `pscale branch connections top` or the dashboard
+Connections page during active connection-pressure incidents to identify
+sessions, blockers, idle-in-transaction roots, sleeping Vitess sessions, and
+blocked Postgres queries without relying on normal database connection capacity.
+Canceling queries or terminating connections is an approval-gated operational
+action, not part of read-only assessment.
 
 ## Output
 

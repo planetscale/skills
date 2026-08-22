@@ -16,6 +16,8 @@ Prevent accidental or autonomous changes that can affect availability, safety, s
 Allowed without approval:
 
 - List databases, branches, keyspaces, webhooks, backups, roles, traffic budgets, schema recommendations, deploy requests, and Insights data.
+- Inspect live connection/session metadata in the CLI or dashboard.
+- Query the public read-only PlanetScale pricing catalog for SKU, region, and rate evidence.
 - Inspect repository code.
 - Read schema metadata.
 - Read non-sensitive database metadata.
@@ -54,6 +56,7 @@ Always requires explicit approval:
 - Reset passwords.
 - Change pg_strict settings.
 - Change connection pooling behavior.
+- Cancel a running query or terminate a connection on a non-production branch.
 - Change IP restrictions, PrivateLink, PSC, or public access.
 - Change backup schedule or retention.
 - Create restore branch.
@@ -72,6 +75,7 @@ Requires explicit approval, named target confirmation, rollback plan, and ideall
 - Promoting or restoring branches.
 - Deleting branches, databases, roles, webhooks, backups, or traffic rules.
 - Enforcing Traffic Control on production.
+- Canceling a production query or terminating a production connection/session.
 - Changing production network access.
 - Rotating production credentials.
 - Emergency backup during high load.
