@@ -16,6 +16,7 @@ Prevent accidental or autonomous changes that can affect availability, safety, s
 Allowed without approval:
 
 - List databases, branches, keyspaces, webhooks, backups, roles, traffic budgets, schema recommendations, deploy requests, and Insights data.
+- Read organization SSO status and SSO email domains.
 - Inspect repository code.
 - Read schema metadata.
 - Read non-sensitive database metadata.
@@ -52,6 +53,9 @@ Always requires explicit approval:
 - Enable/disable extensions or settings that require restart.
 - Create/update/delete role.
 - Reset passwords.
+- Enable or configure organization SSO, directory sync, or SSO domain
+  verification.
+- Change organization IdP-managed role settings.
 - Change pg_strict settings.
 - Change connection pooling behavior.
 - Change IP restrictions, PrivateLink, PSC, or public access.
@@ -73,6 +77,8 @@ Requires explicit approval, named target confirmation, rollback plan, and ideall
 - Deleting branches, databases, roles, webhooks, backups, or traffic rules.
 - Enforcing Traffic Control on production.
 - Changing production network access.
+- Disabling organization SSO or directory sync, or deleting a verified SSO
+  domain.
 - Rotating production credentials.
 - Emergency backup during high load.
 

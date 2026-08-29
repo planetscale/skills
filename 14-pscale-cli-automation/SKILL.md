@@ -64,6 +64,27 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Organization SSO commands
+
+Use `pscale org sso` for organization SSO inventory and administration. `--org`
+is required, and service-token automation needs `manage_sso` for this command
+family.
+
+Read-only checks may run during inventory:
+
+```bash
+pscale org sso show --org <org> --format json
+pscale org sso domain list --org <org> --format json
+pscale org sso domain show <domain-id> --org <org> --format json
+```
+
+Treat `sso enable`, `sso disable`, `sso configure`, `sso directory enable`,
+`sso directory disable`, `sso domain verify`, and `sso domain delete` as
+security-sensitive mutations. Do not run them without the approval required by
+`../11-change-gates-and-approval-contract/SKILL.md`; in JSON mode, destructive
+SSO commands such as `disable`, `directory disable`, and `domain delete` also
+require the subcommand-level `--force` flag after approval.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide

@@ -77,6 +77,14 @@ Review:
 - Query tags.
 - Whether literal/raw query collection is enabled.
 
+For infrastructure pressure, use the Postgres Metrics dashboard alongside
+Query Insights. Instance, storage, and PgBouncer graphs have separate tabs with
+shareable URLs; include those links as evidence when a finding depends on CPU,
+memory, IOPS, storage growth, connection pool pressure, WAL archival, or
+replication lag. When investigating a specific replica or PgBouncer, select it
+from the topology diagram so the matching tab and graphs are highlighted before
+capturing evidence.
+
 Raw query collection is governed by the `pginsights.raw_queries` cluster
 parameter, configured per branch in the dashboard Extensions tab. The
 database API object also carries an `insights_raw_queries` field; when the
@@ -178,6 +186,8 @@ Check:
 - Live connection/session pressure through `pscale branch connections top`,
   including blockers and idle-in-transaction sessions when diagnosing active
   incidents.
+- PgBouncer connection and pool pressure in the Metrics dashboard's PgBouncer
+  tabs, especially waiting client connections and server-pool saturation.
 - Whether private connectivity is configured.
 - Whether IP restrictions are configured.
 - Whether public access remains available unexpectedly.

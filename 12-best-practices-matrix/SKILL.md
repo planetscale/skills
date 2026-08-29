@@ -49,6 +49,19 @@ Recommend:
 - Put database targeting and safety rules in `AGENTS.md`.
 - Agents generate PRs/issues/change plans; humans approve database changes.
 
+### Organization access and SSO
+
+Recommend:
+
+- Inventory organization SSO status and verified SSO email domains when
+  organization access posture is in scope.
+- Treat SSO enablement, IdP or directory-sync configuration, SSO domain
+  verification/deletion, and SSO disablement as approval-gated
+  security-sensitive changes.
+- For CLI automation, use `pscale org sso show` and
+  `pscale org sso domain list` as read-only checks; service tokens need
+  `manage_sso` for the broader SSO command family.
+
 ### SQLCommenter / query tags
 
 Recommend:
@@ -125,6 +138,13 @@ Recommend for application roles after evaluation, especially to block accidental
 ### Traffic Control
 
 Recommend for resource isolation of agents, exports, reports, workers, integrations, BI, and known expensive fingerprints.
+
+### Metrics dashboard
+
+Use the Postgres Metrics dashboard for instance, storage, WAL, replication, and
+PgBouncer evidence. Its instance, storage, and PgBouncer tabs have shareable
+URLs; include them in reports when they support resource, capacity, or pooling
+recommendations.
 
 ### Backups and PITR
 

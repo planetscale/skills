@@ -14,6 +14,7 @@ Build an evidence-backed inventory of a PlanetScale database without making chan
 Allowed by default:
 
 - List organizations, databases, branches, keyspaces, regions, and sizes.
+- Read organization SSO status and SSO email domains.
 - Read branch metadata.
 - Read webhook configuration.
 - Read schema recommendations.
@@ -33,6 +34,8 @@ Not allowed without explicit approval:
 - Any create, update, delete, enable, disable, reset, deploy, restore, promote, enforce, or apply operation.
 - Any SQL mutation.
 - Any command that emits new credentials unless the operator explicitly asked for credential work.
+- Any SSO portal, directory sync, domain verification, or SSO disable/delete
+  action.
 
 ## Interfaces and documentation grounding
 
@@ -59,6 +62,10 @@ Verified interface notes (recheck against the docs when a command fails):
 - `pscale webhook list <database> --org <org>` — the database is a
   positional argument. `pscale backup list <database> <branch>` requires
   the branch.
+- `pscale org sso show --org <org>` and
+  `pscale org sso domain list --org <org>` are read-only SSO inventory
+  commands. Mutating `pscale org sso` subcommands require `manage_sso` and
+  the approval gate in `../11-change-gates-and-approval-contract/SKILL.md`.
 - `pscale branch connections top <database> <branch>` — live read-only
   session inventory works for Postgres and Vitess over a reserved
   administrative connection. Do not cancel queries or terminate connections
@@ -188,10 +195,14 @@ For Postgres only, record:
 - Application role usage.
 - Whether apps use the default role.
 - Whether app roles are least-privilege.
+- Organization SSO status, SSO email domains, and whether role management is
+  delegated to the identity provider when that state is in scope.
 - Whether pg_strict is enabled for application roles.
 - Whether PgBouncer is used for appropriate workloads.
 - Whether live connections show blockers, idle-in-transaction sessions, or
   connection saturation during an active incident.
+- Postgres Metrics dashboard evidence for instance, storage, and PgBouncer
+  pressure; use the tab-specific shareable URLs when available.
 - Whether private connectivity and IP restrictions are configured.
 - Whether backup retention and PITR meet the customer’s recovery expectations.
 
