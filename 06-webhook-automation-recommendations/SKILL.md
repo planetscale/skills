@@ -23,6 +23,8 @@ Webhooks may trigger automation, but automation must produce recommendations, is
 - `branch.ready`: branch created and ready.
 - `branch.sleeping`: branch sleeping.
 - `branch.start_maintenance`: maintenance starting.
+- `backup.succeeded`: backup completed successfully.
+- `backup.failed`: backup failed.
 - `cluster.storage`: storage threshold or growth event.
 - `database.access_request`: access request.
 - `branch.schema_recommendation`: schema recommendation event when available.
@@ -50,6 +52,7 @@ Send these to incident or operations channels:
 - `branch.out_of_memory`
 - `branch.primary_promoted`
 - `branch.start_maintenance`
+- `backup.failed`
 - `cluster.storage`
 - `keyspace.storage`
 - `deploy_request.errored`
@@ -65,6 +68,7 @@ Send these to Slack, Linear/Jira, or deployment channels:
 - `deploy_request.pending_cutover`
 - `deploy_request.schema_applied`
 - `deploy_request.closed`
+- `backup.succeeded`
 - `branch.schema_recommendation`
 
 ### Agent intake queue
@@ -74,6 +78,7 @@ Send these to an agent-safe workflow:
 - `branch.anomaly`
 - `branch.schema_recommendation`
 - `deploy_request.errored`
+- `backup.failed`
 - `cluster.storage`
 - `keyspace.storage`
 
@@ -150,6 +155,16 @@ For Postgres:
 - Alert strongly when errored or reverted.
 - Notify pending cutover and require owner acknowledgement for gated deployments.
 - Record schema applied and correlate with application deploy.
+
+### Backup outcome flow
+
+- Notify operations on `backup.failed` for both Postgres and Vitess, and
+  create a retry-safe incident or ticket with the database, branch, backup ID,
+  and failure time.
+- Record `backup.succeeded` in the recovery audit trail when the team needs
+  backup completion evidence for RPO/RTO reporting.
+- Do not automatically restore from or delete backups in response to either
+  event; produce a human-reviewable recovery recommendation instead.
 
 ## Anti-patterns to block
 

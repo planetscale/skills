@@ -34,6 +34,7 @@ Recommend for operational events:
 
 - Anomalies.
 - Storage pressure.
+- Backup success and failure.
 - Branch readiness/sleeping.
 - Primary promotion.
 - Maintenance.
@@ -131,6 +132,8 @@ Recommend for resource isolation of agents, exports, reports, workers, integrati
 Recommend verifying retention and restore drill coverage.
 If Terraform is the customer's source of truth, recommend managing backup
 policies there so backup posture changes are reviewed as infrastructure code.
+Recommend backup outcome webhooks so failures alert the owning team and
+successful completions can be recorded when recovery audit evidence matters.
 
 ### PgBouncer and connection pooling
 

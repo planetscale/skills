@@ -139,6 +139,8 @@ Recommend:
 - Run a non-production restore drill periodically.
 - Document restore target, RPO/RTO expectation, and application cutover plan.
 - For sharded databases, document shard-aware restore expectations.
+- Subscribe to backup outcome webhooks so failed backups page or ticket the
+  owning team and successful backups can be recorded for recovery audits.
 
 ### Sharding and keyspace safety
 
@@ -160,6 +162,8 @@ Evaluate and recommend webhooks for:
 - `branch.primary_promoted`
 - `branch.ready`
 - `branch.sleeping`
+- `backup.succeeded`
+- `backup.failed`
 - `cluster.storage`
 - `keyspace.storage`
 - `deploy_request.opened`
@@ -174,9 +178,9 @@ Evaluate and recommend webhooks for:
 
 Recommended destinations:
 
-- Alerting for anomaly, primary promotion, storage, and deploy errors.
-- Slack or internal notifications for deploy request lifecycle.
-- Agent intake queue for schema recommendations and anomalies, with PR-only output by default.
+- Alerting for anomaly, primary promotion, backup failures, storage, and deploy errors.
+- Slack or internal notifications for deploy request lifecycle and successful backup audit events.
+- Agent intake queue for schema recommendations, anomalies, and backup failures, with PR-only or report-only output by default.
 
 ## Output
 

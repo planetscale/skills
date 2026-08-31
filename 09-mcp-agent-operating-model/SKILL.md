@@ -140,6 +140,11 @@ for the same fingerprint/recommendation ID).
 - **Anomaly triage** (webhook-triggered, not polled): on `branch.anomaly`,
   gather affected patterns, classify probable cause, post triage note to
   the incident channel. Output: triage note.
+- **Backup failure triage** (webhook-triggered, not polled): on
+  `backup.failed`, gather backup metadata and recent branch posture, open an
+  incident note or ticket with recommended next steps, and wait for human
+  approval before creating restore branches or emergency backups. Output:
+  triage note or ticket.
 - **Posture drift check** (daily): diff current safe-migrations flags,
   webhook config, role list, and backup schedule against the last
   assessment report; report any drift. Output: report.

@@ -165,6 +165,8 @@ Recommend:
   the infrastructure code.
 - Run a restore drill to a new branch.
 - Document the exact application cutover procedure after restore.
+- Subscribe to backup outcome webhooks so `backup.failed` alerts the owning
+  team and `backup.succeeded` can support recovery audit evidence.
 
 Do not restore or create emergency backups without approval. Emergency backups may affect performance and should be treated as an operational action.
 
@@ -225,6 +227,8 @@ Evaluate and recommend webhooks for:
 - `branch.primary_promoted`
 - `branch.ready`
 - `branch.start_maintenance`
+- `backup.succeeded`
+- `backup.failed`
 - `cluster.storage`
 - `database.access_request`
 - `branch.schema_recommendation` if available
@@ -232,8 +236,9 @@ Evaluate and recommend webhooks for:
 
 Recommended automation behavior:
 
-- Alerts: anomaly, out-of-memory, primary promotion, storage, maintenance.
-- Agent intake: anomaly, schema recommendation.
+- Alerts: anomaly, out-of-memory, primary promotion, backup failure, storage, maintenance.
+- Agent intake: anomaly, schema recommendation, backup failure.
+- Audit trail: successful backup completion where RPO/RTO reporting needs evidence.
 - Human approval: any generated Traffic Control, schema, role, or network change.
 
 ## Output
