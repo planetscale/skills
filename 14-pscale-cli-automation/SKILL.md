@@ -70,6 +70,15 @@ for multi-keyspace databases.
   --format json` for the current URL).
 - **Shell scripts and coding agents** — use `pscale` with `--format json` as above.
 
+## Safety boundary
+
+CLI automation guidance does not make every `pscale` command safe to run.
+Database, credential, network, billing, and organization mutations still follow
+`../11-change-gates-and-approval-contract/SKILL.md`. In particular,
+`pscale billing payment-method update` opens Stripe Checkout, and payment-method
+show/delete commands expose or change organization billing state; do not run
+them autonomously.
+
 ## When this skill is not enough
 
 Install the full PlanetScale skills pack (if not already):

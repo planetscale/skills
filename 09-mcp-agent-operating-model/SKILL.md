@@ -49,6 +49,8 @@ Do not edit `AGENTS.md` without approval.
 Allowed by default:
 
 - Read Insights.
+- Read query error patterns and query error executions from Insights.
+- Read Postgres server logs for scoped diagnostic windows.
 - Read schema recommendations.
 - Read schema metadata.
 - Read existing webhooks and Traffic Control configuration.
@@ -80,6 +82,9 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 - Rotate credentials.
 - Change roles.
 - Change IP restrictions or private connectivity.
+- Change organization billing or payment-method settings, including opening
+  payment-method update checkout, showing card-on-file metadata, or deleting
+  the card on file through MCP or CLI billing commands.
 - Restore or promote branches.
 
 ## Agent loops
@@ -200,6 +205,14 @@ For read queries:
   usage (via MCP where available, or `sort=cpuTime` on the Insights API).
   CPU time metrics are Postgres-only; do not ask for the same CPU-sorted
   view on Vitess.
+- For query failures, prefer the read-only MCP query-error tools before
+  broader database access: `planetscale_list_query_error_patterns` to find
+  failing fingerprints, then `planetscale_list_query_error_executions` for
+  the executions behind a selected fingerprint.
+- For Postgres logs, use `planetscale_get_postgres_logs` with the narrowest
+  practical time range, level, server role, pod, or LogsQL filter. Logs can
+  include operationally sensitive context; summarize relevant facts instead
+  of copying raw log lines into public artifacts.
 
 For write queries:
 

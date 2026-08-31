@@ -139,9 +139,13 @@ For Postgres:
 ### Observability
 
 - Query Insights state.
+- Query error fingerprints and selected failed-execution evidence.
 - Anomalies.
 - Query tags.
 - Raw query collection posture.
+- For Postgres incidents, scoped server-log facts such as ERROR/WARNING
+  counts, checkpoint activity, restarts, or role-specific symptoms. Do not
+  paste raw logs unless the operator explicitly asks for that artifact.
 - Schema recommendations.
 
 ### Automation

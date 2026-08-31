@@ -74,6 +74,7 @@ Review:
 - High-frequency queries.
 - Erroring queries.
 - Active anomalies.
+- Postgres server logs for the relevant incident or assessment window.
 - Query tags.
 - Whether literal/raw query collection is enabled.
 
@@ -95,6 +96,13 @@ Recommend:
 - Use tags for attribution and raw collection for invocation-level
   drill-down; they are complementary instruments.
 - Use deploy SHA and route/job tags to correlate regressions with application deploys.
+
+Use `planetscale_get_postgres_logs` through MCP when Postgres behavior needs
+server-log evidence. Start with the smallest useful window and filter by log
+level, server role, pod, or LogsQL query before broadening. Logs are
+diagnostic evidence for errors, warnings, checkpoint activity, restarts, and
+role-specific symptoms; treat raw log lines as sensitive operational context
+and summarize only the facts needed for the report.
 
 ## Query tags
 

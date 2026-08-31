@@ -71,6 +71,20 @@ service token or OAuth token with `read_databases`/`read_database`.
 - `/insights/{fingerprint}/traffic/budgets` — the Traffic Control budgets
   and rules that affect a fingerprint (Postgres).
 
+### MCP Insights surface
+
+When using the PlanetScale MCP server, query-error investigation can start
+without hand-building API paths:
+
+- `planetscale_list_query_error_patterns` — failing queries on a branch,
+  grouped by error fingerprint.
+- `planetscale_list_query_error_executions` — the individual failed
+  executions behind a fingerprint, including normalized SQL and metadata.
+
+Use these tools to answer "which queries are failing?" and "which executions
+sit behind this error fingerprint?" Treat their output as read-only Insights
+evidence and apply the same sensitivity rules as execution-level API data.
+
 Aggregates cover the requested window. Duration fields use names like
 `sum_total_duration_millis`, with explicit share-of-window percent fields
 (`sum_total_duration_percent`); both totals and percentages are reliable

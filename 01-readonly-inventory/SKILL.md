@@ -18,6 +18,10 @@ Allowed by default:
 - Read webhook configuration.
 - Read schema recommendations.
 - Read Query Insights, anomalies, and query patterns through MCP or API.
+- Read query error patterns and query error executions through MCP or the
+  Insights errors API.
+- Read Postgres server logs through MCP when diagnosing a Postgres branch,
+  using narrow level/time/role/pod filters where possible.
 - Read traffic budgets and rules.
 - Read Postgres roles and non-secret role metadata.
 - Read backup schedules and restore metadata.
@@ -72,6 +76,18 @@ Verified interface notes (recheck against the docs when a command fails):
   executions), `insights/{fingerprint}/summary`, and
   `insights/{fingerprint}/traffic/budgets`. The `query-patterns` path
   returns generated report metadata, not live patterns.
+- MCP query-error diagnostics are read-only Insights evidence:
+  `planetscale_list_query_error_patterns` groups failing queries by error
+  fingerprint, and `planetscale_list_query_error_executions` returns the
+  individual failed executions for a fingerprint, including normalized SQL
+  and metadata. Treat execution metadata with the same sensitivity as other
+  Insights drill-down output.
+- MCP Postgres server logs are read-only operational evidence via
+  `planetscale_get_postgres_logs`. The default window is the last hour; narrow
+  by log level, time range, server role, and pod when available. A raw LogsQL
+  `query` can further filter or aggregate, but do not paste unreviewed raw
+  logs into customer reports or public artifacts because log lines may contain
+  application identifiers, SQL fragments, or incident-sensitive context.
 - Traffic budgets: `.../branches/{branch}/traffic/budgets`. The CLI has no
   `pscale traffic-control budget list`; use the API for inventory.
 - Postgres roles: list via `.../branches/{branch}/roles`; fetch a single
@@ -142,6 +158,8 @@ Record:
 - Whether high-cardinality tags are present.
 - Whether complete/raw query collection is enabled.
 - Active anomalies.
+- Query error fingerprints and recent failed executions when query failures
+  are in scope.
 - Query patterns with high latency, high rows read, high error rate, or high execution count.
 - Postgres CPU-heavy query patterns and Vitess vindex-usage data when exposed
   by the Insights interface in use.
@@ -190,6 +208,8 @@ For Postgres only, record:
 - Whether app roles are least-privilege.
 - Whether pg_strict is enabled for application roles.
 - Whether PgBouncer is used for appropriate workloads.
+- Whether Postgres logs show relevant ERROR/WARNING entries, checkpoint
+  activity, restarts, or role-specific symptoms during the incident window.
 - Whether live connections show blockers, idle-in-transaction sessions, or
   connection saturation during an active incident.
 - Whether private connectivity and IP restrictions are configured.

@@ -16,6 +16,8 @@ Map database findings to recommended PlanetScale features. Use this to ensure th
 Recommend for every production database:
 
 - Review slow, expensive, high-frequency, and erroring query patterns.
+- Use MCP query-error tools or the Insights errors API to group failing
+  queries by error fingerprint and inspect selected failed executions.
 - For Postgres, sort Insights by CPU (`sort=cpuTime` on the Insights API)
   when diagnosing CPU pressure.
 - For sharded Vitess, review vindex usage per query pattern and the usage
@@ -46,8 +48,14 @@ Recommend:
 
 - Use insights-only MCP for most autonomous analysis.
 - Use full MCP only with narrow scopes and read-only default.
+- Use read-only MCP diagnostics for query errors and scoped Postgres server
+  logs before escalating to broader database access.
+- Treat raw Postgres log lines as sensitive operational evidence; summarize
+  findings in reports.
 - Put database targeting and safety rules in `AGENTS.md`.
 - Agents generate PRs/issues/change plans; humans approve database changes.
+- Keep billing/payment-method MCP or CLI actions human-gated and outside
+  autonomous remediation loops.
 
 ### SQLCommenter / query tags
 
