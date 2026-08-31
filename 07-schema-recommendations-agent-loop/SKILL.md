@@ -14,9 +14,12 @@ Use PlanetScale schema recommendations as high-quality input to agents. Convert 
 Collect:
 
 - Open schema recommendations.
+- Recommendation number or ID.
 - Recommendation type.
 - Affected table, keyspace, schema, and query pattern.
-- Suggested DDL.
+- Suggested DDL; when using the CLI, fetch one recommendation's full
+  ready-to-apply DDL with
+  `pscale insights recommendations show <database> <number> --org <org>`.
 - Supporting Insights evidence.
 - Application repository and migration system.
 - Engine: Vitess or Postgres.
@@ -38,6 +41,8 @@ For each recommendation, answer:
 - Is this still open and relevant?
 - Which query patterns triggered it?
 - Which application code paths generate those queries?
+- Does the single-recommendation detail still show the same full DDL, target
+  object, and supporting telemetry as the list output suggested?
 - Is the recommendation safely expressible in the application’s migration framework?
 - Does the ORM/schema source of truth need to change?
 - Can it be tested on a non-production branch?

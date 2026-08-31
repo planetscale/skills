@@ -22,6 +22,8 @@ For the selected database and branch, inspect:
 - For Postgres, top queries by CPU usage (`sort=cpuTime` or
   `sort=percentCpuTime` on the Insights API).
 - Queries with errors.
+- Query error patterns and individual failed executions when available
+  through MCP or CLI.
 - Notable queries and active anomalies.
 - Query patterns affected by recent deploys.
 - Query patterns attached to schema recommendations.
@@ -71,6 +73,34 @@ service token or OAuth token with `read_databases`/`read_database`.
 - `/insights/{fingerprint}/traffic/budgets` — the Traffic Control budgets
   and rules that affect a fingerprint (Postgres).
 
+### MCP and CLI surfaces
+
+When PlanetScale MCP is available, prefer the read-only Insights tools for
+agent analysis. Query-tag coverage and attribution can be collected with:
+
+- `planetscale_list_query_tags` — tag keys on a branch's queries, observed
+  values, and query counts.
+- `planetscale_get_query_tag` — one tag key and its values.
+- `planetscale_list_query_tag_summaries` — query statistics grouped by tag
+  value, including total time, latency, rows read, and errors.
+
+When CLI access is the available interface, use `--format json` and prefer
+these read-only commands:
+
+- `pscale insights queries samples <database> <branch> <fingerprint>` for
+  collected executions behind a fingerprint.
+- `pscale insights queries show <database> <branch> <query-id>` for one
+  execution; the ID is a sample ID, not a fingerprint.
+- `pscale insights queries summary <database> <branch> <fingerprint>` for
+  the aggregate for one fingerprint.
+- `pscale insights queries traffic-budgets <database> <branch> <fingerprint>`
+  for Postgres Traffic Control budgets affecting a fingerprint.
+- `pscale metrics queries`, `pscale metrics tables`, and
+  `pscale metrics tags` for query-pattern series, table storage, and tag-set
+  metrics on Postgres or Vitess.
+- Vitess-only `pscale metrics tablets` and `pscale metrics keyspace-tables`
+  for tablet series and keyspace-grouped table storage.
+
 Aggregates cover the requested window. Duration fields use names like
 `sum_total_duration_millis`, with explicit share-of-window percent fields
 (`sum_total_duration_percent`); both totals and percentages are reliable
@@ -94,10 +124,11 @@ For each expensive or anomalous query, determine:
 - Are tags consistent across frameworks and languages?
 - Use the tags API to answer these questions: `/insights/tags` shows which
   keys and values are present, and `/insights/tags/summaries?tags=...`
-  attributes load per tag value. In the Vitess dashboard, filter the query
-  table with `tag:key:value` and drill into query details to see tags on
-  individual executions. Built-in query metadata and SQLCommenter tags are
-  both valid attribution sources.
+  attributes load per tag value. The MCP query-tag tools expose the same
+  investigation path in agent clients. In the Vitess dashboard, filter the
+  query table with `tag:key:value` and drill into query details to see tags
+  on individual executions. Built-in query metadata and SQLCommenter tags
+  are both valid attribution sources.
 
 ### Raw query collection
 

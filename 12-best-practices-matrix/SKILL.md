@@ -22,10 +22,16 @@ Recommend for every production database:
   trend after index or routing changes.
 - Correlate regressions with deploys.
 - Use tags/comments to map queries back to code.
+- Use MCP query-tag tools or the Insights tag APIs to group total time,
+  latency, rows read, and errors by application, route, job, feature, or
+  other bounded tag values.
 - Use tag filtering/navigation in Query Insights: the tags API
   (`insights/tags`, `insights/tags/summaries`) on both engines, plus
   `tag:key:value` filtering and per-execution tag drill-down in the Vitess
   dashboard.
+- Use CLI metrics drill-downs (`pscale metrics queries/tables/tags`, plus
+  Vitess tablet and keyspace-table metrics) when CLI access is the available
+  evidence path.
 - Use anomalies as alert and automation inputs.
 
 ### Webhooks
@@ -129,8 +135,13 @@ Recommend for resource isolation of agents, exports, reports, workers, integrati
 ### Backups and PITR
 
 Recommend verifying retention and restore drill coverage.
+For Postgres, point-in-time restore branches can be created with
+`--restore-point` after approval; use them for restore drills and incident
+recovery planning, not automatic migration rollback.
 If Terraform is the customer's source of truth, recommend managing backup
 policies there so backup posture changes are reviewed as infrastructure code.
+Record backup protected status and treat protection changes as approved
+operational changes.
 
 ### PgBouncer and connection pooling
 

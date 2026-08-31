@@ -197,6 +197,7 @@ State clearly:
 - No schema changed.
 - No traffic controls changed.
 - No roles or credentials changed.
+- No billing settings, payment methods, organization teams, or service tokens changed.
 - No webhooks changed.
 - No code changed.
 - No branches, backups, restores, deploy requests, or migrations created.

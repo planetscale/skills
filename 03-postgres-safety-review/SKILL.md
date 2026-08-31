@@ -17,9 +17,15 @@ Check:
 
 - Whether a development or test branch exists.
 - Whether branches are empty or restored from backup.
+- Whether incident drills need point-in-time restore branches created with
+  `pscale branch create ... --restore-point`; the flag is Postgres-only,
+  requires either `--restore` or `--from`, and cannot be combined with
+  `--seed-data`.
 - Whether migrations are tested against a branch before production.
 - Whether application migrations are reversible or have a documented rollback strategy.
 - Whether production DDL is manually reviewed.
+- Whether any active or recent switchovers need read-only follow-up with
+  `pscale branch switchover list` and `pscale branch switchover show`.
 
 Recommend:
 
@@ -27,6 +33,8 @@ Recommend:
 - Run migration validation and application tests against that branch.
 - Treat production migration application as an explicit human-approved deployment step.
 - Use PITR/backup restore branches for incident recovery, not as an automatic rollback mechanism.
+- Use switchover list/show output to monitor operator-started switchovers by
+  ID; starting a switchover remains an operational action requiring approval.
 
 Do not create branches, run migrations, or restore backups without approval.
 
@@ -71,8 +79,14 @@ Review:
 - High rows-read queries.
 - High CPU query patterns (`sort=cpuTime` or `sort=percentCpuTime` on the
   Insights API).
+- Query-pattern time series, table storage, and tag-set metrics from
+  `pscale metrics queries`, `pscale metrics tables`, and
+  `pscale metrics tags` when CLI access is the available interface.
 - High-frequency queries.
 - Erroring queries.
+- Individual query executions, fingerprint summaries, and Traffic Control
+  budgets affecting a fingerprint via
+  `pscale insights queries samples/show/summary/traffic-budgets`.
 - Active anomalies.
 - Query tags.
 - Whether literal/raw query collection is enabled.
@@ -153,6 +167,7 @@ Check:
 - Retention window.
 - WAL/PITR availability.
 - Manual backups that prevent deletion.
+- Which backups are protected from deletion.
 - Restore drill history.
 - Recovery runbook.
 
@@ -165,8 +180,12 @@ Recommend:
   the infrastructure code.
 - Run a restore drill to a new branch.
 - Document the exact application cutover procedure after restore.
+- Protect backups that must be retained for a restore drill, audit, or
+  incident hold, and document who may later remove that protection.
 
-Do not restore or create emergency backups without approval. Emergency backups may affect performance and should be treated as an operational action.
+Do not restore, create emergency backups, or change a backup's protected
+status without approval. Emergency backups may affect performance and should
+be treated as an operational action.
 
 ## Connections, pooling, and network safety
 

@@ -12,6 +12,9 @@ Define how agents should use PlanetScale MCP safely. Agents should use productio
 ## Default MCP choice
 
 Use the PlanetScale MCP insights-only server when the task only needs Insights and Schema Recommendations.
+It can also be used for read-only query-tag attribution when tools such as
+`planetscale_list_query_tags`, `planetscale_get_query_tag`, and
+`planetscale_list_query_tag_summaries` are available.
 
 Use the full PlanetScale MCP server only when the task explicitly requires database/schema access beyond Insights. Prefer read-only scopes.
 
@@ -49,6 +52,7 @@ Do not edit `AGENTS.md` without approval.
 Allowed by default:
 
 - Read Insights.
+- Read query tags, tag values, and tag-level summaries from Insights.
 - Read schema recommendations.
 - Read schema metadata.
 - Read existing webhooks and Traffic Control configuration.
@@ -78,9 +82,17 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 - Create webhooks.
 - Create or enforce Traffic Control budgets.
 - Rotate credentials.
+- Show, create, delete, or otherwise manage service tokens unless the task is
+  explicitly credential-administration work; never place token values in logs
+  or reports.
 - Change roles.
+- Change organization billing settings, role settings, teams, or team
+  membership.
+- Read billing invoices or payment metadata unless billing is explicitly in
+  scope; invoice and payment details are sensitive report content.
 - Change IP restrictions or private connectivity.
-- Restore or promote branches.
+- Restore, promote, or switchover branches.
+- Change a backup's protected status.
 
 ## Agent loops
 

@@ -13,7 +13,12 @@ Run the complete PlanetScale safe best-practices skill pack end to end. Load and
 
 Default to read-only.
 
-You may inspect configuration, branches, query telemetry, recommendations, webhooks, roles, backups, traffic budgets, and repository code. You must not mutate PlanetScale, the database, the repository, the network posture, credentials, schema, production traffic controls, or automation endpoints without explicit approval of a named change set.
+You may inspect configuration, branches, query telemetry, recommendations,
+webhooks, roles, backups, traffic budgets, and repository code. You must not
+mutate PlanetScale, the database, the repository, the network posture,
+credentials, schema, production traffic controls, backup protection, billing
+settings, organization teams, service tokens, or automation endpoints without
+explicit approval of a named change set.
 
 Class C/D/E mutations require approval per `../11-change-gates-and-approval-contract/SKILL.md`. When in doubt, stop and add to the proposed change set instead of executing.
 

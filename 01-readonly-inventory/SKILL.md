@@ -18,9 +18,12 @@ Allowed by default:
 - Read webhook configuration.
 - Read schema recommendations.
 - Read Query Insights, anomalies, and query patterns through MCP or API.
+- Read query-pattern, table, tablet, and tag metrics.
 - Read traffic budgets and rules.
 - Read Postgres roles and non-secret role metadata.
 - Read backup schedules and restore metadata.
+- Read service-token metadata, organization teams, and billing invoices only
+  when org-level auth or billing posture is explicitly in scope.
 - Read branch schema.
 - Inspect live connection/session metadata with the Connections CLI view.
 - Inspect repository files for frameworks, ORMs, migrations, SQL tagging, and connection config.
@@ -33,6 +36,7 @@ Not allowed without explicit approval:
 - Any create, update, delete, enable, disable, reset, deploy, restore, promote, enforce, or apply operation.
 - Any SQL mutation.
 - Any command that emits new credentials unless the operator explicitly asked for credential work.
+- Any org billing, role-setting, team, or team-membership change.
 
 ## Interfaces and documentation grounding
 
@@ -51,6 +55,10 @@ Verified interface notes (recheck against the docs when a command fails):
 
 - `pscale database show <database> --org <org>` — the org is a flag, not a
   positional argument.
+- `pscale database regions list <database> --org <org>` lists regions
+  available to a database. `pscale database read-only-regions list <database>
+  --org <org>` lists configured Vitess read-only regions for the database's
+  default branch.
 - `pscale api <path>` takes org-relative paths such as
   `organizations/{org}/databases/{db}/branches/{branch}` — there is no
   `get` subcommand and no `/v1/` prefix. Pass query parameters with
@@ -63,6 +71,9 @@ Verified interface notes (recheck against the docs when a command fails):
   session inventory works for Postgres and Vitess over a reserved
   administrative connection. Do not cancel queries or terminate connections
   unless the operator explicitly approves that operational action.
+- Postgres switchovers have read-only CLI inspection after start:
+  `pscale branch switchover list <database> <branch> --org <org>` and
+  `pscale branch switchover show <database> <branch> <id> --org <org>`.
 - Query Insights is public API. Live query telemetry:
   `.../branches/{branch}/insights` (per-pattern statistics; supports
   `from`/`to`/`period`, `q`, `sort`, `dir`, `tablet_type`, `type`,
@@ -72,8 +83,14 @@ Verified interface notes (recheck against the docs when a command fails):
   executions), `insights/{fingerprint}/summary`, and
   `insights/{fingerprint}/traffic/budgets`. The `query-patterns` path
   returns generated report metadata, not live patterns.
-- Traffic budgets: `.../branches/{branch}/traffic/budgets`. The CLI has no
-  `pscale traffic-control budget list`; use the API for inventory.
+- The CLI also exposes read-only Insights and metrics drill-downs:
+  `pscale metrics queries`, `pscale metrics tables`, `pscale metrics tags`,
+  Vitess-only `pscale metrics tablets` and `pscale metrics keyspace-tables`,
+  plus `pscale insights queries samples/show/summary/traffic-budgets`.
+- Traffic budgets: `.../branches/{branch}/traffic/budgets`, or
+  `pscale traffic-control budget list <database> <branch> --org <org>`.
+  Add `--fingerprint <fingerprint>` when inventorying budgets that affect a
+  known query pattern.
 - Postgres roles: list via `.../branches/{branch}/roles`; fetch a single
   role by ID, not name (`pscale role get <db> <branch> <role-id>`).
 - IP restrictions: database-level
@@ -85,11 +102,15 @@ Verified interface notes (recheck against the docs when a command fails):
   response reports `next_page`; use the database object's
   `open_schema_recommendations_count` as the authoritative total, treat
   the returned page as a sample, and state in the report when the itemized
-  list covers only part of the total.
+  list covers only part of the total. Use
+  `pscale insights recommendations show <database> <number> --org <org>` to
+  fetch one recommendation's full ready-to-apply DDL for review.
 - PITR state and branch-level backup policies have no verified read path;
   record backup posture from `pscale backup list` and the database-level
   backup policy, and mark PITR "not assessed in this run" rather than
-  probing paths.
+  probing paths. Creating a Postgres branch with `--restore-point` is a
+  restore operation, not inventory; mention it only as an approved
+  restore-drill or incident-recovery path.
 - List endpoints paginate; follow the pagination parameters until
   exhausted before reporting counts (except the schema-recommendations
   case above).
@@ -128,6 +149,7 @@ For Postgres, record:
 
 - Branch list.
 - Whether branches were created from backup or empty.
+- Whether restore drills use backup IDs or point-in-time restore branches.
 - Whether schema changes are managed manually, through migrations, or through an ORM.
 - Whether a separate branch is used for migration testing.
 - Whether the team expects Vitess-style deploy requests; if yes, flag that Postgres branches do not use deploy requests in the same way.
@@ -143,6 +165,8 @@ Record:
 - Whether complete/raw query collection is enabled.
 - Active anomalies.
 - Query patterns with high latency, high rows read, high error rate, or high execution count.
+- Query, table, tablet, and tag metrics that establish a baseline for the
+  finding under review.
 - Postgres CPU-heavy query patterns and Vitess vindex-usage data when exposed
   by the Insights interface in use.
 - Whether application deploy identifiers are visible in comments or tags.

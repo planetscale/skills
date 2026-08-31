@@ -64,6 +64,55 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Read-only evidence commands
+
+Use these with `--format json` and the normal `--org <org>` flag placement:
+
+- Regions: `pscale database regions list <database>` and, for Vitess default
+  branches, `pscale database read-only-regions list <database>`.
+- Postgres switchover follow-up:
+  `pscale branch switchover list <database> <branch>` and
+  `pscale branch switchover show <database> <branch> <id>`.
+- Metrics: `pscale metrics queries`, `pscale metrics tables`, and
+  `pscale metrics tags` on Postgres or Vitess; Vitess also has
+  `pscale metrics tablets` and `pscale metrics keyspace-tables`.
+- Schema recommendations:
+  `pscale insights recommendations show <database> <number>` fetches one
+  recommendation, including full ready-to-apply DDL, for review.
+- Query details: `pscale insights queries samples/show/summary` and
+  `pscale insights queries traffic-budgets`; `show` takes a sample ID, while
+  `samples`, `summary`, and `traffic-budgets` take a fingerprint.
+- Traffic Control inventory:
+  `pscale traffic-control budget list <database> <branch>` and
+  `--fingerprint <fingerprint>` when narrowing to budgets that affect a query.
+- Service-token metadata: `pscale service-token show <token-id>`. Treat this
+  as credential-administration scope; do not copy token values into logs or
+  reports if any are returned.
+- Billing invoices: `pscale billing invoice list/show/line-items --org <org>`.
+  Treat invoice and payment details as sensitive and only collect them when
+  billing is explicitly in scope.
+- Organization teams: `pscale org team list --org <org>` for read-only team
+  inventory.
+
+## Approval-gated commands
+
+The commands below are available to the CLI, but they change state and must be
+handled under `../11-change-gates-and-approval-contract/SKILL.md`:
+
+- Postgres point-in-time restore branches: use `pscale branch create` with
+  `--from <source-branch> --restore-point <timestamp>` (Postgres-only, cannot
+  be combined with `--seed-data`). Creating the branch is a restore operation.
+- Backup protection:
+  `pscale backup update <database> <branch> <backup-id> --protected` or
+  `--protected=false`.
+- Organization billing/role settings:
+  `pscale org update --org <org> ...`.
+- Team and team-member management:
+  `pscale org team create ...`, `pscale org team member add ...`, and related
+  update/delete commands.
+- Any credential, payment-method, branch restore, switchover start, backup,
+  role, network, Traffic Control, deploy, or schema mutation.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide

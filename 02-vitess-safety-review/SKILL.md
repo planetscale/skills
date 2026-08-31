@@ -81,9 +81,14 @@ Review Insights for:
 - Slow queries.
 - Queries reading too many rows.
 - Erroring queries.
+- Individual query executions and fingerprint summaries from
+  `pscale insights queries samples/show/summary` when CLI access is the
+  available interface.
 - Queries with poor index usage.
 - For sharded databases, whether query patterns use relevant vindexes and how
   vindex usage changes after index or routing changes.
+- Tablet time series and keyspace table-storage metrics from
+  `pscale metrics tablets` and `pscale metrics keyspace-tables`.
 - Unusual query volume.
 - Missing SQL comment tags.
 - Tag breakdowns when built-in metadata or SQLCommenter tags are present:
@@ -136,9 +141,15 @@ Check backup posture and restore runbooks.
 Recommend:
 
 - Verify automated backups exist.
+- Record which backups are protected from deletion.
 - Run a non-production restore drill periodically.
 - Document restore target, RPO/RTO expectation, and application cutover plan.
 - For sharded databases, document shard-aware restore expectations.
+- Protect backups that must be retained for a restore drill, audit, or
+  incident hold, and document who may later remove that protection.
+
+Do not restore, create emergency backups, or change a backup's protected
+status without approval.
 
 ### Sharding and keyspace safety
 
@@ -146,6 +157,8 @@ If the database is sharded, review:
 
 - Keyspaces and shards.
 - Vschema.
+- Available database regions and configured read-only regions, including
+  `pscale database read-only-regions list` for the default branch.
 - Cross-shard query patterns.
 - Whether schema deploy requests show per-shard impact.
 - Whether queries use shard-friendly access paths.

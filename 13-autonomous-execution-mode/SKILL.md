@@ -53,6 +53,9 @@ containing:
   Valid: "open deploy requests for additive DDL from open schema
   recommendations; deploy with revert window; additive only (ADD INDEX,
   ADD COLUMN NULL)". Invalid: "keep the schema optimized".
+- Credential, billing, organization/team, backup-protection, branch-restore,
+  and switchover operations must be named explicitly; a general database
+  maintenance allowlist does not include them.
 - Numeric bounds where applicable: max changes per run, max branch age
   for deletion, budget modes permitted (warn only vs enforce).
 - Expiry date. Expired authorization = report-only mode. Recommended
