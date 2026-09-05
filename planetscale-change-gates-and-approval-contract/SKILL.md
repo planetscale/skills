@@ -47,7 +47,8 @@ Always requires explicit approval:
 - Change deploy request approval settings.
 - Create/update/delete Traffic Control budget or rule.
 - Move Traffic Control budget to enforce mode.
-- Create/update/delete webhook.
+- Create/update/delete webhook, including changing its destination,
+  subscribed events, secret, or Authorization header.
 - Enable raw query collection.
 - Enable/disable extensions or settings that require restart.
 - Create/update/delete role.

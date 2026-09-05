@@ -39,6 +39,8 @@ Recommend for operational events:
 - Maintenance.
 - Schema recommendations where available.
 - Deploy request lifecycle for Vitess.
+- Authorization headers for receivers that require token-based access,
+  alongside PlanetScale signature verification.
 
 ### MCP and agents
 

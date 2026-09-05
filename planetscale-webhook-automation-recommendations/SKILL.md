@@ -13,6 +13,14 @@ Review and recommend PlanetScale webhooks that notify humans and trigger safe au
 
 Webhooks may trigger automation, but automation must produce recommendations, issues, branches, or pull requests by default. It must not directly mutate production databases or production application behavior without explicit human approval.
 
+Webhook receivers can use two complementary protections: PlanetScale
+signature verification proves the event came from PlanetScale, and an
+Authorization header can satisfy receiver-side token requirements. When a
+receiver such as Cursor, Devin, or an internal automation endpoint requires
+Authorization, recommend configuring the full header value, including the
+scheme (for example, `Bearer <token>`). PlanetScale sends the configured
+value unchanged with each delivery.
+
 ## Events to evaluate
 
 ### General and Postgres
@@ -99,11 +107,14 @@ Recommend only receivers that meet these requirements:
 - Fast 2xx response; expensive work is queued asynchronously.
 - No dependency on following redirects.
 - Signature verification using PlanetScale webhook signature header and the webhook secret.
+- Authorization header configured when the receiving service requires a
+  bearer token or other Authorization scheme.
 - Idempotency by event ID or timestamp/resource tuple.
 - Dead-letter queue or retry-safe logging.
 - Human-readable audit trail.
 - Clear owner and escalation path.
-- Secret rotation procedure.
+- Secret rotation procedure for webhook secrets and Authorization header
+  values.
 
 ## Recommended automation flows
 
@@ -165,6 +176,11 @@ Do not recommend:
 - Webhook directly rotates credentials.
 - Webhook posts secrets or raw SQL with literals into public Slack channels.
 - Webhook receiver ignores signature verification.
+- Webhook receiver relies on a static Authorization header but skips
+  PlanetScale signature verification.
+- Webhook Authorization header values are copied into reports, PRs, issues,
+  or logs instead of being stored only in the receiving platform's secret
+  path.
 - Webhook receiver does long-running work before returning 2xx.
 
 ## Output
@@ -175,6 +191,8 @@ Return:
 - Missing recommended subscriptions.
 - Destination quality review.
 - Signature verification status.
+- Authorization header requirement and configured/not-configured status;
+  never include the header value.
 - Automation opportunities.
 - Unsafe automation risks.
 - Proposed webhook changes requiring approval.

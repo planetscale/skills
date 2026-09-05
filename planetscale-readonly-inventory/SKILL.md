@@ -168,6 +168,9 @@ Record:
 - Last delivery success or failure.
 - Destination category: Slack, PagerDuty, internal automation, CI, agent queue, unknown.
 - Whether webhook signature verification is documented or implemented.
+- Whether an Authorization header is required by the destination and
+  whether one is configured. Record presence only; never capture or report
+  the header value.
 - Whether webhook handling is idempotent and asynchronous.
 
 ### Postgres Traffic Control
