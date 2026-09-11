@@ -36,11 +36,14 @@ targeting section to `AGENTS.md` or equivalent project instructions:
 - PlanetScale organization.
 - Database.
 - Branch.
-- Engine: Vitess or Postgres.
+- Engine: Vitess, Neki, or Postgres.
 - Production branch name.
 - Whether agents may use MCP insights-only or full MCP.
 - Whether write queries are forbidden.
 - Required approval protocol for schema, Traffic Control, webhooks, roles, and network changes.
+For Neki, also record router group, replica-routing expectations, shard
+topology owner, and the approved path for native DDL versus managed DDL
+workflows.
 
 Do not edit `AGENTS.md` without approval.
 
@@ -62,6 +65,7 @@ Allowed by default:
 - Open deploy requests into branches protected by a review workflow.
 - Draft Traffic Control budget proposals.
 - Draft webhook receiver requirements.
+- Draft Neki topology, managed DDL, and router-group proposals.
 
 Where a PR + deploy-request workflow exists, the default deliverable for a
 schema recommendation is the complete reviewable unit: development branch
@@ -74,6 +78,9 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 - Execute write SQL against production.
 - Execute DDL directly against production branches.
 - Deploy a deploy request / apply schema to production.
+- Create, complete, cancel, clean up, or retry Neki production managed DDL
+  workflows.
+- Change Neki data topology, enable GSIs, add shards, move tables, or reshard.
 - Merge pull requests.
 - Create webhooks.
 - Create or enforce Traffic Control budgets.
@@ -191,6 +198,11 @@ For read queries:
 - Avoid `EXPLAIN ANALYZE` on production unless explicitly approved.
 - Limit result sizes.
 - Avoid querying sensitive columns unless required and approved.
+- For Neki, prefer replica routing for read-only agent work when stale-read
+  tolerance permits (`__neki.target = 'replica'`, connection options, or
+  `pscale shell --replica`). Include shard-key predicates where possible, and
+  treat unexpected scatter queries as an investigation input before running
+  broader reads.
 - For Postgres tables with row-level security, remember that the MCP read role
   uses `pg_read_all_data` and does not bypass RLS. If a read query returns zero
   rows or a zero count and the MCP response warns that RLS may be filtering

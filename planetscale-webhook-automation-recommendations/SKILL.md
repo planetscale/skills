@@ -15,10 +15,10 @@ Webhooks may trigger automation, but automation must produce recommendations, is
 
 ## Events to evaluate
 
-### General and Postgres
+### General, Neki, and Postgres
 
 - `branch.anomaly`: new Insights anomaly.
-- `branch.out_of_memory`: Postgres out-of-memory event.
+- `branch.out_of_memory`: Postgres or Neki out-of-memory event.
 - `branch.primary_promoted`: primary failover/promotion.
 - `branch.ready`: branch created and ready.
 - `branch.sleeping`: branch sleeping.
@@ -141,6 +141,19 @@ For Postgres:
 5. Open PR.
 6. Apply to production on merge via the deployment pipeline, or on
    explicit approval where no pipeline exists.
+
+For Neki:
+
+1. Receive `branch.schema_recommendation`.
+2. Fetch recommendation details.
+3. Decide whether the change belongs in native DDL, managed Online DDL, or
+   managed direct DDL.
+4. For sharded tables, verify shard-key, reference-table, GSI, and scatter-query
+   implications before proposing the workflow.
+5. Open a PR or issue with the migration or managed DDL runbook.
+6. Create, complete, cancel, clean up, or retry production managed DDL workflows
+   only on explicit approval or under a standing authorization that names this
+   class.
 
 ### Deploy request lifecycle flow for Vitess
 

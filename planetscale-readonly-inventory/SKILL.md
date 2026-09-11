@@ -20,6 +20,8 @@ Allowed by default:
 - Read Query Insights, anomalies, and query patterns through MCP or API.
 - Read traffic budgets and rules.
 - Read Postgres roles and non-secret role metadata.
+- Read Neki roles, router groups, data topology, configuration profiles, and
+  non-secret topology metadata.
 - Read backup schedules and restore metadata.
 - Read branch schema.
 - Inspect live connection/session metadata with the Connections CLI view.
@@ -60,9 +62,9 @@ Verified interface notes (recheck against the docs when a command fails):
   positional argument. `pscale backup list <database> <branch>` requires
   the branch.
 - `pscale branch connections top <database> <branch>` — live read-only
-  session inventory works for Postgres and Vitess over a reserved
-  administrative connection. Do not cancel queries or terminate connections
-  unless the operator explicitly approves that operational action.
+  session inventory works for supported engines over a reserved administrative
+  connection. Do not cancel queries or terminate connections unless the
+  operator explicitly approves that operational action.
 - Query Insights is public API. Live query telemetry:
   `.../branches/{branch}/insights` (per-pattern statistics; supports
   `from`/`to`/`period`, `q`, `sort`, `dir`, `tablet_type`, `type`,
@@ -107,7 +109,7 @@ Record:
 - Organization.
 - Database.
 - Branch.
-- Engine: Vitess or Postgres.
+- Engine: Vitess, Neki, or Postgres.
 - Region and cloud provider.
 - Production/development branch status.
 - Branch protection and safe workflow state.
@@ -132,6 +134,16 @@ For Postgres, record:
 - Whether a separate branch is used for migration testing.
 - Whether the team expects Vitess-style deploy requests; if yes, flag that Postgres branches do not use deploy requests in the same way.
 
+For Neki, record:
+
+- Branch list and whether the database is single-shard or sharded.
+- Data topology: unsharded tables, sharded tables, shard keys, reference
+  tables, global secondary indexes, and authoritative shard groups.
+- Router groups and configuration profiles used by each workload.
+- Whether schema changes use native DDL or managed DDL workflows.
+- Whether the team expects Vitess-style deploy requests; if yes, flag that Neki
+  does not use deploy requests.
+
 ### Observability
 
 Record:
@@ -143,8 +155,9 @@ Record:
 - Whether complete/raw query collection is enabled.
 - Active anomalies.
 - Query patterns with high latency, high rows read, high error rate, or high execution count.
-- Postgres CPU-heavy query patterns and Vitess vindex-usage data when exposed
-  by the Insights interface in use.
+- Postgres and Neki CPU-heavy query patterns, Neki scatter query or shard-call
+  evidence, and Vitess vindex-usage data when exposed by the Insights
+  interface in use.
 - Whether application deploy identifiers are visible in comments or tags.
 
 ### Recommendations
@@ -194,6 +207,26 @@ For Postgres only, record:
   connection saturation during an active incident.
 - Whether private connectivity and IP restrictions are configured.
 - Whether backup retention and PITR meet the customer’s recovery expectations.
+
+### Neki safety
+
+For Neki only, record:
+
+- Platform Preview status and any documented preview limitations that intersect
+  the workload, import plan, schema, or operating model.
+- Shard count, shard placement, router groups, and high-availability topology.
+- Shard keys, reference tables, global secondary indexes, and whether data
+  placement matches the application's query and transaction shape.
+- Whether queries and transactions include shard-key predicates where needed.
+- Whether cross-shard transactions appear in application-critical flows.
+- Whether schema changes use managed DDL for large or busy tables and whether
+  workflow status, completion, cancellation, and cleanup are tracked.
+- Whether native DDL workflows include a router schema-visibility wait step
+  using the emitted `__neki.wait_for_ddl(...)` call before dependent SQL.
+- Whether backup and PITR coverage accounts for every managed shard and recent
+  shard-set changes.
+- Whether read-only workloads route to replicas and whether private
+  connectivity is configured where required.
 
 ### Vitess safety
 

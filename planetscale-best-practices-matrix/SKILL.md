@@ -18,12 +18,15 @@ Recommend for every production database:
 - Review slow, expensive, high-frequency, and erroring query patterns.
 - For Postgres, sort Insights by CPU (`sort=cpuTime` on the Insights API)
   when diagnosing CPU pressure.
+- For Neki, review CPU-heavy query patterns, scatter query evidence, shard-call
+  counts, and whether queries include the routing predicates the data topology
+  expects.
 - For sharded Vitess, review vindex usage per query pattern and the usage
   trend after index or routing changes.
 - Correlate regressions with deploys.
 - Use tags/comments to map queries back to code.
 - Use tag filtering/navigation in Query Insights: the tags API
-  (`insights/tags`, `insights/tags/summaries`) on both engines, plus
+  (`insights/tags`, `insights/tags/summaries`) where available, plus
   `tag:key:value` filtering and per-execution tag drill-down in the Vitess
   dashboard.
 - Use anomalies as alert and automation inputs.
@@ -39,6 +42,7 @@ Recommend for operational events:
 - Maintenance.
 - Schema recommendations where available.
 - Deploy request lifecycle for Vitess.
+- Managed DDL workflow status and schema-recommendation intake for Neki.
 
 ### MCP and agents
 
@@ -108,6 +112,54 @@ Recommend production, staging, and short-lived development branches with safe mi
 ### Sharding/keyspace review
 
 Recommend when query patterns or growth suggest shard-awareness problems. Do not reshard automatically.
+
+## Neki-specific recommendations
+
+### Platform Preview fit
+
+Recommend confirming that the workload, support expectations, and operating
+model are compatible with Platform Preview status. Neki is a Beta Feature under
+PlanetScale's terms or the customer's applicable agreement and is not covered
+by a service level agreement during preview.
+
+### Data topology and shard keys
+
+Recommend for sharded or soon-to-shard Postgres workloads. Review shard keys,
+reference tables, global secondary indexes, and authoritative shard groups
+against the application's query and transaction shape. Do not add shards, move
+tables, enable GSIs, or reshard automatically.
+
+### Scatter query review
+
+Recommend when Query Insights, `EXPLAIN`, or query-plan evidence shows
+unexpected shard fan-out. Prefer adding routing predicates or revising topology
+before treating scatter queries as acceptable baseline behavior.
+
+### Cross-shard transaction review
+
+Recommend when application-critical transactions can touch more than one shard.
+Neki cross-shard transactions do not provide atomic commit across all shards;
+prefer transaction flows that include shard-key predicates and remain local to
+one shard.
+
+### Managed DDL workflow
+
+Recommend managed Online DDL for large or busy table changes and managed direct
+DDL when workflow coordination is useful for direct changes. Neki has no
+Vitess deploy requests; production schema workflow review should focus on
+native DDL versus managed DDL, readiness, explicit completion, cleanup, and
+recovery-forward handling of partial shard outcomes.
+
+### Router groups and replica routing
+
+Recommend separate router groups for workloads needing independent router
+sizing or autoscaling. Route read-only agents, BI, analytics, and reporting to
+replicas when stale-read tolerance permits.
+
+### Backup and PITR shard coverage
+
+Recommend verifying that successful backups cover every managed shard and that
+PITR restore points are covered by a backup after any shard-set change.
 
 ## Postgres-specific recommendations
 

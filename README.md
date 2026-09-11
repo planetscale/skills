@@ -226,6 +226,7 @@ run produces an audit log. Reports end with the same contract line:
 | planetscale-safe-orchestrator | Runs the full assessment end to end; the usual entry point |
 | planetscale-readonly-inventory | Evidence collection: org, branches, backups, webhooks, roles |
 | planetscale-vitess-safety-review | Vitess: safe migrations, deploy requests, revert, sharding |
+| planetscale-neki-safety-review | Neki: sharded Postgres topology, managed DDL, preview limitations, recovery |
 | planetscale-postgres-safety-review | Postgres: roles, pg_strict, Traffic Control, PITR, pooling |
 | planetscale-query-insights-and-tags | Query behavior, anomaly review, tag coverage and cardinality |
 | planetscale-traffic-control-recommendations | Warn-first budget plans for Postgres traffic slices |

@@ -19,7 +19,7 @@ Collect:
 - Suggested DDL.
 - Supporting Insights evidence.
 - Application repository and migration system.
-- Engine: Vitess or Postgres.
+- Engine: Vitess, Neki, or Postgres.
 - Target branch.
 
 ## Recommendation types to recognize
@@ -60,6 +60,29 @@ Recommended path:
 7. Monitor Insights and anomaly state after deployment.
 
 Default output before approval: issue or PR with migration proposal, not a live deploy request.
+
+### Neki
+
+Recommended path:
+
+1. Convert the recommendation into the application's migration framework where
+   possible.
+2. Decide whether the change needs Neki managed DDL:
+   - Use managed Online DDL when direct execution could block traffic, rewrite a
+     large live table, or build an index aggressively on the serving table.
+   - Use managed direct DDL when no shadow-table copy is needed but workflow
+     coordination, readiness, explicit completion, and cleanup are still useful.
+   - Use native DDL only when the operation is safe to execute immediately and
+     does not need workflow tracking or an explicit completion gate.
+3. Test on a non-production branch.
+4. For sharded tables, verify the affected shard key, reference-table, GSI, and
+   scatter-query implications before proposing the workflow.
+5. Open PR with the proposed migration or workflow instructions.
+6. Create, complete, cancel, clean up, or retry production managed DDL workflows
+   only after approval.
+
+Default output before approval: migration PR or issue with the Neki DDL path,
+not production native DDL and not a live production managed DDL workflow.
 
 ### Postgres
 

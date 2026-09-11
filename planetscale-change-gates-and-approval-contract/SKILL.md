@@ -59,6 +59,10 @@ Always requires explicit approval:
 - Create restore branch.
 - Create backup beyond automatic backups.
 - Change branch size or replica topology.
+- Create, complete, cancel, clean up, or retry Neki managed DDL workflows.
+- Change Neki router groups, configuration profiles, data topology, reference
+  table bindings, global secondary indexes, shard count, table placement, or
+  resharding workflows.
 - Edit repository files or dependencies.
 
 ### Class D: production data/availability impacting
@@ -69,6 +73,7 @@ Requires explicit approval, named target confirmation, rollback plan, and ideall
 - Production DML.
 - Applying schema recommendation to production.
 - Queueing or applying Vitess deploy request to production.
+- Running Neki native DDL or completing Neki managed DDL against production.
 - Promoting or restoring branches.
 - Deleting branches, databases, roles, webhooks, backups, or traffic rules.
 - Enforcing Traffic Control on production.

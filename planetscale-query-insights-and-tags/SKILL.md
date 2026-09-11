@@ -25,6 +25,8 @@ For the selected database and branch, inspect:
 - Notable queries and active anomalies.
 - Query patterns affected by recent deploys.
 - Query patterns attached to schema recommendations.
+- For Neki databases, shard-call counts, scatter query evidence, and whether
+  query predicates include the routing keys expected by the data topology.
 - For sharded Vitess databases, vindex usage for each query pattern: the
   percentage of traffic using relevant vindexes and the vindex-usage trend
   over time. The API exposes per-pattern `index_usages` and
@@ -79,8 +81,9 @@ for the window requested.
 The response schema is shared across engines, but some fields are
 engine-specific: CPU/IO durations and block-cache statistics
 (`sum_cpu_duration_millis`, `blocks_read`, `block_cache_hit_ratio`, …) are
-populated for Postgres; shard queries, keyspaces, `tablet_type`, and
-routing-index (vindex) usage are populated for Vitess.
+populated for Postgres and Neki where available; Neki exposes sharded Postgres
+routing and scatter-query evidence where available; shard queries, keyspaces,
+`tablet_type`, and routing-index (vindex) usage are populated for Vitess.
 
 ### Tag coverage
 
@@ -202,7 +205,12 @@ For Postgres only, recommend `warn` mode budgets for expensive but important rou
 
 ### Add schema recommendation workflow
 
-For Vitess, recommend turning open schema recommendations into branch/deploy-request work. For Postgres, recommend turning them into reviewed migrations against a non-production branch.
+For Vitess, recommend turning open schema recommendations into
+branch/deploy-request work. For Neki, recommend a reviewed migration or issue
+that names the native DDL or managed DDL path and verifies shard-key,
+reference-table, GSI, and scatter-query implications. For Postgres, recommend
+turning recommendations into reviewed migrations against a non-production
+branch.
 
 ### Fix code path
 

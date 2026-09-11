@@ -7,7 +7,7 @@ description: Inspect an application repository connected to PlanetScale and reco
 
 ## Purpose
 
-Inspect the application repository connected to PlanetScale and recommend the correct SQLCommenter-style instrumentation so PlanetScale Insights and Postgres Traffic Control can attribute queries to application code paths. Do not edit files or install dependencies without approval.
+Inspect the application repository connected to PlanetScale and recommend the correct SQLCommenter-style instrumentation so PlanetScale Insights, Neki routing analysis, and Postgres Traffic Control can attribute queries to application code paths. Do not edit files or install dependencies without approval.
 
 ## Repository inspection
 
@@ -22,7 +22,7 @@ Identify:
 - Deployment metadata source, such as git SHA or release ID.
 - Existing SQL comments, query tags, tracing, OpenTelemetry, or database middleware.
 - PlanetScale connection configuration.
-- Whether the repository connects to Vitess, Postgres, or both.
+- Whether the repository connects to Vitess, Neki, Postgres, or a combination.
 
 ## Recommended package mapping
 
@@ -169,6 +169,9 @@ Before recommending merge:
 - Confirm comments survive the ORM, driver, pooler, and PlanetScale connection path.
 - Confirm Insights displays tags.
 - Confirm tag cardinality is bounded.
+- For Neki, confirm tags and normalized route/job names are sufficient to
+  correlate scatter queries, shard-key omissions, and workload classes with
+  application code.
 - Confirm Traffic Control can match the intended tags for Postgres.
 - Confirm no sensitive data is present.
 

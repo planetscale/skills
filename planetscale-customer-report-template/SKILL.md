@@ -126,6 +126,15 @@ For Vitess:
 - Gated deployment usage.
 - Schema revert runbook.
 
+For Neki:
+
+- Platform Preview status and workload-relevant limitations.
+- Data topology and shard keys.
+- Native DDL versus managed DDL workflow.
+- Router groups and replica routing.
+- Backup/PITR shard coverage.
+- Role and connection boundaries.
+
 For Postgres:
 
 - Branch migration workflow.
@@ -169,6 +178,7 @@ Recommendation IDs:
 
 - `OBS-*` for Insights/query tags.
 - `VIT-*` for Vitess safety/deploy workflow.
+- `NKI-*` for Neki topology, managed DDL, preview limitations, and recovery workflow.
 - `PG-*` for Postgres roles, pg_strict, Traffic Control, PITR, network.
 - `WEB-*` for webhooks and automation.
 - `APP-*` for repository instrumentation.
