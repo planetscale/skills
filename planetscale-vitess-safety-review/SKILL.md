@@ -52,6 +52,25 @@ Recommend:
   before use, and only recommend the database-level aggressive cutover default
   when frequent cutover blocking is understood and accepted.
 
+### Keyspace tablet throttler
+
+For each Vitess keyspace, check whether the tablet throttler is enabled and
+which replication-lag threshold is configured.
+
+When enabled, the throttler pauses schema migrations and VReplication workflows
+while replication lag is above the threshold. The setting applies across all
+shards in the keyspace.
+
+Recommend:
+
+- Keep the throttler enabled on production keyspaces unless the team has a
+  deliberate exception and an operator-approved change plan.
+- Tune the lag threshold based on observed replica lag, migration windows, and
+  VReplication workload expectations instead of disabling throttling to make a
+  migration or workflow finish sooner.
+- Treat disabling the throttler or materially raising the threshold as a
+  behavior-changing safety tradeoff requiring explicit approval.
+
 ### Schema revert
 
 Check whether the team knows the revert window and whether their incident runbook includes it.
@@ -146,6 +165,7 @@ If the database is sharded, review:
 
 - Keyspaces and shards.
 - Vschema.
+- Keyspace tablet throttler state and replication-lag threshold.
 - Cross-shard query patterns.
 - Whether schema deploy requests show per-shard impact.
 - Whether queries use shard-friendly access paths.

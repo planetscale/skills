@@ -15,7 +15,7 @@ Prevent accidental or autonomous changes that can affect availability, safety, s
 
 Allowed without approval:
 
-- List databases, branches, keyspaces, webhooks, backups, roles, traffic budgets, schema recommendations, deploy requests, and Insights data.
+- List databases, branches, keyspaces, keyspace settings, webhooks, backups, roles, traffic budgets, schema recommendations, deploy requests, and Insights data.
 - Inspect repository code.
 - Read schema metadata.
 - Read non-sensitive database metadata.
@@ -59,6 +59,8 @@ Always requires explicit approval:
 - Create restore branch.
 - Create backup beyond automatic backups.
 - Change branch size or replica topology.
+- Enable or disable the Vitess keyspace tablet throttler, or change its
+  replication-lag threshold.
 - Edit repository files or dependencies.
 
 ### Class D: production data/availability impacting

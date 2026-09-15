@@ -14,6 +14,8 @@ Build an evidence-backed inventory of a PlanetScale database without making chan
 Allowed by default:
 
 - List organizations, databases, branches, keyspaces, regions, and sizes.
+- Read Vitess keyspace settings, including tablet throttler state and
+  replication-lag threshold.
 - Read branch metadata.
 - Read webhook configuration.
 - Read schema recommendations.
@@ -63,6 +65,11 @@ Verified interface notes (recheck against the docs when a command fails):
   session inventory works for Postgres and Vitess over a reserved
   administrative connection. Do not cancel queries or terminate connections
   unless the operator explicitly approves that operational action.
+- `pscale keyspace settings <database> <branch> <keyspace>` — read current
+  Vitess keyspace settings. `pscale keyspace update-settings ...` is mutating;
+  changes such as `--throttler-enabled` and `--throttler-threshold` require the
+  approval gates in
+  `../planetscale-change-gates-and-approval-contract/SKILL.md`.
 - Query Insights is public API. Live query telemetry:
   `.../branches/{branch}/insights` (per-pattern statistics; supports
   `from`/`to`/`period`, `q`, `sort`, `dir`, `tablet_type`, `type`,
@@ -205,6 +212,7 @@ For Vitess only, record:
 - Gated deployment usage.
 - Schema revert availability.
 - Branch and keyspace topology.
+- Per-keyspace tablet throttler state and replication-lag threshold.
 - Sharding/vschema status.
 - Whether sharded query patterns use relevant vindexes.
 - Backups and restore posture.

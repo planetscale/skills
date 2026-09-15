@@ -109,6 +109,17 @@ Recommend production, staging, and short-lived development branches with safe mi
 
 Recommend when query patterns or growth suggest shard-awareness problems. Do not reshard automatically.
 
+### Keyspace tablet throttler
+
+Recommend recording the tablet throttler state and replication-lag threshold
+for each production keyspace. When enabled, it pauses schema migrations and
+VReplication workflows while replication lag is above the threshold, across all
+shards in that keyspace.
+
+Prefer keeping it enabled for production keyspaces unless there is a deliberate
+exception. Treat disabling it or materially raising the threshold as an
+approval-gated safety tradeoff.
+
 ## Postgres-specific recommendations
 
 ### User-defined roles
