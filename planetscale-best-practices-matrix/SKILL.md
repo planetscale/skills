@@ -109,6 +109,20 @@ Recommend production, staging, and short-lived development branches with safe mi
 
 Recommend when query patterns or growth suggest shard-awareness problems. Do not reshard automatically.
 
+### Keyspace rollout controls
+
+For sharded Vitess keyspaces, review rollout concurrency (`max_rollout`) and
+recommend an explicit policy when configuration rollouts over many shards need
+bounded parallelism. Higher concurrency can shorten rollouts but changes more
+shards at the same time, so setting changes require approval.
+
+### MoveTables workflow discipline
+
+Recommend operator-owned runbooks for Vitess MoveTables workflows when tables
+move between keyspaces. Agents may read `pscale branch vtctld move-tables`
+status, but copy, traffic switch, complete, and cancel steps require an
+approved plan.
+
 ## Postgres-specific recommendations
 
 ### User-defined roles
@@ -145,6 +159,9 @@ Recommend for customers requiring private network posture or reduced public expo
 Recommend only when use case is clear and restart/activation impact is accepted.
 Include `auto_explain` when automatic plan logging for slow queries would
 materially improve diagnosis and the resulting log volume is acceptable.
+Include TIN when Postgres full-text search is a core workload and the team
+needs a native index/search path with BM25 ranking instead of ad hoc search
+queries that compete with OLTP traffic.
 If Terraform manages Postgres branch parameters or supported extensions, keep
 that source of truth aligned with approved dashboard/API changes.
 

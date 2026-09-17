@@ -15,7 +15,9 @@ Prevent accidental or autonomous changes that can affect availability, safety, s
 
 Allowed without approval:
 
-- List databases, branches, keyspaces, webhooks, backups, roles, traffic budgets, schema recommendations, deploy requests, and Insights data.
+- List databases, branches, keyspaces, keyspace settings, webhooks, backups,
+  roles, traffic budgets, schema recommendations, deploy requests, Vitess
+  MoveTables workflow status, and Insights data.
 - Inspect repository code.
 - Read schema metadata.
 - Read non-sensitive database metadata.
@@ -56,6 +58,7 @@ Always requires explicit approval:
 - Change connection pooling behavior.
 - Change IP restrictions, PrivateLink, PSC, or public access.
 - Change backup schedule or retention.
+- Change Vitess keyspace settings such as rollout concurrency.
 - Create restore branch.
 - Create backup beyond automatic backups.
 - Change branch size or replica topology.
@@ -69,6 +72,8 @@ Requires explicit approval, named target confirmation, rollback plan, and ideall
 - Production DML.
 - Applying schema recommendation to production.
 - Queueing or applying Vitess deploy request to production.
+- Starting, switching traffic for, completing, or canceling a production Vitess
+  MoveTables workflow.
 - Promoting or restoring branches.
 - Deleting branches, databases, roles, webhooks, backups, or traffic rules.
 - Enforcing Traffic Control on production.

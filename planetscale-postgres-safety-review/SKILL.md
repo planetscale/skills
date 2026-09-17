@@ -204,6 +204,8 @@ Review enabled and available extensions relevant to safety and observability:
 - `pg_cron`
 - `pg_partman_bgw`
 - `pg_hint_plan`
+- TIN, when native Postgres full-text search with BM25 ranking is a core
+  workload
 - TimescaleDB, if time-series features are relevant
 
 Recommend extensions only when use case is clear. `auto_explain` is available
@@ -215,6 +217,10 @@ Postgres branch parameters and supported extensions can be managed there, but
 parameter or extension changes still require the same approval and restart
 impact review as dashboard changes. Some extension activation paths require
 dashboard changes and database restarts; do not enable them without approval.
+For search-heavy applications, evaluate whether TIN indexes can replace
+ad hoc full-text search patterns that produce high latency, high CPU, or high
+rows-read findings. Treat activation and index creation as normal approved
+schema/extension work with migration testing and rollback planning.
 
 ## Webhook recommendations for Postgres
 

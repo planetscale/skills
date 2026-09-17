@@ -149,8 +149,17 @@ If the database is sharded, review:
 - Cross-shard query patterns.
 - Whether schema deploy requests show per-shard impact.
 - Whether queries use shard-friendly access paths.
+- Keyspace rollout settings, including `max_rollout` when exposed, so large
+  keyspaces have an explicit shard concurrency policy for configuration
+  rollouts. The default is one shard at a time; higher values can shorten
+  rollouts but increase the number of shards changing simultaneously.
+- Active or planned Vitess MoveTables workflows. Treat copy progress, replica
+  traffic switch, primary traffic switch, complete, and cancel steps as
+  workflow state that needs operator review and a rollback/abort plan.
 
-Recommend an agent-safe sharding review only as a proposal. Never reshard, change vschema, or alter routing automatically.
+Recommend an agent-safe sharding review only as a proposal. Never reshard,
+change vschema, alter routing, change rollout concurrency, or advance a
+MoveTables workflow automatically.
 
 ## Webhook recommendations for Vitess
 

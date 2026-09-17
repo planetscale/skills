@@ -13,7 +13,8 @@ Build an evidence-backed inventory of a PlanetScale database without making chan
 
 Allowed by default:
 
-- List organizations, databases, branches, keyspaces, regions, and sizes.
+- List organizations, databases, branches, keyspaces, keyspace settings,
+  regions, and sizes.
 - Read branch metadata.
 - Read webhook configuration.
 - Read schema recommendations.
@@ -63,6 +64,12 @@ Verified interface notes (recheck against the docs when a command fails):
   session inventory works for Postgres and Vitess over a reserved
   administrative connection. Do not cancel queries or terminate connections
   unless the operator explicitly approves that operational action.
+- `pscale keyspace settings <database> <branch> <keyspace>` — read Vitess
+  keyspace configuration such as rollout concurrency. Updating these settings
+  is not inventory and requires approval.
+- `pscale branch vtctld move-tables list/status ...` — read Vitess MoveTables
+  workflow state. Copying, switching traffic, completing, or canceling a
+  workflow is operational mutation and requires approval.
 - Query Insights is public API. Live query telemetry:
   `.../branches/{branch}/insights` (per-pattern statistics; supports
   `from`/`to`/`period`, `q`, `sort`, `dir`, `tablet_type`, `type`,
@@ -207,6 +214,8 @@ For Vitess only, record:
 - Branch and keyspace topology.
 - Sharding/vschema status.
 - Whether sharded query patterns use relevant vindexes.
+- Keyspace rollout concurrency settings when exposed.
+- Active or recent MoveTables workflows and their copy/traffic state.
 - Backups and restore posture.
 
 ## Evidence format

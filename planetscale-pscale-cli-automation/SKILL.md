@@ -64,6 +64,22 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Vitess workflow commands
+
+Vitess operational workflows can expose structured status and suggested next
+steps through the CLI. For MoveTables, use read-only commands with JSON output
+when gathering state:
+
+```bash
+pscale branch vtctld move-tables list <database> <branch> --org <org> --format json
+pscale branch vtctld move-tables status <database> <branch> --org <org> --workflow <name> --target-keyspace <keyspace> --format json
+```
+
+Treat any `next_steps` command as a suggestion to classify against
+`../planetscale-change-gates-and-approval-contract/SKILL.md`, not as permission
+to run it. Copy, traffic-switch, complete, and cancel steps can affect
+availability and require an approved plan on production.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide
