@@ -145,6 +145,11 @@ Recommend for customers requiring private network posture or reduced public expo
 Recommend only when use case is clear and restart/activation impact is accepted.
 Include `auto_explain` when automatic plan logging for slow queries would
 materially improve diagnosis and the resulting log volume is acceptable.
+Include TIN when Postgres full-text search is a core production workload and
+the team needs a native index/search path with BM25 ranking instead of ad hoc
+search queries that compete with OLTP traffic. Include Lead for CI,
+development, or staging parity with TIN's search behavior, but not for
+production-sized indexed text because it can become slow beyond a few MB.
 If Terraform manages Postgres branch parameters or supported extensions, keep
 that source of truth aligned with approved dashboard/API changes.
 

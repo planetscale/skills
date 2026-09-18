@@ -204,6 +204,10 @@ Review enabled and available extensions relevant to safety and observability:
 - `pg_cron`
 - `pg_partman_bgw`
 - `pg_hint_plan`
+- TIN, when native Postgres full-text search with BM25 ranking is a core
+  production workload
+- Lead, when CI, development, or staging needs the same full-text search
+  behavior as TIN without depending on PlanetScale production infrastructure
 - TimescaleDB, if time-series features are relevant
 
 Recommend extensions only when use case is clear. `auto_explain` is available
@@ -215,6 +219,11 @@ Postgres branch parameters and supported extensions can be managed there, but
 parameter or extension changes still require the same approval and restart
 impact review as dashboard changes. Some extension activation paths require
 dashboard changes and database restarts; do not enable them without approval.
+For search-heavy applications, evaluate whether TIN indexes can replace
+ad hoc full-text search patterns that produce high latency, high CPU, or high
+rows-read findings. Use Lead for offline and pre-production test parity only;
+it has the same search features as TIN but can become slow once indexed text
+grows beyond a few MB, so do not recommend Lead for production workloads.
 
 ## Webhook recommendations for Postgres
 
