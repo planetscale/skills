@@ -213,8 +213,15 @@ it when slow-query plan capture would materially improve diagnosis and the
 logging volume is acceptable. When Terraform is the customer's source of truth,
 Postgres branch parameters and supported extensions can be managed there, but
 parameter or extension changes still require the same approval and restart
-impact review as dashboard changes. Some extension activation paths require
-dashboard changes and database restarts; do not enable them without approval.
+impact review as dashboard changes. For Neki configuration profiles, supported
+extensions such as pgvector can be managed by name in Terraform or with
+`pscale branch config-profile update --extensions=...` while changing related
+parameters in the same update. Treat the extension list as replace-on-write:
+omit it to leave extensions unchanged, use an empty list or empty flag value to
+disable optional extensions, and do not combine the extension-list interface
+with direct `shared_preload_libraries` or `session_preload_libraries` settings
+in the same configuration. Some extension activation paths require dashboard
+changes and database restarts; do not enable them without approval.
 
 ## Webhook recommendations for Postgres
 

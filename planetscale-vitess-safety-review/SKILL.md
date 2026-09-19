@@ -142,15 +142,24 @@ Recommend:
 
 ### Sharding and keyspace safety
 
-If the database is sharded, review:
+For Vitess keyspace and sharding safety, review:
 
 - Keyspaces and shards.
+- External keyspaces attached to production branches and the source database
+  ownership, network path, TLS/SSL mode, credential rotation, and backup
+  responsibility for each source.
 - Vschema.
 - Cross-shard query patterns.
 - Whether schema deploy requests show per-shard impact.
 - Whether queries use shard-friendly access paths.
+- Whether per-shard sizing is enabled, which shards differ from the keyspace
+  default, and the measured CPU, memory, or Metal storage pressure that
+  justifies the exception. Enabling per-shard sizing changes VTTablet resource
+  allocation only; it does not change key ranges, VSchema, or routing.
 
-Recommend an agent-safe sharding review only as a proposal. Never reshard, change vschema, or alter routing automatically.
+Recommend an agent-safe sharding review only as a proposal. Never reshard,
+create or resize external keyspaces, change per-shard sizing, change vschema,
+or alter routing automatically.
 
 ## Webhook recommendations for Vitess
 

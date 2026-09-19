@@ -25,8 +25,8 @@ Allowed by default:
 - Inspect live connection/session metadata with the Connections CLI view.
 - Inspect repository files for frameworks, ORMs, migrations, SQL tagging, and connection config.
 - Inspect Terraform or other infrastructure-as-code definitions for
-  PlanetScale roles, backups, backup policies, Postgres parameters, and
-  supported extensions.
+  PlanetScale roles, backups, backup policies, Neki configuration profiles,
+  Postgres parameters, and supported extensions.
 
 Not allowed without explicit approval:
 
@@ -112,6 +112,8 @@ Record:
 - Production/development branch status.
 - Branch protection and safe workflow state.
 - Size and cluster shape.
+- For Neki branches, configuration profile state, including supported
+  extensions and parameter overrides when visible.
 
 ### Branches and schema workflow
 
@@ -205,7 +207,11 @@ For Vitess only, record:
 - Gated deployment usage.
 - Schema revert availability.
 - Branch and keyspace topology.
+- External keyspaces attached to production branches, including source host
+  category, SSL mode, and whether source credential handling is documented.
 - Sharding/vschema status.
+- Per-shard sizing state: whether enabled, which shards differ from the
+  keyspace default, and why.
 - Whether sharded query patterns use relevant vindexes.
 - Backups and restore posture.
 

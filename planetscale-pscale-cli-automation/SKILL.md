@@ -64,6 +64,42 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Feature-specific command notes
+
+Prefer `pscale agent-guide --format json` and `pscale <subcommand> --help`
+for exact flags on the installed CLI. Current surfaces agents should recognize:
+
+- Neki configuration profiles can manage supported extensions by name while
+  changing settings:
+
+  ```bash
+  pscale branch config-profile update <database> <branch> <profile> --org <org> \
+    --extensions=vector \
+    --parameters pgconf.hnsw.ef_search=100 \
+    --format json
+  ```
+
+  Passing `--extensions=<comma-separated-names>` replaces the profile's
+  extension list. Omit `--extensions` to leave extensions unchanged, or pass
+  `--extensions=` to disable optional extensions. Required PlanetScale
+  extensions remain enabled.
+
+- Vitess external keyspaces can be attached from the CLI after approval:
+
+  ```bash
+  pscale keyspace create-external <database> <branch> <keyspace> --org <org> \
+    --host <source-host> \
+    --source-database <source-database> \
+    --username <source-user> \
+    --password <source-password> \
+    --ssl-mode required \
+    --wait \
+    --format json
+  ```
+
+  Treat source credentials as secrets; do not put real values in logs, PRs,
+  issues, or reports.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide

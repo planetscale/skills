@@ -15,7 +15,9 @@ Prevent accidental or autonomous changes that can affect availability, safety, s
 
 Allowed without approval:
 
-- List databases, branches, keyspaces, webhooks, backups, roles, traffic budgets, schema recommendations, deploy requests, and Insights data.
+- List databases, branches, keyspaces, configuration profiles, webhooks,
+  backups, roles, traffic budgets, schema recommendations, deploy requests,
+  and Insights data.
 - Inspect repository code.
 - Read schema metadata.
 - Read non-sensitive database metadata.
@@ -49,7 +51,9 @@ Always requires explicit approval:
 - Move Traffic Control budget to enforce mode.
 - Create/update/delete webhook.
 - Enable raw query collection.
-- Enable/disable extensions or settings that require restart.
+- Enable/disable extensions, update Neki configuration profiles, or change
+  database settings and parameters.
+- Create, update, resize, or delete non-production external keyspaces.
 - Create/update/delete role.
 - Reset passwords.
 - Change pg_strict settings.
@@ -58,7 +62,8 @@ Always requires explicit approval:
 - Change backup schedule or retention.
 - Create restore branch.
 - Create backup beyond automatic backups.
-- Change branch size or replica topology.
+- Change branch, keyspace, shard, or replica size/topology, including
+  per-shard VTTablet sizing.
 - Edit repository files or dependencies.
 
 ### Class D: production data/availability impacting
@@ -69,6 +74,8 @@ Requires explicit approval, named target confirmation, rollback plan, and ideall
 - Production DML.
 - Applying schema recommendation to production.
 - Queueing or applying Vitess deploy request to production.
+- Creating, updating, resizing, or deleting an external keyspace on a
+  production branch.
 - Promoting or restoring branches.
 - Deleting branches, databases, roles, webhooks, backups, or traffic rules.
 - Enforcing Traffic Control on production.

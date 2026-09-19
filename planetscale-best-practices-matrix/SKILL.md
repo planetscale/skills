@@ -108,6 +108,13 @@ Recommend production, staging, and short-lived development branches with safe mi
 ### Sharding/keyspace review
 
 Recommend when query patterns or growth suggest shard-awareness problems. Do not reshard automatically.
+For Vitess production branches, include external keyspaces in the review:
+source ownership, network path, SSL mode, credential rotation, backup
+responsibility, and whether querying through Vitess is temporary migration
+scaffolding or a durable dependency. When hot shards need different resources,
+consider per-shard VTTablet sizing as a capacity recommendation only after
+measured CPU, memory, or Metal storage pressure identifies the specific shard;
+do not present it as a VSchema, key-range, or routing change.
 
 ## Postgres-specific recommendations
 
@@ -146,7 +153,14 @@ Recommend only when use case is clear and restart/activation impact is accepted.
 Include `auto_explain` when automatic plan logging for slow queries would
 materially improve diagnosis and the resulting log volume is acceptable.
 If Terraform manages Postgres branch parameters or supported extensions, keep
-that source of truth aligned with approved dashboard/API changes.
+that source of truth aligned with approved dashboard/API changes. For Neki
+configuration profiles, supported extensions such as pgvector can be managed by
+name in Terraform (`extensions = ["vector"]`) or the CLI
+(`--extensions=vector`) alongside parameter updates. The extension list is
+replace-on-write: omit it to leave extensions unchanged, use an empty list or
+empty flag value to disable optional extensions, and do not combine the
+extension-list interface with direct preload-library settings in the same
+configuration.
 
 ### Live connections
 
