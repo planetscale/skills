@@ -1,13 +1,17 @@
 ---
 name: planetscale-change-gates-and-approval-contract
-description: Enforce explicit approval gates for any PlanetScale, database, repository, credential, network, or automation mutation.
+description: Approval classes for PlanetScale database, branch, role, webhook, Traffic Control, backup, network, and credential changes, and for repository changes applying PlanetScale recommendations. Not a general repository, CI, or coding-change approval policy.
 ---
 
 # Change gates and approval contract
 
 ## Purpose
 
-Prevent accidental or autonomous changes that can affect availability, safety, security, data, or developer workflows.
+Prevent accidental or autonomous PlanetScale changes that can affect availability, safety, security, data, or developer workflows.
+
+## Scope
+
+These classes, approval requirements, and checklists govern PlanetScale changes only: databases, branches, roles, webhooks, Traffic Control, backups, network access, credentials, and repository edits that apply PlanetScale recommendations. Other work in the same task, such as CI, application code, or documentation, follows the repository's own rules and the operator's instructions, not this skill.
 
 ## Operation classes
 
@@ -59,7 +63,7 @@ Always requires explicit approval:
 - Create restore branch.
 - Create backup beyond automatic backups.
 - Change branch size or replica topology.
-- Edit repository files or dependencies.
+- Edit repository files or dependencies to apply PlanetScale recommendations.
 
 ### Class D: production data/availability impacting
 
