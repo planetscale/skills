@@ -93,6 +93,14 @@ Review Insights for:
 
 Recommend enabling or improving application query tagging so Insights can attribute queries to app, route, controller, action, job, deployment SHA, and feature.
 
+If the customer exports PlanetScale Prometheus metrics, use
+`planetscale_pods_container_status_restarts_total` for container restart
+counts and `planetscale_pods_container_last_terminated_reason` for the last
+termination reason. Replace alerts or dashboards built on deprecated
+`planetscale_pods_container_restarts_total`; that counter can split series
+when reason or role labels change and does not expose the first restart as an
+increase.
+
 ### Anomalies
 
 Review active and recent anomalies.

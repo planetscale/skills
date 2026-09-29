@@ -178,6 +178,7 @@ Synthesize **all** phase deliverables into one report. Do not dump raw phase out
 | `VIT-*` | Vitess safety and deploy workflow |
 | `PG-*` | Postgres roles, pg_strict, Traffic Control, PITR, network |
 | `WEB-*` | Webhooks and automation |
+| `OAUTH-*` | Installed OAuth application access and MCP client posture |
 | `APP-*` | Repository instrumentation |
 | `AGENT-*` | MCP and agent workflows |
 

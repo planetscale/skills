@@ -17,6 +17,20 @@ Use the full PlanetScale MCP server only when the task explicitly requires datab
 
 The full MCP server has query execution tools. Treat write query tools as disabled unless the operator explicitly approves a specific non-production action or a carefully reviewed production action.
 
+## OAuth application posture
+
+When assessing MCP or agent access, include PlanetScale's installed OAuth
+applications view in the access review. Organization administrators can open
+Settings > OAuth applications > Installed to see third-party apps, how many
+people authorized each app, when it was last authorized, and the permissions
+the app currently has on organizations, databases, and branches.
+
+Dynamically registered apps, including MCP clients, are hidden by default in
+that view. Clear `Hide DCR apps` when inventorying MCP access. Revoking access
+removes the app from that organization only; it does not affect other
+organizations and users can authorize the app again through its normal flow.
+Treat revocation as an approved change, not a default assessment action.
+
 ## AGENTS.md guidance
 
 Two different documents both named `AGENTS.md` serve different purposes:
