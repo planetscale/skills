@@ -95,6 +95,13 @@ Recommend:
 - Use tags for attribution and raw collection for invocation-level
   drill-down; they are complementary instruments.
 - Use deploy SHA and route/job tags to correlate regressions with application deploys.
+- If the customer exports PlanetScale Prometheus metrics, use
+  `planetscale_pods_container_status_restarts_total` for container restart
+  counts and `planetscale_pods_container_last_terminated_reason` for the
+  last termination reason. Replace alerts or dashboards built on deprecated
+  `planetscale_pods_container_restarts_total`; that counter can split
+  series when reason or role labels change and does not expose the first
+  restart as an increase.
 
 ## Query tags
 

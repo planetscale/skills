@@ -143,11 +143,16 @@ For Postgres:
 - Query tags.
 - Raw query collection posture.
 - Schema recommendations.
+- Prometheus dashboards and alerts, including whether container restart
+  views have migrated from deprecated `planetscale_pods_container_restarts_total`
+  to `planetscale_pods_container_status_restarts_total` plus
+  `planetscale_pods_container_last_terminated_reason`.
 
 ### Automation
 
 - Webhooks.
 - Agent loops.
+- Installed OAuth applications and MCP clients with organization access.
 - CI/PR workflows.
 - Incident routing.
 
@@ -171,6 +176,7 @@ Recommendation IDs:
 - `VIT-*` for Vitess safety/deploy workflow.
 - `PG-*` for Postgres roles, pg_strict, Traffic Control, PITR, network.
 - `WEB-*` for webhooks and automation.
+- `OAUTH-*` for installed OAuth application access and MCP client posture.
 - `APP-*` for repository instrumentation.
 - `AGENT-*` for MCP/agent workflows.
 

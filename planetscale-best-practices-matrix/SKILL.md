@@ -48,6 +48,10 @@ Recommend:
 - Use full MCP only with narrow scopes and read-only default.
 - Put database targeting and safety rules in `AGENTS.md`.
 - Agents generate PRs/issues/change plans; humans approve database changes.
+- Review installed OAuth applications for MCP clients and other third-party
+  apps with organization access. In the dashboard, dynamically registered
+  apps are hidden by default; include them by clearing `Hide DCR apps`.
+  Revoke stale or over-scoped app access only as an approved change.
 
 ### SQLCommenter / query tags
 
@@ -57,6 +61,19 @@ Recommend:
 - Use low-cardinality tags.
 - Include application, service, route/job, feature, source, and release SHA.
 - Avoid PII and unbounded IDs.
+
+### Prometheus observability
+
+Recommend when the customer exports PlanetScale Prometheus metrics:
+
+- Use `planetscale_pods_container_status_restarts_total` for container
+  restart counts.
+- Use `planetscale_pods_container_last_terminated_reason` to report why a
+  container was last terminated.
+- Replace dashboards and alerts that still use deprecated
+  `planetscale_pods_container_restarts_total`; the deprecated counter can
+  split series when the reason or role label changes and does not expose a
+  container's first restart as an increase.
 
 ### Schema recommendation workflow
 

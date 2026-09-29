@@ -15,7 +15,7 @@ Prevent accidental or autonomous changes that can affect availability, safety, s
 
 Allowed without approval:
 
-- List databases, branches, keyspaces, webhooks, backups, roles, traffic budgets, schema recommendations, deploy requests, and Insights data.
+- List databases, branches, keyspaces, webhooks, backups, roles, traffic budgets, schema recommendations, deploy requests, Insights data, and installed OAuth applications.
 - Inspect repository code.
 - Read schema metadata.
 - Read non-sensitive database metadata.
@@ -52,6 +52,7 @@ Always requires explicit approval:
 - Enable/disable extensions or settings that require restart.
 - Create/update/delete role.
 - Reset passwords.
+- Revoke an installed OAuth application's access to an organization.
 - Change pg_strict settings.
 - Change connection pooling behavior.
 - Change IP restrictions, PrivateLink, PSC, or public access.

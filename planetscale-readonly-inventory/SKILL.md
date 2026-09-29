@@ -20,6 +20,10 @@ Allowed by default:
 - Read Query Insights, anomalies, and query patterns through MCP or API.
 - Read traffic budgets and rules.
 - Read Postgres roles and non-secret role metadata.
+- Read installed OAuth application metadata, including organization
+  permissions, authorizing users, last authorization time, and whether
+  dynamically registered apps such as MCP clients are hidden from the
+  default dashboard view.
 - Read backup schedules and restore metadata.
 - Read branch schema.
 - Inspect live connection/session metadata with the Connections CLI view.
@@ -146,6 +150,24 @@ Record:
 - Postgres CPU-heavy query patterns and Vitess vindex-usage data when exposed
   by the Insights interface in use.
 - Whether application deploy identifiers are visible in comments or tags.
+- If the customer exports PlanetScale Prometheus metrics, whether dashboards
+  and alerts use `planetscale_pods_container_status_restarts_total` for
+  restart counts and `planetscale_pods_container_last_terminated_reason` for
+  the last termination reason. Treat
+  `planetscale_pods_container_restarts_total` as deprecated.
+
+### Organization integrations and app access
+
+Record:
+
+- Installed third-party OAuth applications with organization access.
+- How many people authorized each application.
+- When each application was last authorized.
+- The organization, database, and branch permissions each app currently has.
+- Whether dynamically registered apps, including MCP clients, were included
+  by unchecking the dashboard's `Hide DCR apps` filter.
+- Any apps that appear stale, over-scoped, or unactionable because evidence
+  was unavailable.
 
 ### Recommendations
 
