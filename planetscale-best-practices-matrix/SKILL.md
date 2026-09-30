@@ -109,6 +109,17 @@ Recommend production, staging, and short-lived development branches with safe mi
 
 Recommend when query patterns or growth suggest shard-awareness problems. Do not reshard automatically.
 
+### External keyspaces and MoveTables imports
+
+Recommend reviewing external keyspaces and active MoveTables workflows when a
+Vitess database is importing MySQL data, moving tables between keyspaces, or has
+multiple keyspaces. Use `pscale branch vtctl move-tables` for workflow
+inventory and operations; deprecated `pscale workflow` commands and `/workflows`
+API endpoints should not be the basis for new automation. Require `vdiff`
+verification before traffic switches, and treat switching reads/writes,
+reversing traffic, completing, or canceling production workflows as explicitly
+approved operational actions.
+
 ## Postgres-specific recommendations
 
 ### User-defined roles

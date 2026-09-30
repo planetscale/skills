@@ -152,6 +152,37 @@ If the database is sharded, review:
 
 Recommend an agent-safe sharding review only as a proposal. Never reshard, change vschema, or alter routing automatically.
 
+### Database imports and MoveTables workflows
+
+For imports from an existing MySQL database or cross-keyspace table moves,
+review the external keyspace and MoveTables workflow separately from normal
+schema deploy requests.
+
+Check:
+
+- Whether any external keyspaces are attached to production branches.
+- Which MoveTables workflows exist, their source keyspace, target keyspace,
+  copied tables, current state, and which keyspace currently serves reads and writes.
+- Whether the import plan includes a `vdiff` verification before traffic is switched.
+- Whether the dashboard Workflows page or `pscale branch vtctl move-tables status`
+  is used for live progress during long-running copy and replication phases.
+- Whether the runbook covers `switch-traffic`, `reverse-traffic`, `complete`,
+  and `cancel`, including who can authorize each action.
+
+Recommend:
+
+- Use `pscale keyspace create-external` only after approving source database
+  connectivity, credentials handling, SSL mode, and production branch impact.
+- Use `pscale branch vtctl move-tables` for workflow operations; do not create
+  new automation around deprecated `pscale workflow` commands or `/workflows`
+  API endpoints.
+- Verify data with `pscale branch vtctl vdiff` before switching reads or writes.
+- Treat switching reads, switching writes, reversing traffic, completing, or
+  canceling a production workflow as operator-controlled availability and data
+  safety actions, not autonomous cleanup.
+- Monitor Query Insights, anomalies, replication/copy lag, and application
+  behavior during and after the switch.
+
 ## Webhook recommendations for Vitess
 
 Evaluate and recommend webhooks for:

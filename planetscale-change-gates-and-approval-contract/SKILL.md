@@ -16,6 +16,7 @@ Prevent accidental or autonomous changes that can affect availability, safety, s
 Allowed without approval:
 
 - List databases, branches, keyspaces, webhooks, backups, roles, traffic budgets, schema recommendations, deploy requests, and Insights data.
+- List external keyspaces and MoveTables workflow status.
 - Inspect repository code.
 - Read schema metadata.
 - Read non-sensitive database metadata.
@@ -32,11 +33,14 @@ Allowed by default; requires approval only when the operator has demanded strict
 - Creating database development branches.
 - Applying DDL or migrations to non-production development branches.
 - Opening deploy requests targeting a branch protected by a review workflow.
+- Running `vdiff` as an import verification step when the target, source, and
+  expected load are understood and no traffic or schema state changes.
 
-The last three are proposals inside an existing review system: nothing
-reaches production until a human merges or deploys. The gate belongs on
-the merge/deploy action (Class C/D), not on proposal creation. An agent
-that stops to ask permission to open a PR is misclassifying.
+Creating database development branches, applying non-production DDL, and opening
+deploy requests are proposals inside an existing review system: nothing reaches
+production until a human merges or deploys. The gate belongs on the merge/deploy
+action (Class C/D), not on proposal creation. An agent that stops to ask
+permission to open a PR is misclassifying.
 
 ### Class C: behavior-changing
 
@@ -59,6 +63,9 @@ Always requires explicit approval:
 - Create restore branch.
 - Create backup beyond automatic backups.
 - Change branch size or replica topology.
+- Create/update/delete external keyspaces on non-production branches.
+- Create, start, stop, complete, cancel, or reverse a non-production
+  MoveTables workflow.
 - Edit repository files or dependencies.
 
 ### Class D: production data/availability impacting
@@ -69,6 +76,9 @@ Requires explicit approval, named target confirmation, rollback plan, and ideall
 - Production DML.
 - Applying schema recommendation to production.
 - Queueing or applying Vitess deploy request to production.
+- Creating or operating a production MoveTables import workflow, including
+  switching reads, switching writes, reversing traffic, completing, or canceling
+  the workflow when production traffic or production data is involved.
 - Promoting or restoring branches.
 - Deleting branches, databases, roles, webhooks, backups, or traffic rules.
 - Enforcing Traffic Control on production.

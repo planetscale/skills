@@ -89,7 +89,7 @@ The operator handed over control; visibility is what they get in return. Emit st
 - **Plan announcement** — numbered steps, each with target, exact command/interface, expected effect, rollback mechanism, and class. This is the last thing shown before execution begins.
 - **Per-step, before**: `[step 3/7] STARTING VIT-3a — deploy request: add idx_orders_on_user_id to storefront-demo/main (Class D, revert window available)`
 - **Per-step, after**: `[step 3/7] DONE — deploy request #4 deployed, index visible in schema read-back (took 2m 10s)`
-- **Long-running operations** (deploy requests, migrations, restores): poll and report progress at a sensible cadence, not just at completion. Include queue position/state transitions.
+- **Long-running operations** (deploy requests, migrations, restores, MoveTables imports): poll and report progress at a sensible cadence, not just at completion. Include queue position/state transitions.
 - **Skips and blocks**: report immediately with the reason (`BLOCKED — state drift`, `EXCLUDED — Class E`, `SKIPPED — prerequisite failed`), never silently.
 - **Run summary** — the post-execution report from the change-gates skill: what changed, when, evidence of success, warnings, rollback state, follow-up monitoring. Plus the acknowledgment quote and the autonomy level used.
 
