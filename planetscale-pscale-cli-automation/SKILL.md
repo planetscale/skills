@@ -64,6 +64,41 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Vitess imports and MoveTables
+
+For Vitess database imports and table-move workflows, use the current `vtctl`
+MoveTables commands:
+
+```bash
+pscale branch vtctl move-tables list <database> <branch> --org <org> --format json
+pscale branch vtctl move-tables status <database> <branch> --org <org> --format json
+pscale branch vtctl vdiff <database> <branch> --org <org> --format json
+```
+
+`pscale branch vtctl move-tables` includes subcommands such as `create`,
+`start`, `stop`, `switch-traffic`, `reverse-traffic`, `complete`, and `cancel`.
+Treat any subcommand that creates a workflow, changes replication/copy state,
+switches serving traffic, completes, cancels, or reverses traffic as a gated
+database operation under
+`../planetscale-change-gates-and-approval-contract/SKILL.md`.
+
+To import an existing MySQL database into PlanetScale Vitess, the current CLI
+path is:
+
+1. Create an external keyspace on a production branch, for example
+   `pscale keyspace create-external <database> <branch> <source-keyspace> ...`.
+2. Start a MoveTables workflow with
+   `pscale branch vtctl move-tables create <database> <branch> ...`.
+3. Monitor with `move-tables status` or the dashboard Workflows page.
+4. Verify data with `pscale branch vtctl vdiff` before switching traffic.
+5. Switch reads and writes only after explicit approval and an operator-owned
+   rollback plan.
+
+Do not build new automation on the older `pscale workflow` commands or the
+`/workflows` API endpoints. They are being deprecated in favor of
+`pscale branch vtctl move-tables`, which exposes the Vitess workflow steps more
+directly.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide

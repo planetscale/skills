@@ -15,6 +15,7 @@ Allowed by default:
 
 - List organizations, databases, branches, keyspaces, regions, and sizes.
 - Read branch metadata.
+- Read external keyspace and MoveTables workflow metadata.
 - Read webhook configuration.
 - Read schema recommendations.
 - Read Query Insights, anomalies, and query patterns through MCP or API.
@@ -90,6 +91,11 @@ Verified interface notes (recheck against the docs when a command fails):
   record backup posture from `pscale backup list` and the database-level
   backup policy, and mark PITR "not assessed in this run" rather than
   probing paths.
+- Vitess MoveTables workflow inventory: prefer
+  `pscale branch vtctl move-tables list <database> <branch> --org <org> --format json`
+  and `pscale branch vtctl move-tables status <database> <branch> --org <org> --format json`.
+  Do not use deprecated `pscale workflow` commands or `/workflows` API endpoints
+  for new automation.
 - List endpoints paginate; follow the pagination parameters until
   exhausted before reporting counts (except the schema-recommendations
   case above).
@@ -205,6 +211,10 @@ For Vitess only, record:
 - Gated deployment usage.
 - Schema revert availability.
 - Branch and keyspace topology.
+- External keyspaces attached to production branches.
+- MoveTables workflows, including source keyspace, target keyspace, workflow
+  state, table scope, copy progress, traffic-serving state, and whether a
+  `vdiff` verification is documented before traffic switches.
 - Sharding/vschema status.
 - Whether sharded query patterns use relevant vindexes.
 - Backups and restore posture.
