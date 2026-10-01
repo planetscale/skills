@@ -103,7 +103,12 @@ Recommend documenting revert responsibilities and the application rollback relat
 
 ### Branch strategy
 
-Recommend production, staging, and short-lived development branches with safe migrations on protected targets.
+Recommend production, staging, and short-lived development branches with safe
+migrations on protected targets. Include development branch limit usage in
+branch-strategy findings: the database default is 100 development branches,
+configurable from 1 to 5,000. If proposal or migration-test automation is
+close to the cap, recommend cleanup or an explicit limit change instead of
+unbounded branch creation.
 
 ### Sharding/keyspace review
 
@@ -145,6 +150,12 @@ Recommend for customers requiring private network posture or reduced public expo
 Recommend only when use case is clear and restart/activation impact is accepted.
 Include `auto_explain` when automatic plan logging for slow queries would
 materially improve diagnosis and the resulting log volume is acceptable.
+For full-text search workloads, recommend TIN for production search when it
+fits the query model. Include TIN index options in the review: per-index
+`stemmer` settings for inflected-language matching, stable secondary
+`ORDER BY` keys after `tin.score(ctid)` for equal-score tie-breaking, and
+the operational plan for `ALTER EXTENSION tin UPDATE;` plus `REINDEX` when
+stemming changes on a populated index.
 If Terraform manages Postgres branch parameters or supported extensions, keep
 that source of truth aligned with approved dashboard/API changes.
 

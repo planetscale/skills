@@ -71,6 +71,10 @@ Recommend a branch topology:
 - `staging` branch based from production with safe migrations enabled.
 - Short-lived development branches based from staging.
 - Deploy requests from development to staging, then staging to production when appropriate.
+- Development branch usage kept below the database's configured development
+  branch limit. The default limit is 100 and the setting can range from 1
+  to 5,000; if the limit blocks safe proposal work, recommend deleting
+  stale development branches or explicitly raising the limit.
 
 Do not create branches without approval.
 

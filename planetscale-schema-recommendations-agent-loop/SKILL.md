@@ -51,7 +51,8 @@ For each recommendation, answer:
 
 Recommended path:
 
-1. Create or use a development branch.
+1. Create or use a development branch, after checking current usage against
+   the database's development branch limit.
 2. Apply the schema change to that branch only after approval.
 3. Open a deploy request only after approval.
 4. Use deploy request review to inspect schema, shard impact, data-loss warnings, lint errors, and conflicts.
@@ -66,7 +67,8 @@ Default output before approval: issue or PR with migration proposal, not a live 
 Recommended path:
 
 1. Convert DDL into the application’s migration framework where possible.
-2. Test against a non-production branch.
+2. Test against a non-production branch, after checking current usage against
+   the database's development branch limit.
 3. Run application tests and relevant query checks.
 4. Open PR.
 5. Apply production migration only after approval.
@@ -96,6 +98,25 @@ Block direct application when:
 - Dropping a table or index lacks owner confirmation.
 - The migration framework has a different schema source of truth.
 - The recommendation targets production and no branch/test plan exists.
+- Creating another development branch would exceed the database's configured
+  development branch limit. Recommend deleting stale branches or obtaining
+  explicit approval to raise the limit before opening more proposal branches.
+
+## Postgres TIN search recommendations
+
+When a recommendation or code review involves PlanetScale Postgres TIN
+full-text search indexes:
+
+- Capture whether the desired search semantics need stemming. TIN supports
+  per-index Snowball stemming with options such as `WITH (stemmer = 'en')`.
+- For ranked queries, include a stable secondary ordering key after
+  `tin.score(ctid)` so equal-score rows keep deterministic order without
+  forcing an unbounded scan.
+- If changing stemming on a populated index, add `REINDEX` to the validation
+  and maintenance plan.
+- If the cluster is not on the needed TIN library version, include the
+  cluster update/restart and `ALTER EXTENSION tin UPDATE;` steps as explicit
+  prerequisites.
 
 ## Output
 

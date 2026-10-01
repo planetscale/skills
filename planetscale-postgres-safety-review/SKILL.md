@@ -16,6 +16,9 @@ PlanetScale Postgres branches do not use Vitess-style deploy requests. Schema ch
 Check:
 
 - Whether a development or test branch exists.
+- Current development branch count and whether the database's configured
+  development branch limit leaves room for migration-test branches. The
+  default limit is 100 and the setting can range from 1 to 5,000.
 - Whether branches are empty or restored from backup.
 - Whether migrations are tested against a branch before production.
 - Whether application migrations are reversible or have a documented rollback strategy.
@@ -24,6 +27,8 @@ Check:
 Recommend:
 
 - Create or use a non-production branch for migration testing.
+- Keep test and proposal branches short-lived; if the development branch
+  limit is close or reached, recommend cleanup before raising the cap.
 - Run migration validation and application tests against that branch.
 - Treat production migration application as an explicit human-approved deployment step.
 - Use PITR/backup restore branches for incident recovery, not as an automatic rollback mechanism.
@@ -204,6 +209,8 @@ Review enabled and available extensions relevant to safety and observability:
 - `pg_cron`
 - `pg_partman_bgw`
 - `pg_hint_plan`
+- `tin` for PlanetScale Postgres full-text search workloads, when search
+  relevance and ranked retrieval belong in the database
 - TimescaleDB, if time-series features are relevant
 
 Recommend extensions only when use case is clear. `auto_explain` is available
@@ -215,6 +222,22 @@ Postgres branch parameters and supported extensions can be managed there, but
 parameter or extension changes still require the same approval and restart
 impact review as dashboard changes. Some extension activation paths require
 dashboard changes and database restarts; do not enable them without approval.
+
+For TIN search indexes:
+
+- Prefer TIN over Lead for production full-text search. Lead is useful for
+  CI, development, and staging parity but is not the production recommendation
+  once indexed text grows beyond a few MB.
+- Consider `WITH (stemmer = 'en')` or another supported Snowball language
+  when the application expects inflected words to match the same term. The
+  setting is per index and optional.
+- For ranked searches, keep bounded top-k scans by ordering first by
+  `tin.score(ctid)`, then by stable tie-breakers such as a unique `id`.
+- To pick up a newer TIN library on an existing cluster, the cluster must be
+  updated or restarted onto the new library and each database using TIN must
+  run `ALTER EXTENSION tin UPDATE;`.
+- If stemming is enabled or changed on a populated index, include `REINDEX`
+  in the proposed maintenance plan and state its operational impact.
 
 ## Webhook recommendations for Postgres
 

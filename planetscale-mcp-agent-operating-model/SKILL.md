@@ -69,6 +69,12 @@ with the DDL applied, PR with evidence (fingerprint, metrics, expected
 effect), and an open deploy request. The human action is the merge/deploy
 decision, not shepherding the proposal into existence.
 
+Before creating development branches in bulk, read the database branch
+inventory and respect the configured development branch limit. The default
+limit is 100 and the database setting can range from 1 to 5,000. If the
+limit is close or already reached, do not fan out proposals; produce a
+smaller batch and recommend branch cleanup or an explicit limit change.
+
 Not allowed by default (the review-gate actions and non-reviewable mutations):
 
 - Execute write SQL against production.
@@ -125,11 +131,12 @@ for the same fingerprint/recommendation ID).
 
 - **Recommendation-to-PR loop** (daily): list open schema recommendations
   via MCP; for each new one matching the workflow (additive or destructive
-  — the PR review is the gate), create a development branch, apply the
-  DDL, open a PR with fingerprint, metrics, and expected effect, and open
-  the deploy request. The reviewable unit is complete when a human can
-  ship it with one merge/deploy action. Output: branch + PR + deploy
-  request per recommendation.
+  — the PR review is the gate), create a development branch when capacity
+  remains under the database's development branch limit, apply the DDL,
+  open a PR with fingerprint, metrics, and expected effect, and open the
+  deploy request. The reviewable unit is complete when a human can ship it
+  with one merge/deploy action. Output: branch + PR + deploy request per
+  recommendation, capped to the safe branch capacity for the run.
 - **Regression watch** (hourly or per-deploy): compare top patterns
   against a stored baseline (p50/p99, rows read, execution count); on
   material regression, identify the deploy SHA from query tags and file
@@ -158,7 +165,9 @@ for the same fingerprint/recommendation ID).
   covers only the mechanical deploy.
 - **Branch hygiene** (weekly): delete development branches older than the
   authorized age bound with no open deploy request; never touch
-  production or protected branches. 
+  production or protected branches. Include the current development branch
+  limit and usage in the report so cleanup recommendations are tied to the
+  actual cap.
 - **Warn-budget gardener** (weekly): create warn-mode Traffic Control
   budgets for newly identified expensive slices matching the allowlist;
   report warn counts on existing budgets. Enforce mode is never entered
