@@ -111,6 +111,8 @@ Record:
 - Region and cloud provider.
 - Production/development branch status.
 - Branch protection and safe workflow state.
+- Development branch count and, when exposed by the available interface, the
+  database's development branch limit.
 - Size and cluster shape.
 
 ### Branches and schema workflow
@@ -118,6 +120,9 @@ Record:
 For Vitess, record:
 
 - Production branch.
+- Current number of development branches and whether it is close to the
+  database's development branch limit. The default limit is 100, and the
+  database setting can be adjusted from 1 to 5,000.
 - Whether safe migrations are enabled for production and staging branches.
 - Open deploy requests.
 - Deploy request approval setting.
@@ -127,6 +132,9 @@ For Vitess, record:
 For Postgres, record:
 
 - Branch list.
+- Current number of development branches and whether it is close to the
+  database's development branch limit. The default limit is 100, and the
+  database setting can be adjusted from 1 to 5,000.
 - Whether branches were created from backup or empty.
 - Whether schema changes are managed manually, through migrations, or through an ORM.
 - Whether a separate branch is used for migration testing.

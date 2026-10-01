@@ -38,6 +38,11 @@ reaches production until a human merges or deploys. The gate belongs on
 the merge/deploy action (Class C/D), not on proposal creation. An agent
 that stops to ask permission to open a PR is misclassifying.
 
+Before creating development branches, check current usage against the
+database's development branch limit. Hitting the limit is not permission
+to raise it automatically; produce a smaller proposal batch or recommend
+cleanup.
+
 ### Class C: behavior-changing
 
 Always requires explicit approval:
@@ -56,6 +61,7 @@ Always requires explicit approval:
 - Change connection pooling behavior.
 - Change IP restrictions, PrivateLink, PSC, or public access.
 - Change backup schedule or retention.
+- Change a database's development branch limit.
 - Create restore branch.
 - Create backup beyond automatic backups.
 - Change branch size or replica topology.
