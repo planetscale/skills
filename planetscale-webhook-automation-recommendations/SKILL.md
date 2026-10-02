@@ -25,7 +25,8 @@ Webhooks may trigger automation, but automation must produce recommendations, is
 - `branch.start_maintenance`: maintenance starting.
 - `cluster.storage`: storage threshold or growth event.
 - `database.access_request`: access request.
-- `branch.schema_recommendation`: schema recommendation event when available.
+- `branch.schema_recommendation`: schema recommendation event for Postgres
+  and Vitess databases.
 - `webhook.test`: test event.
 
 ### Vitess deploy lifecycle

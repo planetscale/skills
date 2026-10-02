@@ -227,13 +227,15 @@ Evaluate and recommend webhooks for:
 - `branch.start_maintenance`
 - `cluster.storage`
 - `database.access_request`
-- `branch.schema_recommendation` if available
+- `branch.schema_recommendation`
 - `webhook.test` for setup validation
 
 Recommended automation behavior:
 
 - Alerts: anomaly, out-of-memory, primary promotion, storage, maintenance.
-- Agent intake: anomaly, schema recommendation.
+- Agent intake: anomaly, schema recommendation. Use
+  `branch.schema_recommendation` to start the Postgres migration PR flow
+  when PlanetScale creates a new recommendation.
 - Human approval: any generated Traffic Control, schema, role, or network change.
 
 ## Output

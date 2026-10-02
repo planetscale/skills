@@ -14,6 +14,8 @@ Build an evidence-backed inventory of a PlanetScale database without making chan
 Allowed by default:
 
 - List organizations, databases, branches, keyspaces, regions, and sizes.
+- Read organization members, pending invitations, and non-secret access
+  metadata.
 - Read branch metadata.
 - Read webhook configuration.
 - Read schema recommendations.
@@ -112,6 +114,17 @@ Record:
 - Production/development branch status.
 - Branch protection and safe workflow state.
 - Size and cluster shape.
+
+### Organization access
+
+Record:
+
+- Organization administrators and member role distribution.
+- Pending organization invitations and the role selected for each invite.
+- Whether new invites are assigned the intended least-privilege role before
+  they are sent instead of relying on post-join role changes.
+- Whether SSO, teams, or other access-management controls are used for the
+  organization.
 
 ### Branches and schema workflow
 

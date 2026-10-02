@@ -21,6 +21,8 @@ Collect:
 - Application repository and migration system.
 - Engine: Vitess or Postgres.
 - Target branch.
+- Trigger source: scheduled inventory, manual request, or
+  `branch.schema_recommendation` webhook.
 
 ## Recommendation types to recognize
 

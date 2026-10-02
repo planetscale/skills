@@ -37,7 +37,7 @@ Recommend for operational events:
 - Branch readiness/sleeping.
 - Primary promotion.
 - Maintenance.
-- Schema recommendations where available.
+- Schema recommendations for Postgres and Vitess.
 - Deploy request lifecycle for Vitess.
 
 ### MCP and agents
@@ -48,6 +48,15 @@ Recommend:
 - Use full MCP only with narrow scopes and read-only default.
 - Put database targeting and safety rules in `AGENTS.md`.
 - Agents generate PRs/issues/change plans; humans approve database changes.
+
+### Organization access
+
+Recommend reviewing organization membership and pending invitations when the
+assessment scope includes access governance. New organization invitations can
+be assigned the intended role before they are sent; prefer selecting the
+least-privilege role up front instead of inviting every user as a default
+member and changing access after they join. Treat invite creation, member role
+changes, and team membership changes as approval-gated access-control changes.
 
 ### SQLCommenter / query tags
 
