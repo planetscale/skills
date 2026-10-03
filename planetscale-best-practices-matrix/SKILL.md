@@ -107,7 +107,21 @@ Recommend production, staging, and short-lived development branches with safe mi
 
 ### Sharding/keyspace review
 
-Recommend when query patterns or growth suggest shard-awareness problems. Do not reshard automatically.
+Recommend when query patterns or growth suggest shard-awareness problems. Review
+keyspace topology, vschema, shard-aware access paths, and any VTTablet/MySQL
+keyspace parameter overrides or in-progress parameter changes. Do not reshard,
+change vschema, alter routing, or change/reset keyspace parameters
+automatically.
+
+### Prometheus reparent and VTOrc metrics
+
+When Prometheus metrics are available, recommend alerting and runbook checks for
+`planetscale_vitess_planned_reparents_total`,
+`planetscale_vitess_emergency_reparents_total`, VTOrc success/failure recovery
+counters, and `planetscale_vtorc_detected_problems`. Verify dashboards and
+alerts use actual `planetscale_vtorc_recovery_type` values such as
+`RecoverDeadPrimary`, `ElectNewPrimary`, or `FixReplica`, not stale
+`planned`/`unplanned` filters.
 
 ## Postgres-specific recommendations
 
