@@ -64,6 +64,33 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Vitess keyspace parameters
+
+For Vitess databases, `pscale keyspace parameters` can inspect and manage
+VTTablet and MySQL parameters for a keyspace:
+
+```bash
+pscale keyspace parameters list <database> <branch> <keyspace> --org <org> --format json
+pscale keyspace parameters changes list <database> <branch> <keyspace> --org <org> --format json
+```
+
+Listing current/default values and rollout changes is read-only. Changing or
+resetting a parameter is behavior-changing and requires explicit approval under
+`../planetscale-change-gates-and-approval-contract/SKILL.md`:
+
+```bash
+pscale keyspace parameters set <database> <branch> <keyspace> --org <org> --format json \
+  --parameters vttablet.vreplication-parallel-insert-workers=4 \
+  --parameters mysqld.wait_timeout=600
+
+pscale keyspace parameters set <database> <branch> <keyspace> --org <org> --format json \
+  --parameters mysqld.wait_timeout --reset
+```
+
+Use this surface for approved Vitess keyspace tuning, including import
+preparation. Capture the parameter name, current value, default value, target
+value or reset, rollout status, and rollback plan in the approval record.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide

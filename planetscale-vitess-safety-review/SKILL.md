@@ -93,6 +93,33 @@ Review Insights for:
 
 Recommend enabling or improving application query tagging so Insights can attribute queries to app, route, controller, action, job, deployment SHA, and feature.
 
+### Prometheus reparent and VTOrc metrics
+
+When Prometheus metrics are available, review primary-change and VTOrc recovery
+signals:
+
+- `planetscale_vitess_planned_reparents_total` counts planned primary
+  changes, such as maintenance or operator-requested reparents.
+- `planetscale_vitess_emergency_reparents_total` counts emergency reparents
+  where a replica was promoted to recover from a failed primary.
+- Both counters include successes and failures via
+  `planetscale_reparent_result`; `planetscale_component` identifies whether
+  `vtorc` or `vtctld` ran the reparent.
+- For VTOrc recovery counters, `planetscale_vtorc_recovery_type` contains
+  recovery names such as `RecoverDeadPrimary`, `ElectNewPrimary`, or
+  `FixReplica`; do not filter for older documented placeholder values like
+  `planned` or `unplanned`.
+- On Vitess 23 and later, `planetscale_vtorc_failed_recoveries_total` and
+  `planetscale_vtorc_successful_recoveries_total` include
+  `planetscale_keyspace` and `planetscale_shard` labels.
+- Use `planetscale_vtorc_detected_problems` with the recovery counters to see
+  which problems VTOrc detected and what recovery action followed.
+
+Recommend alerts and runbook checks that distinguish planned maintenance from
+emergency primary promotion, correlate failures to keyspace/shard when labels
+are present, and avoid stale Prometheus queries that filter
+`planetscale_vtorc_recovery_type` as `planned` or `unplanned`.
+
 ### Anomalies
 
 Review active and recent anomalies.
@@ -145,12 +172,19 @@ Recommend:
 If the database is sharded, review:
 
 - Keyspaces and shards.
+- VTTablet and MySQL keyspace parameter overrides, default values, and any
+  in-progress rollout changes from `pscale keyspace parameters list` and
+  `pscale keyspace parameters changes list`.
 - Vschema.
 - Cross-shard query patterns.
 - Whether schema deploy requests show per-shard impact.
 - Whether queries use shard-friendly access paths.
 
-Recommend an agent-safe sharding review only as a proposal. Never reshard, change vschema, or alter routing automatically.
+Recommend an agent-safe sharding review only as a proposal. Never reshard,
+change vschema, alter routing, or change/reset keyspace parameters
+automatically. Parameter tuning for imports or replication workload changes
+must include the current value, default value, target value or reset, rollout
+status, expected effect, and rollback plan.
 
 ## Webhook recommendations for Vitess
 

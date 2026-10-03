@@ -14,6 +14,7 @@ Build an evidence-backed inventory of a PlanetScale database without making chan
 Allowed by default:
 
 - List organizations, databases, branches, keyspaces, regions, and sizes.
+- List Vitess keyspace parameters and parameter rollout changes.
 - Read branch metadata.
 - Read webhook configuration.
 - Read schema recommendations.
@@ -63,6 +64,11 @@ Verified interface notes (recheck against the docs when a command fails):
   session inventory works for Postgres and Vitess over a reserved
   administrative connection. Do not cancel queries or terminate connections
   unless the operator explicitly approves that operational action.
+- `pscale keyspace parameters list <database> <branch> <keyspace> --org
+  <org> --format json` and `pscale keyspace parameters changes list
+  <database> <branch> <keyspace> --org <org> --format json` — read-only
+  Vitess keyspace parameter inventory. Setting or resetting parameters is a
+  behavior-changing operation and is not part of inventory.
 - Query Insights is public API. Live query telemetry:
   `.../branches/{branch}/insights` (per-pattern statistics; supports
   `from`/`to`/`period`, `q`, `sort`, `dir`, `tablet_type`, `type`,
@@ -205,6 +211,7 @@ For Vitess only, record:
 - Gated deployment usage.
 - Schema revert availability.
 - Branch and keyspace topology.
+- Keyspace parameter overrides and in-progress parameter changes.
 - Sharding/vschema status.
 - Whether sharded query patterns use relevant vindexes.
 - Backups and restore posture.
