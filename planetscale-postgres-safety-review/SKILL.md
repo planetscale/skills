@@ -173,6 +173,9 @@ Do not restore or create emergency backups without approval. Emergency backups m
 Check:
 
 - Whether app uses direct port 5432 or PgBouncer port 6432.
+- Whether read-heavy, analytical, agent, or regional workloads target
+  primary-cluster replicas or named dedicated read replicas instead of the
+  primary when they do not require read-your-writes semantics.
 - Whether connection pool size matches runtime and deployment model.
 - Whether serverless or edge environments can create connection storms.
 - Live connection/session pressure through `pscale branch connections top`,
@@ -186,11 +189,55 @@ Recommend:
 
 - Use PgBouncer for high-churn application connections where transaction-pooling limitations are acceptable.
 - Use direct connections for session-dependent features that PgBouncer transaction mode cannot support.
+- Use read-only connection targets for read-heavy workloads that can tolerate
+  stale reads; do not route read-after-write paths, migrations, or operational
+  verification queries to replicas.
 - Use AWS PrivateLink or GCP Private Service Connect for private network requirements.
 - Use IP restrictions to reduce public exposure.
 - Be explicit that private connectivity does not automatically block public access; IP restrictions or equivalent controls are required for private-only posture.
 
 Do not change network restrictions without approval. Network changes can break application connectivity.
+
+## Dedicated read replicas
+
+For production Postgres branches, check:
+
+- Dedicated read replica inventory: name, state, region, cloud provider,
+  replica count, cluster size, storage settings, supported Postgres
+  parameters, private host/service metadata, and recent change history.
+- Whether each dedicated read replica is in the same cloud provider as the
+  primary branch; replicas may be in the primary region or another region from
+  that provider, but not a different cloud.
+- Whether clients connect through the named dedicated read replica target. The
+  host and username differ from the primary cluster, and generated usernames
+  end in `|replica` for that selected replica cluster.
+- Whether workloads using the replica tolerate asynchronous replication lag and
+  temporarily stale results. Dedicated read replicas reject `INSERT`,
+  `UPDATE`, `DELETE`, and other writes.
+- Whether replica-specific parameters are set at or above corresponding
+  primary-cluster values, and whether restart impact is acceptable before a
+  parameter change.
+- Whether cross-region dedicated read replica traffic and per-instance storage
+  costs are understood.
+- Whether Prometheus dashboards distinguish dedicated replica metrics with
+  `planetscale_database_branch_id` for the replica and
+  `planetscale_upstream_database_branch_id` for the parent branch.
+
+Recommend:
+
+- Use dedicated read replicas when primary-cluster replicas are not enough to
+  isolate sustained read-heavy, analytical, agent, reporting, or regional read
+  traffic from the primary cluster.
+- Prefer Terraform management with `planetscale_postgres_read_only_replica`
+  when Terraform is the customer's source of truth.
+- Keep connection strings and service discovery explicit about which workloads
+  target the primary, primary-cluster replicas, or named dedicated read
+  replicas.
+- Monitor replication lag and stale-read tolerance as part of the rollout plan.
+
+Do not create, update, resize, change storage for, change parameters for, or
+delete a dedicated read replica without approval. Deleting one is irreversible
+and stops its connection endpoint.
 
 ## Extensions
 

@@ -39,6 +39,8 @@ Look for:
 - BI tools.
 - Agent-generated read queries.
 - High-frequency polling.
+- Read-heavy workloads that could be moved to a Postgres dedicated read
+  replica instead of only being throttled on the primary.
 - Known expensive query fingerprints.
 - Customer-triggered endpoints with high variance.
 
@@ -87,7 +89,9 @@ Intent: prevent agents from starving application traffic.
 
 Mode: start in `warn`.
 
-Recommendation: agents should prefer replicas and read-only scopes. Writes require human approval.
+Recommendation: agents should prefer replicas and read-only scopes. For
+Postgres workloads with sustained agent reads, consider a named dedicated read
+replica when stale reads are acceptable. Writes require human approval.
 
 ### Export/reporting budget
 
@@ -139,6 +143,9 @@ Do not recommend it for unbounded tags such as user IDs, request IDs, raw tenant
 Every recommendation must explain:
 
 - Traffic Control limits resource use; it does not replace query tuning.
+- Traffic Control does not move traffic off the primary cluster. For sustained
+  read-heavy Postgres workloads that tolerate stale reads, a dedicated read
+  replica may be the safer isolation mechanism or complement.
 - It is not a web application firewall.
 - It does not replace application-level rate limits.
 - Limits are guardrails, not exact guarantees for every failure mode.

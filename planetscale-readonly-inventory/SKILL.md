@@ -20,13 +20,14 @@ Allowed by default:
 - Read Query Insights, anomalies, and query patterns through MCP or API.
 - Read traffic budgets and rules.
 - Read Postgres roles and non-secret role metadata.
+- Read Postgres dedicated read replica metadata and change history.
 - Read backup schedules and restore metadata.
 - Read branch schema.
 - Inspect live connection/session metadata with the Connections CLI view.
 - Inspect repository files for frameworks, ORMs, migrations, SQL tagging, and connection config.
 - Inspect Terraform or other infrastructure-as-code definitions for
-  PlanetScale roles, backups, backup policies, Postgres parameters, and
-  supported extensions.
+  PlanetScale roles, backups, backup policies, Postgres parameters,
+  supported extensions, and dedicated read replicas.
 
 Not allowed without explicit approval:
 
@@ -76,6 +77,14 @@ Verified interface notes (recheck against the docs when a command fails):
   `pscale traffic-control budget list`; use the API for inventory.
 - Postgres roles: list via `.../branches/{branch}/roles`; fetch a single
   role by ID, not name (`pscale role get <db> <branch> <role-id>`).
+- Postgres dedicated read replicas: list via
+  `.../branches/{branch}/dedicated-read-replicas`; fetch a named replica with
+  `GET .../dedicated-read-replicas/{dedicated_read_replica}`; read change
+  history at
+  `.../branches/{branch}/dedicated-read-replica-changes`. Role connection
+  details for a specific dedicated read replica use the role endpoint's
+  `dedicated_read_replica` query parameter, which may emit credential
+  material and is not part of routine inventory.
 - IP restrictions: database-level
   `organizations/{org}/databases/{db}/cidrs`. Branch-level IP-restriction
   paths are not valid.
@@ -112,6 +121,9 @@ Record:
 - Production/development branch status.
 - Branch protection and safe workflow state.
 - Size and cluster shape.
+- Primary-cluster replica topology and any Postgres dedicated read replicas:
+  name, state, region, cloud provider, replica count, cluster size, storage
+  configuration, custom parameters, and whether each replica is ready.
 
 ### Branches and schema workflow
 
@@ -188,6 +200,9 @@ For Postgres only, record:
 - Application role usage.
 - Whether apps use the default role.
 - Whether app roles are least-privilege.
+- Whether dedicated read replicas exist for read-heavy, analytical, or
+  regional workloads; which application connection targets use them; and
+  whether those workloads tolerate asynchronous replication lag.
 - Whether pg_strict is enabled for application roles.
 - Whether PgBouncer is used for appropriate workloads.
 - Whether live connections show blockers, idle-in-transaction sessions, or

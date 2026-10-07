@@ -132,6 +132,9 @@ For Postgres:
 - Roles.
 - pg_strict.
 - Traffic Control.
+- Primary-cluster replica and dedicated read replica topology, including
+  connection targets used by read-heavy workloads and any stale-read
+  assumptions.
 - Backups/PITR.
 - Connection pooling.
 - Private connectivity and IP restrictions.

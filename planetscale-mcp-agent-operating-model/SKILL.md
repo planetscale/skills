@@ -38,6 +38,8 @@ targeting section to `AGENTS.md` or equivalent project instructions:
 - Branch.
 - Engine: Vitess or Postgres.
 - Production branch name.
+- Read target policy: primary, primary-cluster replicas, or named Postgres
+  dedicated read replicas for workloads that can tolerate stale reads.
 - Whether agents may use MCP insights-only or full MCP.
 - Whether write queries are forbidden.
 - Required approval protocol for schema, Traffic Control, webhooks, roles, and network changes.
@@ -79,6 +81,7 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 - Create or enforce Traffic Control budgets.
 - Rotate credentials.
 - Change roles.
+- Create, update, or delete dedicated read replicas.
 - Change IP restrictions or private connectivity.
 - Restore or promote branches.
 
@@ -186,6 +189,13 @@ For read queries:
   branch has replicas configured (`use_replica: true`). Set
   `use_replica: false` only when the task needs primary-read semantics, such
   as checking immediately-after-write state or primary-only behavior.
+- For Postgres dedicated read replicas, use the explicit named connection
+  target or connection string when the interface supports it. Do not assume
+  generic replica routing selects a named dedicated read replica unless the
+  tool exposes that target.
+- Dedicated read replicas are asynchronous and can return stale results. Do
+  not use them for read-after-write verification, migrations, incident checks
+  that require primary state, or any write path.
 - Add source tags/comments for agent work.
 - Avoid unbounded scans.
 - Avoid `EXPLAIN ANALYZE` on production unless explicitly approved.
