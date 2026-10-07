@@ -64,6 +64,22 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+For Postgres dedicated read replicas, routine inventory should use the API
+instead of credential-producing commands:
+
+```bash
+pscale api organizations/<org>/databases/<database>/branches/<branch>/dedicated-read-replicas --org <org> --format json
+pscale api organizations/<org>/databases/<database>/branches/<branch>/dedicated-read-replica-changes --org <org> --format json
+```
+
+Only retrieve connection details when the operator explicitly asks for
+credential work. To get role connection details for a named dedicated read
+replica, pass the target name to `pscale role get`:
+
+```bash
+pscale role get <database> <branch> <role-id> --org <org> --dedicated-read-replica <dedicated-read-replica-name> --format json
+```
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide

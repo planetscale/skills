@@ -58,7 +58,10 @@ Always requires explicit approval:
 - Change backup schedule or retention.
 - Create restore branch.
 - Create backup beyond automatic backups.
-- Change branch size or replica topology.
+- Change branch size, primary-cluster replica topology, or dedicated read
+  replica topology.
+- Create, update, resize, change storage for, or change parameters for a
+  dedicated read replica.
 - Edit repository files or dependencies.
 
 ### Class D: production data/availability impacting
@@ -70,7 +73,8 @@ Requires explicit approval, named target confirmation, rollback plan, and ideall
 - Applying schema recommendation to production.
 - Queueing or applying Vitess deploy request to production.
 - Promoting or restoring branches.
-- Deleting branches, databases, roles, webhooks, backups, or traffic rules.
+- Deleting branches, databases, roles, webhooks, backups, traffic rules, or
+  dedicated read replicas.
 - Enforcing Traffic Control on production.
 - Changing production network access.
 - Rotating production credentials.

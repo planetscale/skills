@@ -126,6 +126,15 @@ Recommend for application roles after evaluation, especially to block accidental
 
 Recommend for resource isolation of agents, exports, reports, workers, integrations, BI, and known expensive fingerprints.
 
+### Dedicated read replicas
+
+Recommend for sustained read-heavy, analytical, reporting, agent, or regional
+read workloads that can tolerate asynchronous replication lag and stale reads.
+Use explicit connection targets for named dedicated read replicas, keep
+write/read-after-write paths on the primary, and monitor replica-specific
+metrics. If Terraform is the customer's source of truth, manage them with
+`planetscale_postgres_read_only_replica`.
+
 ### Backups and PITR
 
 Recommend verifying retention and restore drill coverage.
