@@ -87,7 +87,10 @@ Intent: prevent agents from starving application traffic.
 
 Mode: start in `warn`.
 
-Recommendation: agents should prefer replicas and read-only scopes. Writes require human approval.
+Recommendation: agents should prefer replicas and read-only scopes. For
+OAuth MCP clients, organization MCP query access can prevent query tools or
+write query tools from being granted in new authorizations. Service-token MCP
+clients still depend on token permissions. Writes require human approval.
 
 ### Export/reporting budget
 

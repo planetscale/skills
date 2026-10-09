@@ -68,6 +68,9 @@ for multi-keyspace databases.
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide
   --format json` for the current URL).
+- OAuth MCP clients are also bounded by the organization's MCP query access
+  setting for new authorizations. Service-token MCP clients are not bounded by
+  that setting; grant the smallest token permissions needed for the tools.
 - **Shell scripts and coding agents** — use `pscale` with `--format json` as above.
 
 ## When this skill is not enough

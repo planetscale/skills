@@ -92,6 +92,7 @@ The report is plain markdown: headed sections, prose, and pipe tables. This is t
 - Engine:
 - Repository reviewed:
 - Interfaces used:
+- MCP authentication and query access posture:
 - Time window:
 - Changes applied: none
 
@@ -148,6 +149,10 @@ For Postgres:
 
 - Webhooks.
 - Agent loops.
+- MCP server choice, authentication model, and organization MCP query access
+  setting for OAuth clients. State whether existing OAuth clients would need
+  revocation or reauthorization to pick up a stricter setting; for service
+  tokens, assess token permissions instead.
 - CI/PR workflows.
 - Incident routing.
 
@@ -198,6 +203,7 @@ State clearly:
 - No traffic controls changed.
 - No roles or credentials changed.
 - No webhooks changed.
+- No MCP query access settings or OAuth client authorizations changed.
 - No code changed.
 - No branches, backups, restores, deploy requests, or migrations created.
 
