@@ -19,6 +19,7 @@ Allowed by default:
 - Read schema recommendations.
 - Read Query Insights, anomalies, and query patterns through MCP or API.
 - Read traffic budgets and rules.
+- Read organization-level MCP query access settings and installed OAuth/MCP app metadata when available.
 - Read Postgres roles and non-secret role metadata.
 - Read backup schedules and restore metadata.
 - Read branch schema.
@@ -97,6 +98,10 @@ Verified interface notes (recheck against the docs when a command fails):
 Record access failures (403s, missing token scopes, timeouts) in the
 internal run log for the operator. They are not findings and do not enter
 the customer report (see `../planetscale-customer-report-template/SKILL.md`).
+Do not infer the organization MCP query access setting from a missing query
+tool alone; query tools can also be absent because the client used the
+insights-only server, a service token is missing permissions, or the OAuth
+authorization predates a policy change.
 
 ## Inventory checklist
 
@@ -157,6 +162,20 @@ Record:
 - Proposed DDL or action.
 - Whether a branch/deploy workflow exists to evaluate it safely.
 - Whether the recommendation can be implemented as application code, ORM migration, or database DDL.
+
+### MCP and agent access
+
+Record:
+
+- Whether agents use the insights-only MCP server or the full MCP server.
+- MCP authentication model: OAuth or service token.
+- Organization MCP query access setting for OAuth clients when available:
+  no query access, read-only queries, or read and write queries.
+- Whether existing OAuth MCP clients may need revocation or reauthorization to
+  pick up a stricter organization query policy.
+- For service-token MCP clients, whether token permissions are scoped to the
+  smallest set of organizations, databases, branches, and query capabilities
+  needed. Do not read or record token secrets.
 
 ### Webhooks and automation
 

@@ -17,6 +17,19 @@ Use the full PlanetScale MCP server only when the task explicitly requires datab
 
 The full MCP server has query execution tools. Treat write query tools as disabled unless the operator explicitly approves a specific non-production action or a carefully reviewed production action.
 
+For OAuth-authenticated MCP clients, check the organization's **MCP query access**
+setting before recommending query tools:
+
+- **No query access** means members cannot grant MCP read or write query tools.
+- **Read-only queries** means members can grant read queries but not write queries.
+- **Read and write queries** is the default and adds no organization-level query limit.
+
+This setting limits new OAuth authorizations only. Existing authorized MCP
+clients keep the access they were granted until they are revoked or
+reauthenticated, and schema, Insights, billing, and other non-query tools are
+not affected. Service-token MCP clients are not limited by this organization
+setting; their own token permissions control access.
+
 ## AGENTS.md guidance
 
 Two different documents both named `AGENTS.md` serve different purposes:
@@ -39,6 +52,8 @@ targeting section to `AGENTS.md` or equivalent project instructions:
 - Engine: Vitess or Postgres.
 - Production branch name.
 - Whether agents may use MCP insights-only or full MCP.
+- MCP authentication model: OAuth or service token.
+- Organization MCP query access setting, if OAuth is used.
 - Whether write queries are forbidden.
 - Required approval protocol for schema, Traffic Control, webhooks, roles, and network changes.
 
@@ -182,6 +197,9 @@ for the same fingerprint/recommendation ID).
 For read queries:
 
 - Prefer replicas when available.
+- Confirm the MCP authorization can grant read query tools. If organization
+  policy blocks query tools, continue with Insights, schema metadata, API, or
+  CLI evidence instead of treating the missing tool as database state.
 - `planetscale_execute_read_query` routes reads to replicas by default when a
   branch has replicas configured (`use_replica: true`). Set
   `use_replica: false` only when the task needs primary-read semantics, such
@@ -204,6 +222,10 @@ For read queries:
 For write queries:
 
 - Default is forbidden.
+- Confirm both layers allow the tool: OAuth clients need organization MCP query
+  access that permits write queries, while service-token clients need the
+  token's write-query permissions. Permission to grant the tool is still not
+  approval to use it.
 - If approved, prefer non-production branch.
 - Require exact SQL review.
 - Require rollback plan.
@@ -214,6 +236,7 @@ For write queries:
 Return:
 
 - Recommended MCP server choice.
+- MCP authentication model and organization MCP query access posture, where known.
 - Required scopes.
 - AGENTS.md instructions to add.
 - Allowed autonomous work.

@@ -46,6 +46,12 @@ Recommend:
 
 - Use insights-only MCP for most autonomous analysis.
 - Use full MCP only with narrow scopes and read-only default.
+- For OAuth MCP clients, set organization MCP query access to the narrowest
+  level that matches policy: no query access, read-only queries, or read and
+  write queries. Existing authorizations keep their prior access until revoked
+  or reauthenticated.
+- For service-token MCP clients, scope the token permissions directly; the
+  organization MCP query access setting does not limit service tokens.
 - Put database targeting and safety rules in `AGENTS.md`.
 - Agents generate PRs/issues/change plans; humans approve database changes.
 

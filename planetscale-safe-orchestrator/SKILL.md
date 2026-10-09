@@ -34,6 +34,8 @@ Ground all CLI and API usage in the official documentation rather than guessing:
    - Branch name
    - Engine: PlanetScale Vitess or PlanetScale Postgres
    - Production branch or branches
+   - MCP server type and authentication model, if agents use MCP
+   - Organization MCP query access setting, if OAuth MCP is used
    - Connected application repository path, if available
    - Application language, framework, ORM, query builder, connection pooling
    - Operator tolerance: report-only, PR-generation, branch-only migrations, or supervised production apply
@@ -149,6 +151,10 @@ Deliverables: detected stack, current tagging state, recommended package/path, p
 Read and execute: `../planetscale-mcp-agent-operating-model/SKILL.md`
 
 Deliverables: recommended MCP server choice, AGENTS.md additions, allowed/disallowed autonomous work, proposed agent loops.
+Include the MCP authentication model and organization MCP query access posture
+when known. If OAuth clients are capped at no-query or read-only access, carry
+that into the allowed/disallowed work; if service tokens are used, evaluate the
+token permissions directly.
 
 ### Phase 9 — Best-practices matrix coverage check
 
