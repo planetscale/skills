@@ -17,6 +17,11 @@ Use the full PlanetScale MCP server only when the task explicitly requires datab
 
 The full MCP server has query execution tools. Treat write query tools as disabled unless the operator explicitly approves a specific non-production action or a carefully reviewed production action.
 
+When branch-level resource posture is needed, use the MCP server's
+`planetscale_get_branch_metrics` tool if available. It is read-only and
+returns branch CPU, memory, disk, replication lag, and connection metrics for
+Vitess, Postgres, and Neki. Query-level statistics remain an Insights task.
+
 ## AGENTS.md guidance
 
 Two different documents both named `AGENTS.md` serve different purposes:
@@ -53,6 +58,7 @@ Allowed by default:
 - Read schema metadata.
 - Read existing webhooks and Traffic Control configuration.
 - Read branch metadata.
+- Read branch resource metrics.
 - Inspect repository code.
 - Correlate query patterns with code.
 - File issues.
@@ -96,7 +102,7 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 ### Anomaly loop
 
 1. Receive or inspect anomaly.
-2. Gather affected query patterns and tags.
+2. Gather affected branch metrics, query patterns, and tags.
 3. Identify source route/job/deploy.
 4. Produce incident note and proposed remediation.
 5. If code fix is obvious, open PR.
@@ -200,6 +206,11 @@ For read queries:
   usage (via MCP where available, or `sort=cpuTime` on the Insights API).
   CPU time metrics are Postgres-only; do not ask for the same CPU-sorted
   view on Vitess.
+- For branch-level resource questions, prefer
+  `planetscale_get_branch_metrics` over ad hoc SQL probes. Its default summary
+  covers the last hour and includes current disk and connection numbers.
+  Memory utilization includes page cache, so compare RSS and cache separately
+  when deciding whether memory pressure is application-resident or cache-heavy.
 
 For write queries:
 

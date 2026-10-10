@@ -139,6 +139,8 @@ For Postgres:
 ### Observability
 
 - Query Insights state.
+- Branch metrics: CPU, memory/RSS/cache, disk, replication lag, connections,
+  and time window assessed.
 - Anomalies.
 - Query tags.
 - Raw query collection posture.
