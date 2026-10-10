@@ -69,6 +69,7 @@ Requires explicit approval, named target confirmation, rollback plan, and ideall
 - Production DML.
 - Applying schema recommendation to production.
 - Queueing or applying Vitess deploy request to production.
+- Retrying a partially failed Vitess deploy request against production.
 - Promoting or restoring branches.
 - Deleting branches, databases, roles, webhooks, backups, or traffic rules.
 - Enforcing Traffic Control on production.

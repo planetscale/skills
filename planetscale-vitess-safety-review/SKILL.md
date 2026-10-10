@@ -34,6 +34,8 @@ Check:
 - Whether teams use gated deployments for cutover control.
 - Whether “deploy instantly” is used and whether the team understands it removes the gated-deployment/revert shape.
 - Whether cutover is regularly delayed by long-running transactions.
+- Whether any deploy request is partially failed, which tables failed, and
+  whether the team has a retry procedure for failed tables.
 - Whether deploy request events are subscribed to via webhooks.
 
 Recommend:
@@ -51,6 +53,13 @@ Recommend:
   cutover. Recommend reviewing the blocking workload and incident context
   before use, and only recommend the database-level aggressive cutover default
   when frequent cutover blocking is understood and accepted.
+- For partially failed deploy requests, inspect the failed tables and error
+  details first, then use the dashboard retry action or
+  `pscale deploy-request retry <database> <number>` to restart migration only
+  for failed tables. Tables that are already healthy keep their existing
+  progress. Treat retrying a production deploy request as a production DDL
+  recovery action requiring the same approval or standing authorization as the
+  original deploy.
 
 ### Schema revert
 
@@ -176,6 +185,8 @@ Recommended destinations:
 
 - Alerting for anomaly, primary promotion, storage, and deploy errors.
 - Slack or internal notifications for deploy request lifecycle.
+- Triage for `deploy_request.errored` events that distinguishes retryable
+  partial table failures from failures that require a new deploy request.
 - Agent intake queue for schema recommendations and anomalies, with PR-only output by default.
 
 ## Output

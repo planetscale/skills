@@ -28,6 +28,17 @@ Recommend for every production database:
   dashboard.
 - Use anomalies as alert and automation inputs.
 
+### Branch metrics
+
+Recommend for every production database:
+
+- Use MCP branch metrics for CPU, memory, disk, replication lag, and
+  connection posture when available.
+- Treat branch metrics as resource telemetry and Insights as query-level
+  telemetry; do not substitute one for the other.
+- When memory utilization is high, compare RSS and page-cache contribution
+  before recommending size or workload changes.
+
 ### Webhooks
 
 Recommend for operational events:
@@ -77,6 +88,11 @@ Recommend for production branches and staging branches that accept deploy reques
 ### Deploy requests
 
 Recommend for schema changes into protected branches.
+
+For partially failed Vitess deploy requests, recommend reviewing the failed
+tables and retrying only those tables from the dashboard or CLI when the
+operator approves the recovery action. Do not restart the entire deploy
+request unless the targeted retry is unavailable or inappropriate.
 
 ### Force cutover discipline
 

@@ -18,6 +18,7 @@ Allowed by default:
 - Read webhook configuration.
 - Read schema recommendations.
 - Read Query Insights, anomalies, and query patterns through MCP or API.
+- Read branch resource metrics through MCP.
 - Read traffic budgets and rules.
 - Read Postgres roles and non-secret role metadata.
 - Read backup schedules and restore metadata.
@@ -93,6 +94,12 @@ Verified interface notes (recheck against the docs when a command fails):
 - List endpoints paginate; follow the pagination parameters until
   exhausted before reporting counts (except the schema-recommendations
   case above).
+- MCP branch metrics: `planetscale_get_branch_metrics` is read-only and works
+  for Vitess, Postgres, and Neki. Use it for branch CPU, memory, disk,
+  replication lag, and connection summaries. The default summary covers the
+  last hour and includes current disk and connection numbers. Memory
+  utilization includes page cache; record RSS and cache separately when
+  available. Query-level statistics still belong to Insights.
 
 Record access failures (403s, missing token scopes, timeouts) in the
 internal run log for the operator. They are not findings and do not enter
@@ -111,7 +118,7 @@ Record:
 - Region and cloud provider.
 - Production/development branch status.
 - Branch protection and safe workflow state.
-- Size and cluster shape.
+- Size, cluster shape, current disk usage, and current connection usage.
 
 ### Branches and schema workflow
 
@@ -143,6 +150,8 @@ Record:
 - Whether complete/raw query collection is enabled.
 - Active anomalies.
 - Query patterns with high latency, high rows read, high error rate, or high execution count.
+- Branch CPU, memory, disk, replication lag, and connection metrics for the
+  assessed time window.
 - Postgres CPU-heavy query patterns and Vitess vindex-usage data when exposed
   by the Insights interface in use.
 - Whether application deploy identifiers are visible in comments or tags.

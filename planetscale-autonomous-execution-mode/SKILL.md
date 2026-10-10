@@ -78,7 +78,7 @@ Before the first mutation, produce and show an **execution plan**:
 
 1. **Order by dependency, then by risk.** Prerequisites first (e.g. stop the app's boot-time DDL before enabling safe migrations, add an index before dropping the one it replaces). Among independent changes, lowest-risk first so early failures cost the least.
 2. **Pre-flight each change.** Re-read the live state immediately before mutating (branch flags, recommendation state, webhook config). If the state no longer matches the report evidence, the change is **stale**: skip it, mark it `BLOCKED — state drift`, and continue with independent changes.
-3. **Safety prerequisites are steps, not assumptions.** Before any Class D DDL: confirm a backup completed within the retention window, confirm safe migrations or a deploy request is the vehicle where the engine supports it, and prefer revertible mechanisms (deploy requests with revert window, warn-mode before enforce-mode for Traffic Control).
+3. **Safety prerequisites are steps, not assumptions.** Before any Class D DDL: confirm a backup completed within the retention window, confirm safe migrations or a deploy request is the vehicle where the engine supports it, and prefer revertible mechanisms (deploy requests with revert window, warn-mode before enforce-mode for Traffic Control). If a Vitess deploy request partially failed, inspect the failed tables and retry only those tables when that retry step is inside the acknowledged scope.
 4. **One atomic change at a time.** Never batch unrelated mutations into one command. Never parallelize Class D steps.
 5. **Verify after each step.** Read the state back and confirm the expected effect before moving on. A change is not "done" when the command exits 0; it is done when the read-back matches the expected state.
 
@@ -106,7 +106,7 @@ Stop-the-line rules. When any of these fires, finish or safely abort the current
 3. **An anomaly begins firing on a target database mid-run** → pause the run, report the anomaly, wait for the operator.
 4. **State drift on a production target** (someone else changed it mid-run) → halt the run.
 5. **Scope pressure** — anything needed that is outside the acknowledged scope → do not do it; report it.
-6. **Error on a destructive step** → never auto-retry. Retries are permitted only for idempotent reads and transient network failures on non-destructive calls.
+6. **Error on a destructive step** → never auto-retry. Retries are permitted only for idempotent reads and transient network failures on non-destructive calls. A Vitess partially failed deploy-request retry is allowed only as an explicit, pre-staged recovery step within the approval or standing authorization; otherwise halt and report the failed tables.
 
 After a halt: report state of every step (done / rolled back / blocked / not started), current database state, and what re-acknowledgment would be needed to resume. Never resume a halted run on the original acknowledgment.
 

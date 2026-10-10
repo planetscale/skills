@@ -64,6 +64,19 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Operational command notes
+
+Vitess deploy requests that partially fail can retry only the failed tables:
+
+```bash
+pscale deploy-request retry <database> <number> --org <org> --format json
+```
+
+Use this after inspecting the failed tables and error details. It is a schema
+deployment recovery action, not a generic transient retry; for production deploy
+requests it requires the same approval or standing authorization as applying
+production DDL.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide
