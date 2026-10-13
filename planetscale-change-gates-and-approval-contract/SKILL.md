@@ -45,6 +45,9 @@ Always requires explicit approval:
 - Enable safe migrations.
 - Disable safe migrations.
 - Change deploy request approval settings.
+- Change deploy request cutover behavior, including opting a deploy request
+  into aggressive cutover or changing the database-level aggressive cutover
+  default.
 - Create/update/delete Traffic Control budget or rule.
 - Move Traffic Control budget to enforce mode.
 - Create/update/delete webhook.

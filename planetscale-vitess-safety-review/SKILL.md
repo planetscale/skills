@@ -34,6 +34,7 @@ Check:
 - Whether teams use gated deployments for cutover control.
 - Whether “deploy instantly” is used and whether the team understands it removes the gated-deployment/revert shape.
 - Whether cutover is regularly delayed by long-running transactions.
+- Whether aggressive cutover is enabled as a database default or on specific deploy requests.
 - Whether deploy request events are subscribed to via webhooks.
 
 Recommend:
@@ -48,9 +49,11 @@ Recommend:
 - Use gated deployment when cutover timing matters.
 - Treat “force cutover now” as an operator-controlled action for delayed
   cutovers: it aggressively stops running transactions to complete schema
-  cutover. Recommend reviewing the blocking workload and incident context
-  before use, and only recommend the database-level aggressive cutover default
-  when frequent cutover blocking is understood and accepted.
+  cutover. Aggressive cutover can now be set on a single deploy request from
+  the CLI or API before deployment; prefer that per-request scope when one
+  migration needs it, and only recommend the database-level aggressive cutover
+  default when frequent cutover blocking is understood and accepted.
+  Recommend reviewing the blocking workload and incident context before use.
 
 ### Schema revert
 

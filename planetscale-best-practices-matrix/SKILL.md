@@ -78,12 +78,13 @@ Recommend for production branches and staging branches that accept deploy reques
 
 Recommend for schema changes into protected branches.
 
-### Force cutover discipline
+### Cutover discipline
 
-Recommend documenting who may use "force cutover now" for deploy requests
-delayed by long-running transactions. It stops running transactions to finish
-schema cutover, so frequent use should trigger workload review before enabling
-aggressive cutover as the database default.
+Recommend documenting who may use "force cutover now" or opt an individual
+deploy request into aggressive cutover when long-running transactions delay
+cutover. These controls stop running transactions to finish schema cutover, so
+frequent use should trigger workload review before enabling aggressive cutover
+as the database default.
 
 ### Admin approval
 

@@ -78,7 +78,7 @@ Before the first mutation, produce and show an **execution plan**:
 
 1. **Order by dependency, then by risk.** Prerequisites first (e.g. stop the app's boot-time DDL before enabling safe migrations, add an index before dropping the one it replaces). Among independent changes, lowest-risk first so early failures cost the least.
 2. **Pre-flight each change.** Re-read the live state immediately before mutating (branch flags, recommendation state, webhook config). If the state no longer matches the report evidence, the change is **stale**: skip it, mark it `BLOCKED — state drift`, and continue with independent changes.
-3. **Safety prerequisites are steps, not assumptions.** Before any Class D DDL: confirm a backup completed within the retention window, confirm safe migrations or a deploy request is the vehicle where the engine supports it, and prefer revertible mechanisms (deploy requests with revert window, warn-mode before enforce-mode for Traffic Control).
+3. **Safety prerequisites are steps, not assumptions.** Before any Class D DDL: confirm a backup completed within the retention window, confirm safe migrations or a deploy request is the vehicle where the engine supports it, and prefer revertible mechanisms (deploy requests with revert window, warn-mode before enforce-mode for Traffic Control). Do not opt a deploy request into aggressive cutover unless the standing authorization or execution plan names that cutover behavior; when aggressive cutover is needed for one migration, prefer the per-deploy-request setting over changing the database default.
 4. **One atomic change at a time.** Never batch unrelated mutations into one command. Never parallelize Class D steps.
 5. **Verify after each step.** Read the state back and confirm the expected effect before moving on. A change is not "done" when the command exits 0; it is done when the read-back matches the expected state.
 
@@ -89,7 +89,7 @@ The operator handed over control; visibility is what they get in return. Emit st
 - **Plan announcement** — numbered steps, each with target, exact command/interface, expected effect, rollback mechanism, and class. This is the last thing shown before execution begins.
 - **Per-step, before**: `[step 3/7] STARTING VIT-3a — deploy request: add idx_orders_on_user_id to storefront-demo/main (Class D, revert window available)`
 - **Per-step, after**: `[step 3/7] DONE — deploy request #4 deployed, index visible in schema read-back (took 2m 10s)`
-- **Long-running operations** (deploy requests, migrations, restores): poll and report progress at a sensible cadence, not just at completion. Include queue position/state transitions.
+- **Long-running operations** (deploy requests, migrations, restores): poll and report progress at a sensible cadence, not just at completion. Include queue position/state transitions and whether the deploy request is using normal or aggressive cutover.
 - **Skips and blocks**: report immediately with the reason (`BLOCKED — state drift`, `EXCLUDED — Class E`, `SKIPPED — prerequisite failed`), never silently.
 - **Run summary** — the post-execution report from the change-gates skill: what changed, when, evidence of success, warnings, rollback state, follow-up monitoring. Plus the acknowledgment quote and the autonomy level used.
 
@@ -124,7 +124,7 @@ Maintain an append-only run log for the whole session: timestamp, step ID, comma
 
 - `../planetscale-change-gates-and-approval-contract/SKILL.md` — the class definitions and pre/post-execution checklists still apply verbatim; a valid risk acknowledgment substitutes for per-change approval within scope. Class E rules are unchanged.
 - `../planetscale-safe-orchestrator/SKILL.md` — when a valid acknowledgment accompanies the assessment request ("run the audit and fix what you find, I accept the risk"), run the full assessment first, present the report and execution plan, then proceed directly into execution under this skill without stopping for approval.
-- `../planetscale-schema-recommendations-agent-loop/SKILL.md` — in autonomous mode the loop may carry recommendations all the way through branch, deploy request, and deploy, using gated deployments where cutover timing matters.
+- `../planetscale-schema-recommendations-agent-loop/SKILL.md` — in autonomous mode the loop may carry recommendations all the way through branch, deploy request, and deploy, using gated deployments where cutover timing matters and aggressive cutover only when explicitly allowlisted.
 
 ## Required refusal behavior
 
