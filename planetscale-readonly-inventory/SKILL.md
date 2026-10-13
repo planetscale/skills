@@ -203,6 +203,8 @@ For Vitess only, record:
 - Deploy request workflow.
 - Admin approval requirement.
 - Gated deployment usage.
+- Aggressive cutover posture: database default and any open deploy requests
+  opted into aggressive cutover.
 - Schema revert availability.
 - Branch and keyspace topology.
 - Sharding/vschema status.

@@ -64,6 +64,22 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Deploy request cutover flags
+
+For Vitess deploy requests, aggressive cutover can be scoped to one deploy
+request instead of changing the database default:
+
+```bash
+pscale deploy-request create <database> <branch> --org <org> --aggressive-cutover --format json
+pscale deploy-request update <database> <deploy-request-number> --org <org> --aggressive-cutover --format json
+pscale deploy-request update <database> <deploy-request-number> --org <org> --aggressive-cutover=false --format json
+```
+
+`pscale deploy-request show` and `pscale deploy-request queue` include an
+aggressive cutover column. Treat the flag as cutover-safety behavior, not a CLI
+convenience: use the change-gates skill before setting it on any production
+deploy workflow.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide

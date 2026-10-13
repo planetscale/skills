@@ -148,14 +148,16 @@ for the same fingerprint/recommendation ID).
 
 - **Recommendation deployer** (daily, after the PR loop): deploy open
   deploy requests that match the allowlist — typically "additive DDL,
-  PR approved or authored from an open recommendation, deploy with revert
-  window, max N per run" — then verify via schema read-back and an
-  Insights follow-up on the target fingerprint. Destructive DDL deploys
-  autonomously only when the authorization states a runtime-verifiable
-  bound (e.g. "drop only indexes with zero reads in 30 days, confirmed
-  via Insights at run time"). Where the org requires PR approval before
-  deploy, an approved PR satisfies the review gate and the authorization
-  covers only the mechanical deploy.
+  PR approved or authored from an open recommendation, normal cutover,
+  deploy with revert window, max N per run" — then verify via schema
+  read-back and an Insights follow-up on the target fingerprint. Per-request
+  aggressive cutover is allowed only when the standing authorization names it
+  and the run status reports that cutover mode before queueing. Destructive
+  DDL deploys autonomously only when the authorization states a
+  runtime-verifiable bound (e.g. "drop only indexes with zero reads in 30
+  days, confirmed via Insights at run time"). Where the org requires PR
+  approval before deploy, an approved PR satisfies the review gate and the
+  authorization covers only the mechanical deploy.
 - **Branch hygiene** (weekly): delete development branches older than the
   authorized age bound with no open deploy request; never touch
   production or protected branches. 
