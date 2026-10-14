@@ -15,7 +15,7 @@ Prevent accidental or autonomous changes that can affect availability, safety, s
 
 Allowed without approval:
 
-- List databases, branches, keyspaces, webhooks, backups, roles, traffic budgets, schema recommendations, deploy requests, and Insights data.
+- List databases, branches, keyspaces, cloud providers, regions, webhooks, backups, roles, traffic budgets, schema recommendations, deploy requests, and Insights data.
 - Inspect repository code.
 - Read schema metadata.
 - Read non-sensitive database metadata.
@@ -59,6 +59,10 @@ Always requires explicit approval:
 - Create restore branch.
 - Create backup beyond automatic backups.
 - Change branch size or replica topology.
+- Create a database or change a database's cloud provider or region placement
+  for non-production use.
+- Request or initiate a support-assisted provider move, including moves of
+  existing databases to Azure.
 - Edit repository files or dependencies.
 
 ### Class D: production data/availability impacting
@@ -75,6 +79,8 @@ Requires explicit approval, named target confirmation, rollback plan, and ideall
 - Changing production network access.
 - Rotating production credentials.
 - Emergency backup during high load.
+- Moving a production database between cloud providers or regions, including
+  support-assisted moves to Azure.
 
 ### Class E: never autonomous
 

@@ -68,6 +68,16 @@ Recommend:
 - Test before production.
 - Apply only through approved workflow.
 
+### Cloud provider and region fit
+
+Record the database's cloud provider and region before making topology
+recommendations. Azure regions support PlanetScale Postgres and Neki
+databases with the standard high availability, branching, Query Insights,
+automated backup, and Metal cluster features; Vitess databases are not
+currently available on Azure. Do not recommend Azure as a placement target
+for Vitess, and treat moves of existing databases to Azure as
+support-assisted provider migrations rather than self-service changes.
+
 ## Vitess-specific recommendations
 
 ### Safe migrations
