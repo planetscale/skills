@@ -90,6 +90,7 @@ The report is plain markdown: headed sections, prose, and pipe tables. This is t
 - Database:
 - Branches reviewed:
 - Engine:
+- Cloud provider and region:
 - Repository reviewed:
 - Interfaces used:
 - Time window:
@@ -115,6 +116,12 @@ Then:
 ### Database and branch topology
 
 Include evidence.
+
+Include cloud provider and region. If Azure is in scope, state whether the
+engine supports Azure placement: PlanetScale Postgres and Neki can be created
+in Azure regions; Vitess is not currently available on Azure. For existing
+database moves to Azure, state that PlanetScale support must be contacted
+instead of listing an agent-executable migration step.
 
 ### Safety workflow
 

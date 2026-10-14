@@ -13,7 +13,7 @@ Build an evidence-backed inventory of a PlanetScale database without making chan
 
 Allowed by default:
 
-- List organizations, databases, branches, keyspaces, regions, and sizes.
+- List organizations, databases, branches, keyspaces, cloud providers, regions, and sizes.
 - Read branch metadata.
 - Read webhook configuration.
 - Read schema recommendations.
@@ -86,6 +86,10 @@ Verified interface notes (recheck against the docs when a command fails):
   `open_schema_recommendations_count` as the authoritative total, treat
   the returned page as a sample, and state in the report when the itemized
   list covers only part of the total.
+- Cloud provider availability is engine-specific. Azure regions currently
+  support PlanetScale Postgres and Neki databases; Vitess databases are not
+  currently available on Azure. Moving an existing database to Azure is a
+  support-assisted operation, not a self-service inventory action.
 - PITR state and branch-level backup policies have no verified read path;
   record backup posture from `pscale backup list` and the database-level
   backup policy, and mark PITR "not assessed in this run" rather than
@@ -107,7 +111,7 @@ Record:
 - Organization.
 - Database.
 - Branch.
-- Engine: Vitess or Postgres.
+- Engine: Vitess, Postgres, or Neki.
 - Region and cloud provider.
 - Production/development branch status.
 - Branch protection and safe workflow state.

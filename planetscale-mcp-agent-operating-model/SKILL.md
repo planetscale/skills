@@ -36,7 +36,8 @@ targeting section to `AGENTS.md` or equivalent project instructions:
 - PlanetScale organization.
 - Database.
 - Branch.
-- Engine: Vitess or Postgres.
+- Engine: Vitess, Postgres, or Neki.
+- Cloud provider and region.
 - Production branch name.
 - Whether agents may use MCP insights-only or full MCP.
 - Whether write queries are forbidden.
@@ -80,6 +81,8 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 - Rotate credentials.
 - Change roles.
 - Change IP restrictions or private connectivity.
+- Create databases or change cloud provider/region placement, including
+  support-assisted moves of existing databases to Azure.
 - Restore or promote branches.
 
 ## Agent loops

@@ -30,6 +30,23 @@ Recommend:
 
 Do not create branches, run migrations, or restore backups without approval.
 
+## Cloud provider and region
+
+Check:
+
+- Cloud provider and region.
+- Whether the provider/region supports the required PlanetScale Postgres
+  features.
+- Whether an existing database move to another provider is being requested.
+
+PlanetScale Postgres can be created in Azure regions as well as AWS and
+Google Cloud regions. Azure-hosted Postgres databases retain high
+availability, branching, Query Insights, automated backups, and Metal cluster
+support. Moving an existing database to Azure requires contacting
+PlanetScale support; do not present it as an agent-executable migration.
+
+Do not create databases or initiate provider/region moves without approval.
+
 ## Roles and least privilege
 
 Check whether the application connects with the default role. Flag this as a safety gap.
@@ -186,7 +203,11 @@ Recommend:
 
 - Use PgBouncer for high-churn application connections where transaction-pooling limitations are acceptable.
 - Use direct connections for session-dependent features that PgBouncer transaction mode cannot support.
-- Use AWS PrivateLink or GCP Private Service Connect for private network requirements.
+- Use provider-specific private connectivity where PlanetScale supports it
+  for the database's cloud provider, such as AWS PrivateLink or GCP Private
+  Service Connect. For Azure-hosted Postgres databases, verify the current
+  PlanetScale docs or support guidance before recommending a private
+  connectivity mechanism.
 - Use IP restrictions to reduce public exposure.
 - Be explicit that private connectivity does not automatically block public access; IP restrictions or equivalent controls are required for private-only posture.
 
@@ -241,6 +262,7 @@ Recommended automation behavior:
 Return:
 
 - Current Postgres safety posture.
+- Cloud provider and region fit.
 - Highest-risk availability gaps.
 - Recommended Traffic Control plan.
 - Recommended role and pg_strict plan.

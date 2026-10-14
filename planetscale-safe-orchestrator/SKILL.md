@@ -32,13 +32,19 @@ Ground all CLI and API usage in the official documentation rather than guessing:
    - Organization slug
    - Database name
    - Branch name
-   - Engine: PlanetScale Vitess or PlanetScale Postgres
+   - Engine: PlanetScale Vitess, PlanetScale Postgres, or Neki
+   - Cloud provider and region
    - Production branch or branches
    - Connected application repository path, if available
    - Application language, framework, ORM, query builder, connection pooling
    - Operator tolerance: report-only, PR-generation, branch-only migrations, or supervised production apply
 
 If inputs are missing, continue with discovery. Do not block on completeness.
+
+Provider availability is engine-specific. Azure regions currently support
+PlanetScale Postgres and Neki, not Vitess. If a requested topology involves
+moving an existing database to Azure, record it as a support-assisted
+provider migration requiring approval rather than an agent-executable step.
 
 ## Progress checklist
 
@@ -92,7 +98,8 @@ Deliverables to carry forward:
 - Inventory table with evidence (source, path/command, timestamp, confidence)
 - Missing evidence table
 - Risk flags
-- Confirmed engine (Vitess or Postgres)
+- Confirmed engine (Vitess, Postgres, or Neki)
+- Confirmed cloud provider and region
 - Branch topology and production branch
 
 If engine is still unknown after inventory, determine it before Phase 2.
@@ -101,10 +108,11 @@ If engine is still unknown after inventory, determine it before Phase 2.
 
 Run exactly one:
 
-| Engine | Skill file |
-|--------|------------|
+| Engine | Review path |
+|--------|-------------|
 | Vitess | `../planetscale-vitess-safety-review/SKILL.md` |
 | Postgres | `../planetscale-postgres-safety-review/SKILL.md` |
+| Neki | Run the shared Postgres safety review for Postgres-compatible surfaces, then use Neki-specific docs or skills where available for sharding and topology review. |
 
 Deliverables: engine-specific safety gaps, workflow gaps, and proposed changes requiring approval.
 
