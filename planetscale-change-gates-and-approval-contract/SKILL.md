@@ -19,6 +19,7 @@ Allowed without approval:
 - Inspect repository code.
 - Read schema metadata.
 - Read non-sensitive database metadata.
+- Read parameter listings, including `requires_update` status.
 - Produce reports and proposed change sets.
 
 ### Class B: state-creating proposals
@@ -59,6 +60,10 @@ Always requires explicit approval:
 - Create restore branch.
 - Create backup beyond automatic backups.
 - Change branch size or replica topology.
+- Change Postgres branch parameters or Neki configuration profile, admin,
+  sidecar, or router parameters.
+- Run branch or Neki configuration-profile maintenance required before changing
+  a locked parameter.
 - Edit repository files or dependencies.
 
 ### Class D: production data/availability impacting

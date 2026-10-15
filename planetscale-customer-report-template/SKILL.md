@@ -136,6 +136,14 @@ For Postgres:
 - Connection pooling.
 - Private connectivity and IP restrictions.
 
+For Neki or parameter-managed Postgres:
+
+- Parameter source of truth: dashboard, CLI/API, Terraform, or mixed.
+- Any parameters reporting `requires_update`.
+- Maintenance required before parameter changes.
+- Terraform provider version when Postgres bouncers or Neki router parameters are
+  in scope.
+
 ### Observability
 
 - Query Insights state.
@@ -170,6 +178,7 @@ Recommendation IDs:
 - `OBS-*` for Insights/query tags.
 - `VIT-*` for Vitess safety/deploy workflow.
 - `PG-*` for Postgres roles, pg_strict, Traffic Control, PITR, network.
+- `NK-*` for Neki configuration profiles, routers, and sharded-Postgres operations.
 - `WEB-*` for webhooks and automation.
 - `APP-*` for repository instrumentation.
 - `AGENT-*` for MCP/agent workflows.
@@ -198,6 +207,7 @@ State clearly:
 - No traffic controls changed.
 - No roles or credentials changed.
 - No webhooks changed.
+- No parameters, router settings, bouncer settings, or maintenance state changed.
 - No code changed.
 - No branches, backups, restores, deploy requests, or migrations created.
 

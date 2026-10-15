@@ -64,6 +64,27 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Parameter commands
+
+Parameter listings can include whether a parameter needs a platform update before
+it can be changed. Use the CLI's JSON output and inspect `requires_update` (also
+shown as the "Requires update" column in table output) before planning parameter
+changes.
+
+```bash
+pscale branch parameters list <database> <branch> --org <org> --format json
+pscale branch config-profile parameters <database> <branch> <profile> --org <org> --format json
+```
+
+- Postgres branch parameter listings expose the update requirement.
+- Neki configuration profile parameter listings expose the update requirement;
+  the same requirement can also appear on Neki admin and sidecar parameter
+  listings.
+- A required update is separate from whether a parameter change needs a restart.
+  Run the required branch or Neki configuration-profile maintenance before
+  trying to configure the parameter, and treat that maintenance as an operational
+  change rather than a read-only preflight.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide

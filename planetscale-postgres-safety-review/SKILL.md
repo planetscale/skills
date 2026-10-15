@@ -213,8 +213,12 @@ it when slow-query plan capture would materially improve diagnosis and the
 logging volume is acceptable. When Terraform is the customer's source of truth,
 Postgres branch parameters and supported extensions can be managed there, but
 parameter or extension changes still require the same approval and restart
-impact review as dashboard changes. Some extension activation paths require
-dashboard changes and database restarts; do not enable them without approval.
+impact review as dashboard changes. Before proposing a parameter change, inspect
+the branch parameter listing for `requires_update`; if it is true, plan the
+required branch maintenance before the parameter change and state that this
+requirement is separate from restart impact. Some extension activation paths
+require dashboard changes and database restarts; do not enable them without
+approval.
 
 ## Webhook recommendations for Postgres
 
