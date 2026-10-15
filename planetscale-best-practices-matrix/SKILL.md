@@ -68,6 +68,15 @@ Recommend:
 - Test before production.
 - Apply only through approved workflow.
 
+### Parameter management
+
+Recommend recording the source of truth for database and routing parameters
+before proposing changes. Parameter listings can report `requires_update`;
+when they do, schedule the required maintenance before the parameter change and
+treat that maintenance separately from restart impact. If Terraform manages the
+parameters, compare the complete declared map with live state rather than
+assuming omitted values are unchanged.
+
 ## Vitess-specific recommendations
 
 ### Safe migrations
@@ -146,13 +155,30 @@ Recommend only when use case is clear and restart/activation impact is accepted.
 Include `auto_explain` when automatic plan logging for slow queries would
 materially improve diagnosis and the resulting log volume is acceptable.
 If Terraform manages Postgres branch parameters or supported extensions, keep
-that source of truth aligned with approved dashboard/API changes.
+that source of truth aligned with approved dashboard/API changes. Check
+Postgres branch parameter listings for `requires_update` before recommending a
+parameter change.
 
 ### Live connections
 
 Recommend inspecting `pscale branch connections top` during active connection
 pressure incidents to identify sessions, blockers, and idle-in-transaction
 roots without relying on normal database connection capacity.
+
+## Neki-specific recommendations
+
+### Configuration and router parameters
+
+Recommend parameter changes only after confirming the owning surface: dashboard,
+CLI/API, or Terraform. For configuration profile, admin, sidecar, and router
+parameters, record any `requires_update` status and plan the required
+maintenance before the parameter mutation.
+
+If Terraform manages `planetscale_neki_router` parameters, require the
+configuration to declare the full intended parameter map because omitted
+customer-configurable parameters reset to defaults. Use the
+`planetscale_databases` data source's `kind` filter (`neki`) when inventorying
+mixed-engine organizations.
 
 ## Output
 

@@ -25,8 +25,8 @@ Allowed by default:
 - Inspect live connection/session metadata with the Connections CLI view.
 - Inspect repository files for frameworks, ORMs, migrations, SQL tagging, and connection config.
 - Inspect Terraform or other infrastructure-as-code definitions for
-  PlanetScale roles, backups, backup policies, Postgres parameters, and
-  supported extensions.
+  PlanetScale roles, backups, backup policies, Postgres parameters, Neki
+  router parameters, Postgres bouncers, and supported extensions.
 
 Not allowed without explicit approval:
 
@@ -93,6 +93,22 @@ Verified interface notes (recheck against the docs when a command fails):
 - List endpoints paginate; follow the pagination parameters until
   exhausted before reporting counts (except the schema-recommendations
   case above).
+- Parameter listings can include a `requires_update` field. For Postgres
+  branches, read it with
+  `pscale branch parameters list <database> <branch> --org <org> --format json`.
+  For Neki configuration profiles, read it with
+  `pscale branch config-profile parameters <database> <branch> <profile> --org <org> --format json`.
+  Treat `requires_update: true` as evidence that maintenance must run before
+  the parameter can be changed; this is independent of any restart requirement.
+- Terraform can manage Neki router parameters on
+  `planetscale_neki_router`; its data source can read router parameters. When
+  Terraform configures router parameters, omitted customer-configurable
+  parameters reset to their defaults, so inventory must compare the complete
+  configured map against live state before recommending changes. The
+  `planetscale_databases` data source can filter by `kind` (`mysql`,
+  `postgresql`, or `neki`). For Terraform-managed Postgres bouncers, provider
+  v1.14.0 or later is required to read bouncers after PgBouncer parameter
+  reporting changes.
 
 Record access failures (403s, missing token scopes, timeouts) in the
 internal run log for the operator. They are not findings and do not enter
@@ -107,7 +123,7 @@ Record:
 - Organization.
 - Database.
 - Branch.
-- Engine: Vitess or Postgres.
+- Engine: Vitess, Postgres, or Neki.
 - Region and cloud provider.
 - Production/development branch status.
 - Branch protection and safe workflow state.
@@ -146,6 +162,22 @@ Record:
 - Postgres CPU-heavy query patterns and Vitess vindex-usage data when exposed
   by the Insights interface in use.
 - Whether application deploy identifiers are visible in comments or tags.
+
+### Parameters and infrastructure as code
+
+Record:
+
+- Whether Postgres branch parameters are managed in the dashboard, CLI/API, or
+  Terraform.
+- Whether any Postgres branch parameter reports `requires_update`.
+- Whether Neki configuration profile, admin, sidecar, or router parameters are
+  managed in the dashboard, CLI/API, or Terraform.
+- Whether any Neki parameter reports `requires_update`.
+- For Terraform-managed Neki routers, whether the configuration declares the
+  complete intended parameter map, because omitted configurable parameters reset
+  to defaults.
+- Terraform provider version when Postgres bouncers or Neki router parameters
+  are in scope.
 
 ### Recommendations
 

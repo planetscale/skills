@@ -19,7 +19,7 @@ Collect:
 - Suggested DDL.
 - Supporting Insights evidence.
 - Application repository and migration system.
-- Engine: Vitess or Postgres.
+- Engine: Vitess, Postgres, or Neki when schema recommendations are available for the target.
 - Target branch.
 
 ## Recommendation types to recognize

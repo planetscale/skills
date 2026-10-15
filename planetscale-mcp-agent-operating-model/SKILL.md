@@ -36,7 +36,7 @@ targeting section to `AGENTS.md` or equivalent project instructions:
 - PlanetScale organization.
 - Database.
 - Branch.
-- Engine: Vitess or Postgres.
+- Engine: Vitess, Postgres, or Neki.
 - Production branch name.
 - Whether agents may use MCP insights-only or full MCP.
 - Whether write queries are forbidden.
