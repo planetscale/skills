@@ -25,8 +25,8 @@ Allowed by default:
 - Inspect live connection/session metadata with the Connections CLI view.
 - Inspect repository files for frameworks, ORMs, migrations, SQL tagging, and connection config.
 - Inspect Terraform or other infrastructure-as-code definitions for
-  PlanetScale roles, backups, backup policies, Postgres parameters, and
-  supported extensions.
+  PlanetScale roles, backups, backup policies, Postgres parameters, Neki
+  configuration-profile/admin/router parameters, and supported extensions.
 
 Not allowed without explicit approval:
 
@@ -194,6 +194,21 @@ For Postgres only, record:
   connection saturation during an active incident.
 - Whether private connectivity and IP restrictions are configured.
 - Whether backup retention and PITR meet the customer’s recovery expectations.
+
+### Configurable parameters
+
+For Postgres and Neki, record:
+
+- Which cluster or configuration-profile parameters are manually
+  configured instead of default-owned.
+- Whether Terraform or another IaC system is the source of truth for
+  those parameters.
+- Which configured or recommended parameters require a restart.
+- For `huge_pages`, whether it is available for the current cluster size
+  or Neki configuration profile and whether the `shared_buffers`
+  combination is valid. If this cannot be verified from the dashboard,
+  API, or IaC, mark it "not assessed" rather than assuming availability.
+- Any pending parameter changes shown by the dashboard/API changes view.
 
 ### Vitess safety
 
