@@ -192,6 +192,32 @@ Recommend:
 
 Do not change network restrictions without approval. Network changes can break application connectivity.
 
+## Cluster parameters
+
+Review configured cluster parameters when the assessment includes
+operational tuning or restart-sensitive settings. `huge_pages` can be
+enabled for PlanetScale Postgres on supported cluster sizes to reduce the
+memory and CPU overhead of managing PostgreSQL shared memory.
+
+Recommend parameter changes only when the use case is clear and the
+availability impact is accepted. For `huge_pages`, verify the current
+cluster size supports it and that the `shared_buffers` combination is
+valid; if support cannot be verified from the dashboard or API, mark it
+"not assessed" rather than assuming it is available.
+
+Restart-required parameter changes use PlanetScale's rolling restart
+process on production clusters: replicas are restarted first, a replica is
+promoted, and the former primary is restarted. This minimizes downtime but
+still creates a brief unavailability window during switchover, and direct
+database connections are terminated. Confirm application retry behavior
+before recommending a production restart-required parameter change. When
+Terraform is the customer's source of truth, keep branch parameter state
+aligned with approved dashboard/API changes.
+
+Do not change cluster parameters without approval. Treat restart-required
+parameter changes, including `huge_pages`, as availability-affecting
+operational changes.
+
 ## Extensions
 
 Review enabled and available extensions relevant to safety and observability:
@@ -211,10 +237,10 @@ for PlanetScale Postgres and can log execution plans for slow queries when
 configured with parameters such as `auto_explain.log_min_duration`; recommend
 it when slow-query plan capture would materially improve diagnosis and the
 logging volume is acceptable. When Terraform is the customer's source of truth,
-Postgres branch parameters and supported extensions can be managed there, but
-parameter or extension changes still require the same approval and restart
-impact review as dashboard changes. Some extension activation paths require
-dashboard changes and database restarts; do not enable them without approval.
+Postgres supported extensions can be managed there, but extension changes still
+require the same approval and restart impact review as dashboard changes. Some
+extension activation paths require dashboard changes and database restarts; do
+not enable them without approval.
 
 ## Webhook recommendations for Postgres
 

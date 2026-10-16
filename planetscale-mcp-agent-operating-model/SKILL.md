@@ -40,7 +40,8 @@ targeting section to `AGENTS.md` or equivalent project instructions:
 - Production branch name.
 - Whether agents may use MCP insights-only or full MCP.
 - Whether write queries are forbidden.
-- Required approval protocol for schema, Traffic Control, webhooks, roles, and network changes.
+- Required approval protocol for schema, Traffic Control, webhooks, roles,
+  configurable parameters, and network changes.
 
 Do not edit `AGENTS.md` without approval.
 
@@ -79,6 +80,7 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 - Create or enforce Traffic Control budgets.
 - Rotate credentials.
 - Change roles.
+- Change Postgres or Neki configurable parameters such as `huge_pages`.
 - Change IP restrictions or private connectivity.
 - Restore or promote branches.
 

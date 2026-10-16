@@ -50,6 +50,8 @@ Always requires explicit approval:
 - Create/update/delete webhook.
 - Enable raw query collection.
 - Enable/disable extensions or settings that require restart.
+- Change Postgres or Neki parameters that require restart, including
+  `huge_pages`.
 - Create/update/delete role.
 - Reset passwords.
 - Change pg_strict settings.

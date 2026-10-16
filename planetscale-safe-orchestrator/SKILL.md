@@ -177,6 +177,7 @@ Synthesize **all** phase deliverables into one report. Do not dump raw phase out
 | `OBS-*` | Insights and query tags |
 | `VIT-*` | Vitess safety and deploy workflow |
 | `PG-*` | Postgres roles, pg_strict, Traffic Control, PITR, network |
+| `PARAM-*` | Postgres/Neki configurable parameters and restart impact |
 | `WEB-*` | Webhooks and automation |
 | `APP-*` | Repository instrumentation |
 | `AGENT-*` | MCP and agent workflows |

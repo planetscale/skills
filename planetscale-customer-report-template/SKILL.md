@@ -132,6 +132,7 @@ For Postgres:
 - Roles.
 - pg_strict.
 - Traffic Control.
+- Cluster parameters and restart-required overrides.
 - Backups/PITR.
 - Connection pooling.
 - Private connectivity and IP restrictions.
@@ -170,6 +171,7 @@ Recommendation IDs:
 - `OBS-*` for Insights/query tags.
 - `VIT-*` for Vitess safety/deploy workflow.
 - `PG-*` for Postgres roles, pg_strict, Traffic Control, PITR, network.
+- `PARAM-*` for Postgres/Neki configurable parameters and restart impact.
 - `WEB-*` for webhooks and automation.
 - `APP-*` for repository instrumentation.
 - `AGENT-*` for MCP/agent workflows.
@@ -185,6 +187,7 @@ For every proposed change, include:
 - Why it is recommended.
 - Expected effect.
 - Possible availability impact.
+- Restart and connection impact for restart-required parameter changes.
 - Test plan.
 - Rollback plan.
 - Whether it changes production.
@@ -197,6 +200,7 @@ State clearly:
 - No schema changed.
 - No traffic controls changed.
 - No roles or credentials changed.
+- No cluster or configuration-profile parameters changed.
 - No webhooks changed.
 - No code changed.
 - No branches, backups, restores, deploy requests, or migrations created.

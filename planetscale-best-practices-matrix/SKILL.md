@@ -68,6 +68,17 @@ Recommend:
 - Test before production.
 - Apply only through approved workflow.
 
+### Configurable parameters
+
+For PlanetScale Postgres and Neki, recommend reviewing configurable
+parameters when measured workload behavior points to a specific setting or
+when existing overrides may be stale. `huge_pages` can reduce memory and CPU
+overhead for PostgreSQL shared memory on supported cluster sizes and Neki
+configuration profiles, but it requires a restart and must use a supported
+`shared_buffers` combination. Recommend it only when the restart impact is
+accepted and the fit is tied to workload evidence or an explicit operational
+requirement.
+
 ## Vitess-specific recommendations
 
 ### Safe migrations
@@ -147,6 +158,13 @@ Include `auto_explain` when automatic plan logging for slow queries would
 materially improve diagnosis and the resulting log volume is acceptable.
 If Terraform manages Postgres branch parameters or supported extensions, keep
 that source of truth aligned with approved dashboard/API changes.
+
+### Cluster parameters
+
+Recommend restart-required parameter changes only with an explicit
+availability-impact review. For production Postgres, rolling restarts still
+include a primary switchover window and terminate direct database
+connections, so application retry behavior must be part of the test plan.
 
 ### Live connections
 
