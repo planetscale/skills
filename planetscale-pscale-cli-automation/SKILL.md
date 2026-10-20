@@ -64,6 +64,24 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Neki configuration-profile commands
+
+Use these commands only after checking the current `pscale agent-guide` and the
+relevant workflow skill. Inventory commands are read-only; create/update
+commands are behavior-changing and require approval under
+`../planetscale-change-gates-and-approval-contract/SKILL.md`.
+
+```bash
+pscale size cluster list --engine neki --format json
+pscale branch config-profile changes list <DATABASE_NAME> <BRANCH_NAME> <PROFILE_NAME> --org <org> --format json
+pscale branch config-profile update <DATABASE_NAME> <BRANCH_NAME> <PROFILE_NAME> --read-only-replicas 2 --org <org> --format json
+```
+
+`pscale branch config-profile create` accepts `--read-only-replicas` as well.
+Read-only replica count is 0 to 8 per shard. Updating the count creates a
+configuration-profile change request; follow it with
+`pscale branch config-profile changes list`.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide

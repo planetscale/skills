@@ -76,11 +76,13 @@ Aggregates cover the requested window. Duration fields use names like
 (`sum_total_duration_percent`); both totals and percentages are reliable
 for the window requested.
 
-The response schema is shared across engines, but some fields are
+The response schema is shared across supported engines, but some fields are
 engine-specific: CPU/IO durations and block-cache statistics
 (`sum_cpu_duration_millis`, `blocks_read`, `block_cache_hit_ratio`, …) are
-populated for Postgres; shard queries, keyspaces, `tablet_type`, and
-routing-index (vindex) usage are populated for Vitess.
+populated for Postgres-derived engines where exposed; shard queries,
+keyspaces, and `tablet_type` appear for sharded/routed engines. For Neki,
+`tablet_type=rdonly` identifies traffic routed to read-only replicas when the
+client explicitly uses the `rdonly` target.
 
 ### Tag coverage
 

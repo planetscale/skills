@@ -1,6 +1,6 @@
 ---
 name: planetscale-readonly-inventory
-description: Collect read-only evidence about PlanetScale org, database, branches, webhooks, backups, roles, Insights, recommendations, and traffic configuration.
+description: Collect read-only evidence about PlanetScale org, database, branches, Neki configuration profiles, webhooks, backups, roles, Insights, recommendations, and traffic configuration.
 ---
 
 # Read-only inventory
@@ -15,6 +15,8 @@ Allowed by default:
 
 - List organizations, databases, branches, keyspaces, regions, and sizes.
 - Read branch metadata.
+- Read Neki configuration-profile, admin, router, size, storage, and replica
+  metadata.
 - Read webhook configuration.
 - Read schema recommendations.
 - Read Query Insights, anomalies, and query patterns through MCP or API.
@@ -51,6 +53,10 @@ Verified interface notes (recheck against the docs when a command fails):
 
 - `pscale database show <database> --org <org>` — the org is a flag, not a
   positional argument.
+- `pscale size cluster list --engine neki` — lists currently available Neki
+  cluster sizes. The dashboard remains the source of truth for prices,
+  current profile sizing, storage selections, and whether a size is currently
+  compatible with a profile's architecture and storage usage.
 - `pscale api <path>` takes org-relative paths such as
   `organizations/{org}/databases/{db}/branches/{branch}` — there is no
   `get` subcommand and no `/v1/` prefix. Pass query parameters with
@@ -107,7 +113,7 @@ Record:
 - Organization.
 - Database.
 - Branch.
-- Engine: Vitess or Postgres.
+- Engine: PlanetScale Vitess, PlanetScale Postgres, or Neki.
 - Region and cloud provider.
 - Production/development branch status.
 - Branch protection and safe workflow state.
@@ -194,6 +200,31 @@ For Postgres only, record:
   connection saturation during an active incident.
 - Whether private connectivity and IP restrictions are configured.
 - Whether backup retention and PITR meet the customer’s recovery expectations.
+
+### Neki topology and sizing
+
+For Neki only, record:
+
+- Shards and configuration-profile assignment.
+- Configuration-profile size, storage type, storage capacity, and whether the
+  profile uses network-attached storage or Metal.
+- For AWS Metal profiles using M-10 through M-160, the separately selected
+  fixed storage capacity. That capacity does not autoscale; additional storage
+  requires choosing a larger storage option or larger size.
+- Admin-service size and router size.
+- Production failover replica count separately from read-only replica count.
+- Read-only replica count per shard, which can be 0 to 8. Read-only replicas
+  serve the `rdonly` target, reject writes, never become primary, do not
+  acknowledge commits, and do not add write durability or failover capacity.
+- Whether analytics, reports, exports, batch jobs, BI tools, or agents use the
+  `rdonly` target through the Connect-page query target, connection option
+  `-c __neki.target=RDONLY`, `PGOPTIONS`, or `SET __neki.target = 'rdonly'`
+  before a transaction.
+- Whether the application retries read connections and queries sent to
+  `rdonly`, because those queries fail rather than falling back when no
+  eligible read-only replica exists for a destination shard.
+- Restore expectations: backup restores do not copy the read-only replica
+  count, so restored branches start with no read-only replicas.
 
 ### Vitess safety
 

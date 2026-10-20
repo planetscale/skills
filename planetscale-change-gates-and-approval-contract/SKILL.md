@@ -58,7 +58,9 @@ Always requires explicit approval:
 - Change backup schedule or retention.
 - Create restore branch.
 - Create backup beyond automatic backups.
-- Change branch size or replica topology.
+- Change branch size, configuration-profile size or storage, or replica
+  topology.
+- Change Neki read-only replica count.
 - Edit repository files or dependencies.
 
 ### Class D: production data/availability impacting
@@ -75,6 +77,8 @@ Requires explicit approval, named target confirmation, rollback plan, and ideall
 - Changing production network access.
 - Rotating production credentials.
 - Emergency backup during high load.
+- Production capacity or topology changes that restart or replace serving
+  instances, remove failover capacity, or remove read capacity.
 
 ### Class E: never autonomous
 
