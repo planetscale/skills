@@ -32,7 +32,7 @@ Ground all CLI and API usage in the official documentation rather than guessing:
    - Organization slug
    - Database name
    - Branch name
-   - Engine: PlanetScale Vitess or PlanetScale Postgres
+   - Engine: PlanetScale Vitess, PlanetScale Postgres, or Neki
    - Production branch or branches
    - Connected application repository path, if available
    - Application language, framework, ORM, query builder, connection pooling
@@ -48,9 +48,10 @@ Copy and track:
 Master assessment progress:
 - [ ] Phase 0: Safety contract loaded
 - [ ] Phase 1: Read-only inventory
-- [ ] Phase 2: Engine safety review (Vitess OR Postgres)
+- [ ] Phase 2: Engine safety review (Vitess, Postgres, or Neki)
 - [ ] Phase 3: Query Insights and tags
-- [ ] Phase 4: Traffic Control (Postgres only — skip for Vitess)
+- [ ] Phase 4: Traffic Control (Postgres only; mark N/A for Vitess/Neki
+  unless current docs confirm support)
 - [ ] Phase 5: Webhook automation
 - [ ] Phase 6: Schema recommendations agent loop
 - [ ] Phase 7: Codebase SQLCommenter instrumentation
@@ -92,19 +93,20 @@ Deliverables to carry forward:
 - Inventory table with evidence (source, path/command, timestamp, confidence)
 - Missing evidence table
 - Risk flags
-- Confirmed engine (Vitess or Postgres)
+- Confirmed engine (Vitess, Postgres, or Neki)
 - Branch topology and production branch
 
 If engine is still unknown after inventory, determine it before Phase 2.
 
 ### Phase 2 — Engine safety review
 
-Run exactly one:
+Run the matching path:
 
 | Engine | Skill file |
 |--------|------------|
 | Vitess | `../planetscale-vitess-safety-review/SKILL.md` |
 | Postgres | `../planetscale-postgres-safety-review/SKILL.md` |
+| Neki | `../planetscale-postgres-safety-review/SKILL.md` for Postgres-layer safety concerns, plus the Neki topology, read-only replica, and sizing checks from `../planetscale-readonly-inventory/SKILL.md` and `../planetscale-best-practices-matrix/SKILL.md` |
 
 Deliverables: engine-specific safety gaps, workflow gaps, and proposed changes requiring approval.
 
@@ -116,7 +118,9 @@ Deliverables: query risk table, tag coverage table, bad/high-cardinality tags, r
 
 ### Phase 4 — Traffic Control (Postgres only)
 
-**Skip this phase for Vitess.** Mark checklist item complete with note "N/A — Vitess".
+**Skip this phase for Vitess and Neki unless current PlanetScale docs confirm
+Database Traffic Control support for the selected engine.** Mark checklist item
+complete with note "N/A — <engine>" when skipped.
 
 For Postgres, read and execute: `../planetscale-traffic-control-recommendations/SKILL.md`
 
@@ -177,6 +181,7 @@ Synthesize **all** phase deliverables into one report. Do not dump raw phase out
 | `OBS-*` | Insights and query tags |
 | `VIT-*` | Vitess safety and deploy workflow |
 | `PG-*` | Postgres roles, pg_strict, Traffic Control, PITR, network |
+| `NEKI-*` | Neki shard topology, configuration profiles, read-only replicas, routers, admins, Metal/storage sizing |
 | `WEB-*` | Webhooks and automation |
 | `APP-*` | Repository instrumentation |
 | `AGENT-*` | MCP and agent workflows |

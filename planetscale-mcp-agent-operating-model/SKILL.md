@@ -36,7 +36,7 @@ targeting section to `AGENTS.md` or equivalent project instructions:
 - PlanetScale organization.
 - Database.
 - Branch.
-- Engine: Vitess or Postgres.
+- Engine: Vitess, Postgres, or Neki.
 - Production branch name.
 - Whether agents may use MCP insights-only or full MCP.
 - Whether write queries are forbidden.
@@ -181,11 +181,22 @@ for the same fingerprint/recommendation ID).
 
 For read queries:
 
-- Prefer replicas when available.
+- Prefer replicas or read-only replicas when available and the task can
+  tolerate replica-lag semantics.
 - `planetscale_execute_read_query` routes reads to replicas by default when a
   branch has replicas configured (`use_replica: true`). Set
   `use_replica: false` only when the task needs primary-read semantics, such
   as checking immediately-after-write state or primary-only behavior.
+- For Neki SQL clients that should use dedicated read-only replicas, set the
+  `rdonly` target explicitly through the Connect-page query target, connection
+  option `-c __neki.target=RDONLY`, `PGOPTIONS`, or
+  `SET __neki.target = 'rdonly'` before starting a transaction. Neki does not
+  send ordinary traffic to read-only replicas.
+- Treat Neki `rdonly` as a no-fallback target: if no eligible read-only replica
+  exists for a destination shard, the query fails rather than running on a
+  failover replica or primary. Agent and reporting jobs using `rdonly` need
+  retry behavior and should not assume those replicas add write durability or
+  failover capacity.
 - Add source tags/comments for agent work.
 - Avoid unbounded scans.
 - Avoid `EXPLAIN ANALYZE` on production unless explicitly approved.

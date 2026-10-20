@@ -22,7 +22,7 @@ Identify:
 - Deployment metadata source, such as git SHA or release ID.
 - Existing SQL comments, query tags, tracing, OpenTelemetry, or database middleware.
 - PlanetScale connection configuration.
-- Whether the repository connects to Vitess, Postgres, or both.
+- Whether the repository connects to Vitess, Postgres, Neki, or a combination.
 
 ## Recommended package mapping
 

@@ -136,6 +136,17 @@ For Postgres:
 - Connection pooling.
 - Private connectivity and IP restrictions.
 
+For Neki:
+
+- Shard and configuration-profile assignment.
+- Configuration-profile size, storage type, storage capacity, admin size, and
+  router size.
+- Failover replica count separately from read-only replica count.
+- Whether long-running reads use the `rdonly` target, and whether clients retry
+  when no eligible read-only replica is available.
+- For AWS Metal M-10 through M-160 profiles, the fixed storage capacity selected
+  separately from vCPU and memory.
+
 ### Observability
 
 - Query Insights state.
@@ -170,6 +181,8 @@ Recommendation IDs:
 - `OBS-*` for Insights/query tags.
 - `VIT-*` for Vitess safety/deploy workflow.
 - `PG-*` for Postgres roles, pg_strict, Traffic Control, PITR, network.
+- `NEKI-*` for Neki shard topology, configuration profiles, read-only
+  replicas, routers, admins, and Metal/storage sizing.
 - `WEB-*` for webhooks and automation.
 - `APP-*` for repository instrumentation.
 - `AGENT-*` for MCP/agent workflows.

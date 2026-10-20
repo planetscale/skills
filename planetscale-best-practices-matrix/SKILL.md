@@ -23,7 +23,7 @@ Recommend for every production database:
 - Correlate regressions with deploys.
 - Use tags/comments to map queries back to code.
 - Use tag filtering/navigation in Query Insights: the tags API
-  (`insights/tags`, `insights/tags/summaries`) on both engines, plus
+  (`insights/tags`, `insights/tags/summaries`) on supported engines, plus
   `tag:key:value` filtering and per-execution tag drill-down in the Vitess
   dashboard.
 - Use anomalies as alert and automation inputs.
@@ -108,6 +108,49 @@ Recommend production, staging, and short-lived development branches with safe mi
 ### Sharding/keyspace review
 
 Recommend when query patterns or growth suggest shard-awareness problems. Do not reshard automatically.
+
+## Neki-specific recommendations
+
+### Read-only replicas
+
+Recommend Neki read-only replicas for long-running reads such as analytics,
+reports, exports, batch jobs, BI tools, and agent queries when those workloads
+should not consume the replicas used for live read traffic and failover.
+
+State the mechanics precisely:
+
+- Read-only replicas add read capacity, not availability or write durability.
+- They never become primary, never acknowledge commits, and reject writes.
+- Sessions use them only with the `rdonly` target, selected on the Connect page
+  or by setting `__neki.target` to `rdonly` before a transaction.
+- If no eligible read-only replica exists for a destination shard, the query
+  fails instead of falling back to a replica or primary.
+- Replication lag and read-consistency caveats are the same as Neki replicas.
+- Use two or more read-only replicas per shard when the workload cannot accept
+  failures while a single read-only replica restarts or is unavailable.
+- Backup restores do not copy the read-only replica count.
+
+Changing read-only replica count is a configuration-profile topology change.
+It requires approval per the change-gates skill and should be validated against
+node limits, monthly cost, and retry behavior for `rdonly` clients.
+
+### Configuration-profile sizing and Metal
+
+Recommend sizing Neki configuration profiles from shard-level evidence: CPU,
+memory, IOPS, storage, connections, WAL activity, and whether uneven load comes
+from workload or data topology. If one shard consistently needs different
+capacity, prefer a compatible separate profile for that shard over resizing
+unrelated shards.
+
+For Metal profiles, record the storage model:
+
+- Metal uses fixed-capacity, locally attached NVMe storage with unlimited IOPS
+  and requires a primary with replicas.
+- On AWS M-10 through M-160 sizes, storage capacity is selected separately from
+  vCPU and memory, but remains fixed after selection and does not autoscale.
+- To add storage on those sizes, choose a larger storage option or a larger
+  size. Verify the dashboard's current storage-margin check before proposing a
+  change.
 
 ## Postgres-specific recommendations
 

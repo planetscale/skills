@@ -19,7 +19,7 @@ Collect:
 - Suggested DDL.
 - Supporting Insights evidence.
 - Application repository and migration system.
-- Engine: Vitess or Postgres.
+- Engine: Vitess, Postgres, or Neki.
 - Target branch.
 
 ## Recommendation types to recognize
@@ -73,6 +73,14 @@ Recommended path:
 6. Use backups/PITR runbook as recovery plan, not as a substitute for migration review.
 
 Default output before approval: migration PR or issue, not production DDL.
+
+### Neki
+
+Use the Postgres implementation path for DDL and migration handling, then add
+Neki-specific checks for shard scope, configuration-profile assignment, and
+whether the affected workload runs on primaries, replicas, or the `rdonly`
+read-only-replica target. Do not treat read-only replicas as a failover or
+durability mechanism when evaluating rollout risk.
 
 ## Codebase correlation
 
