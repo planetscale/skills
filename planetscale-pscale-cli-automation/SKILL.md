@@ -92,3 +92,10 @@ pscale agent-guide --format json
 
 The embedded `guide` field contains the full CLI agent guide shipped with your
 `pscale` binary.
+
+When proposing Vitess keyspace disk scaling changes through the CLI, verify the
+installed CLI supports the current flags. CLI v0.344.0 and later supports
+`pscale keyspace update-settings` with `--disk-scaling-strategy`,
+`--max-storage`, and `--storage`. These flags mutate keyspace storage behavior;
+they require the approval gates in
+`../planetscale-change-gates-and-approval-contract/SKILL.md`.

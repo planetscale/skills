@@ -54,11 +54,15 @@ Always requires explicit approval:
 - Reset passwords.
 - Change pg_strict settings.
 - Change connection pooling behavior.
+- Create, drop, or change failover support for Postgres logical replication
+  slots.
 - Change IP restrictions, PrivateLink, PSC, or public access.
 - Change backup schedule or retention.
 - Create restore branch.
 - Create backup beyond automatic backups.
 - Change branch size or replica topology.
+- Change Vitess keyspace disk scaling strategy, storage limit, requested
+  storage size, or storage shrink settings.
 - Edit repository files or dependencies.
 
 ### Class D: production data/availability impacting
@@ -75,6 +79,7 @@ Requires explicit approval, named target confirmation, rollback plan, and ideall
 - Changing production network access.
 - Rotating production credentials.
 - Emergency backup during high load.
+- Shrinking production Vitess keyspace storage.
 
 ### Class E: never autonomous
 

@@ -109,7 +109,23 @@ Recommend production, staging, and short-lived development branches with safe mi
 
 Recommend when query patterns or growth suggest shard-awareness problems. Do not reshard automatically.
 
+### Keyspace disk scaling
+
+Recommend reviewing Vitess keyspace disk scaling when storage pressure,
+unused disk capacity, or billing questions appear in the evidence. Keyspaces
+can grow automatically to a storage limit, stay fixed at current capacity, or
+shrink to a requested size. Treat shrink as an operational storage change:
+it recreates disks, turns automatic growth off, and is rejected if any disk is
+using more than 80% of the requested size.
+
 ## Postgres-specific recommendations
+
+### Logical replication slots
+
+Recommend documenting logical replication slot consumers when slots are used.
+Do not recommend `patroni.slots`; PlanetScale detects logical slots
+automatically. For slots that must survive switchovers and failovers,
+recommend keeping failover support enabled.
 
 ### User-defined roles
 

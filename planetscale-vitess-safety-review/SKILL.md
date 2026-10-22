@@ -152,6 +152,27 @@ If the database is sharded, review:
 
 Recommend an agent-safe sharding review only as a proposal. Never reshard, change vschema, or alter routing automatically.
 
+### Keyspace storage and disk scaling
+
+Review each keyspace's disk scaling settings:
+
+- Current disk capacity and storage usage.
+- Storage limit.
+- Disk scaling strategy: grow automatically, off, or shrink.
+- Whether recent storage pressure, unused capacity, or billing concerns
+  justify a proposed change.
+
+PlanetScale Vitess keyspaces can grow disks automatically up to the configured
+storage limit, leave disks fixed at their current size, or shrink disks to a
+requested size. Shrink recreates disks at the requested size and then turns
+automatic growth off; it is rejected when any disk is using more than 80% of
+the requested size. Billing is based on disk capacity, not the storage limit.
+
+Recommend storage changes only as explicit proposed changes with usage
+evidence, expected billing or capacity effect, and rollback/monitoring plan.
+Never change disk scaling strategy, storage limits, or requested storage
+without approval.
+
 ## Webhook recommendations for Vitess
 
 Evaluate and recommend webhooks for:
@@ -188,6 +209,7 @@ Return:
 - Recommended webhook subscriptions.
 - Schema recommendation triage table.
 - Deploy safety gaps.
+- Keyspace disk scaling and storage findings.
 - Proposed changes requiring approval.
 
 End with:
