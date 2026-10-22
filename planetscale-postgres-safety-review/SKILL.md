@@ -30,6 +30,23 @@ Recommend:
 
 Do not create branches, run migrations, or restore backups without approval.
 
+## Logical replication slots
+
+Check whether logical replication slots are used for downstream replication,
+change-data-capture, or external consumers.
+
+Recommend:
+
+- Do not ask operators to configure the removed `patroni.slots` cluster
+  parameter; PlanetScale detects Postgres logical slots automatically.
+- Keep failover support enabled on logical slots that must survive switchovers
+  and failovers.
+- Document which external consumers own each logical slot and how lag is
+  monitored.
+
+Do not create, drop, or change failover support for logical slots without
+approval.
+
 ## Roles and least privilege
 
 Check whether the application connects with the default role. Flag this as a safety gap.
@@ -242,6 +259,7 @@ Return:
 
 - Current Postgres safety posture.
 - Highest-risk availability gaps.
+- Logical replication slot posture, when slots are used.
 - Recommended Traffic Control plan.
 - Recommended role and pg_strict plan.
 - Recommended backup/PITR plan.

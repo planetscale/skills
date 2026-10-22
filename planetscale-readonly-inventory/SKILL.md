@@ -189,6 +189,10 @@ For Postgres only, record:
 - Whether apps use the default role.
 - Whether app roles are least-privilege.
 - Whether pg_strict is enabled for application roles.
+- Whether logical replication slots exist, which external consumers use them,
+  and whether slots that must survive switchovers and failovers have failover
+  support enabled. Do not expect or recommend `patroni.slots`; logical slots
+  are detected automatically.
 - Whether PgBouncer is used for appropriate workloads.
 - Whether live connections show blockers, idle-in-transaction sessions, or
   connection saturation during an active incident.
@@ -207,6 +211,8 @@ For Vitess only, record:
 - Branch and keyspace topology.
 - Sharding/vschema status.
 - Whether sharded query patterns use relevant vindexes.
+- Keyspace disk capacity, usage, storage limit, and disk scaling strategy
+  (grow automatically, off, or shrink) when available.
 - Backups and restore posture.
 
 ## Evidence format

@@ -125,10 +125,12 @@ For Vitess:
 - Approval requirements.
 - Gated deployment usage.
 - Schema revert runbook.
+- Keyspace disk capacity, storage limits, and disk scaling strategy.
 
 For Postgres:
 
 - Branch migration workflow.
+- Logical replication slots and failover support, if slots are used.
 - Roles.
 - pg_strict.
 - Traffic Control.
