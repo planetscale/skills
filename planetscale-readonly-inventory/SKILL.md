@@ -59,10 +59,14 @@ Verified interface notes (recheck against the docs when a command fails):
 - `pscale webhook list <database> --org <org>` — the database is a
   positional argument. `pscale backup list <database> <branch>` requires
   the branch.
-- `pscale branch connections top <database> <branch>` — live read-only
-  session inventory works for Postgres and Vitess over a reserved
-  administrative connection. Do not cancel queries or terminate connections
-  unless the operator explicitly approves that operational action.
+- `pscale branch connections show <database> <branch> --format json` —
+  scriptable live connection inventory for Postgres, Vitess, and Neki.
+  Use `top` for an interactive or captured live view. The command requires
+  a signed-in user, not a service token, and works over a reserved
+  administrative connection. For Neki, the rows are router sessions only;
+  they do not show the router-to-shard Postgres connections. Do not cancel
+  queries, kill transactions, or terminate connections unless the operator
+  explicitly approves that operational action.
 - Query Insights is public API. Live query telemetry:
   `.../branches/{branch}/insights` (per-pattern statistics; supports
   `from`/`to`/`period`, `q`, `sort`, `dir`, `tablet_type`, `type`,
@@ -123,6 +127,11 @@ For Vitess, record:
 - Deploy request approval setting.
 - Pending schema changes.
 - Whether branch strategy has a staging branch with safe migrations enabled.
+- Active MoveTables and Materialize workflows visible on the dashboard
+  Workflows page, including workflow type, stream states, replication lag,
+  copied/materialized tables, and any query that feeds a Materialize table.
+  Creation and control remain CLI/API operations, not read-only dashboard
+  actions.
 
 For Postgres, record:
 
@@ -194,6 +203,18 @@ For Postgres only, record:
   connection saturation during an active incident.
 - Whether private connectivity and IP restrictions are configured.
 - Whether backup retention and PITR meet the customer’s recovery expectations.
+
+### Neki safety
+
+For Neki only, record:
+
+- Whether live router sessions show active connection pressure, long-running
+  queries, idle-in-transaction sessions, or incomplete router coverage during
+  an active incident.
+- Whether the evidence came from the dashboard Connections page or
+  `pscale branch connections show/top`.
+- That Connections covers client sessions on routers only, not the
+  connections from routers to each shard's Postgres instances.
 
 ### Vitess safety
 

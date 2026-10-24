@@ -150,9 +150,28 @@ that source of truth aligned with approved dashboard/API changes.
 
 ### Live connections
 
-Recommend inspecting `pscale branch connections top` during active connection
-pressure incidents to identify sessions, blockers, and idle-in-transaction
-roots without relying on normal database connection capacity.
+Recommend inspecting `pscale branch connections show --format json` or
+`pscale branch connections top` during active connection pressure incidents
+to identify live sessions without relying on normal database connection
+capacity. For Postgres, use this to find blockers and idle-in-transaction
+roots. For Vitess, target the relevant keyspace/shard primary tablet. For
+Neki, treat the results as router client sessions only; they do not include
+the router-to-shard Postgres connections.
+
+Canceling a query, killing a transaction, or terminating a connection is an
+operational action, not inventory. Recommend it only as an explicitly
+approved incident step with read-back verification.
+
+## Neki-specific recommendations
+
+### Router connection visibility
+
+Recommend the dashboard Connections page or `pscale branch connections
+show/top` when active incidents require router-session evidence for
+connection pressure, long-running statements, or idle transactions. Record
+that Neki exposes client sessions on routers and shard backend details for a
+session, but not a complete inventory of router-to-shard Postgres
+connections.
 
 ## Output
 

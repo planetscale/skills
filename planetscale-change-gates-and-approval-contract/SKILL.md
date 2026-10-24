@@ -19,6 +19,8 @@ Allowed without approval:
 - Inspect repository code.
 - Read schema metadata.
 - Read non-sensitive database metadata.
+- Inspect live connection/session metadata through the dashboard or
+  `pscale branch connections show/top`.
 - Produce reports and proposed change sets.
 
 ### Class B: state-creating proposals
@@ -59,6 +61,10 @@ Always requires explicit approval:
 - Create restore branch.
 - Create backup beyond automatic backups.
 - Change branch size or replica topology.
+- Cancel live queries, kill transactions, or terminate live connections on
+  non-production branches.
+- Create, start, stop, or cancel Vitess MoveTables or Materialize workflows
+  on non-production branches.
 - Edit repository files or dependencies.
 
 ### Class D: production data/availability impacting
@@ -75,6 +81,11 @@ Requires explicit approval, named target confirmation, rollback plan, and ideall
 - Changing production network access.
 - Rotating production credentials.
 - Emergency backup during high load.
+- Canceling live queries, killing transactions, or terminating live
+  connections on production branches.
+- Creating, starting, stopping, switching traffic for, completing, or
+  canceling Vitess MoveTables or Materialize workflows that affect
+  production traffic or production data.
 
 ### Class E: never autonomous
 

@@ -64,6 +64,39 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Live connection inspection
+
+For live connection and session inventory, prefer the scriptable command:
+
+```bash
+pscale branch connections show <database> <branch> --org <org> --format json
+```
+
+`pscale branch connections top <database> <branch> --org <org>` opens the
+interactive live view; when running headlessly, capture to a trace with
+`--capture <file>` and `--duration <duration>`.
+
+The command works for Postgres, Vitess, and Neki branches and adapts the
+output to the engine. It requires a signed-in user (`pscale auth login`), not a
+service token. For Vitess, pass `--keyspace` and `--shard` when automation
+needs a non-interactive target. For Neki, results are client sessions on
+routers only, not the connections between routers and each shard's Postgres
+instances.
+
+Action subcommands take effect immediately and do not prompt:
+
+```bash
+pscale branch connections kill <database> <branch> <connection-id> --org <org>
+pscale branch connections kill <database> <branch> <query-id> --query --org <org>
+pscale branch connections kill-transaction <database> <branch> <transaction-id> --org <org>
+```
+
+Agents should get IDs from `show --format json`, act on one session at a time
+only after explicit approval, and run `show` again to verify the result. For
+Neki, canceling a query leaves the router session open but aborts any open
+transaction; terminating a session closes the client connection and rolls back
+any open transaction.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide
