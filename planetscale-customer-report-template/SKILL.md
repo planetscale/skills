@@ -143,6 +143,10 @@ For Postgres:
 - Query tags.
 - Raw query collection posture.
 - Schema recommendations.
+- Live connection/session evidence when it was relevant to the assessment.
+  For Neki, state explicitly that Connections evidence covers router client
+  sessions only, not the complete set of router-to-shard Postgres
+  connections.
 
 ### Automation
 

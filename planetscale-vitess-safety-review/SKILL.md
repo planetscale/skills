@@ -152,6 +152,21 @@ If the database is sharded, review:
 
 Recommend an agent-safe sharding review only as a proposal. Never reshard, change vschema, or alter routing automatically.
 
+### Workflows
+
+Review the branch Workflows page for active or recent MoveTables and
+Materialize workflows. The dashboard now shows Materialize workflows alongside
+MoveTables workflows and identifies the workflow type. For Materialize
+workflows, inspect stream states, replication lag, materialized tables, and
+the query that feeds each table.
+
+Use the dashboard workflow view as read-only evidence. Creating, starting,
+stopping, canceling, switching traffic for, or completing workflows remains a
+CLI/API operation: use `pscale branch vtctl move-tables` for MoveTables and
+`pscale branch vtctld materialize` for Materialize. Treat those workflow
+control operations as approval-gated, especially when production traffic or
+production data is involved.
+
 ## Webhook recommendations for Vitess
 
 Evaluate and recommend webhooks for:
