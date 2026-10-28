@@ -20,6 +20,11 @@ Allowed by default:
 - Read Query Insights, anomalies, and query patterns through MCP or API.
 - Read traffic budgets and rules.
 - Read Postgres roles and non-secret role metadata.
+- Read service-token non-secret usage metadata, including last-used time, IP,
+  location, and network operator when exposed by the dashboard, API, or CLI.
+- Read audit-log metadata, including IP and network operator. Do not collect
+  or publish sensitive actor details unless the assessment explicitly needs
+  them and the report audience is authorized.
 - Read backup schedules and restore metadata.
 - Read branch schema.
 - Inspect live connection/session metadata with the Connections CLI view.
@@ -63,6 +68,11 @@ Verified interface notes (recheck against the docs when a command fails):
   session inventory works for Postgres and Vitess over a reserved
   administrative connection. Do not cancel queries or terminate connections
   unless the operator explicitly approves that operational action.
+- Vitess `pscale branch vtctl`/`vtctld` read-only inspections, such as
+  listing tablets or reading workflow state, are inventory actions when the
+  command is verified in the docs. Creating, starting, stopping, cancelling,
+  or otherwise changing workflows, reparents, routing, or shard tablet
+  controls is not read-only.
 - Query Insights is public API. Live query telemetry:
   `.../branches/{branch}/insights` (per-pattern statistics; supports
   `from`/`to`/`period`, `q`, `sort`, `dir`, `tablet_type`, `type`,
@@ -145,7 +155,22 @@ Record:
 - Query patterns with high latency, high rows read, high error rate, or high execution count.
 - Postgres CPU-heavy query patterns and Vitess vindex-usage data when exposed
   by the Insights interface in use.
+- For Postgres and Neki databases in scope, whether high public network egress
+  email notifications are available to the operators who need cost or traffic
+  anomaly visibility.
 - Whether application deploy identifiers are visible in comments or tags.
+
+### Access and audit metadata
+
+Record:
+
+- Service tokens used by automation, without revealing token secrets.
+- Last-used timestamp, IP, location, and network operator for service tokens
+  when available in the dashboard, API, or CLI.
+- Audit-log IP and network-operator metadata when it helps explain access
+  patterns or credential usage.
+- Stale or unexpected service-token usage as a finding only when the evidence
+  is read successfully and the expected usage pattern is known.
 
 ### Recommendations
 

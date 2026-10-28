@@ -16,6 +16,9 @@ Prevent accidental or autonomous changes that can affect availability, safety, s
 Allowed without approval:
 
 - List databases, branches, keyspaces, webhooks, backups, roles, traffic budgets, schema recommendations, deploy requests, and Insights data.
+- List service tokens and audit-log metadata without exposing token secrets.
+- List Vitess workflow, tablet, and vtctl state where the verified command is
+  observational only.
 - Inspect repository code.
 - Read schema metadata.
 - Read non-sensitive database metadata.
@@ -59,6 +62,9 @@ Always requires explicit approval:
 - Create restore branch.
 - Create backup beyond automatic backups.
 - Change branch size or replica topology.
+- Start, stop, cancel, or otherwise operate a Vitess workflow or diagnostic
+  job, including Materialize, Lookup Vindex, VDiff, or MoveTables operations
+  outside an approved production deploy path.
 - Edit repository files or dependencies.
 
 ### Class D: production data/availability impacting
@@ -69,6 +75,9 @@ Requires explicit approval, named target confirmation, rollback plan, and ideall
 - Production DML.
 - Applying schema recommendation to production.
 - Queueing or applying Vitess deploy request to production.
+- Running production-impacting Vitess vtctl operations such as
+  PlannedReparentShard, workflow cutover, routing-control changes, or shard
+  tablet control updates.
 - Promoting or restoring branches.
 - Deleting branches, databases, roles, webhooks, backups, or traffic rules.
 - Enforcing Traffic Control on production.

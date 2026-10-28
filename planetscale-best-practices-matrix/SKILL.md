@@ -40,6 +40,13 @@ Recommend for operational events:
 - Schema recommendations where available.
 - Deploy request lifecycle for Vitess.
 
+### Public network egress notifications
+
+For Postgres and Neki databases, verify that the right operators receive the
+email notifications PlanetScale sends when it detects higher than usual public
+network egress. Use the finding to route cost and traffic-anomaly review; do
+not treat the notification itself as a network-control mechanism.
+
 ### MCP and agents
 
 Recommend:
@@ -48,6 +55,8 @@ Recommend:
 - Use full MCP only with narrow scopes and read-only default.
 - Put database targeting and safety rules in `AGENTS.md`.
 - Agents generate PRs/issues/change plans; humans approve database changes.
+- Use service-token last-used IP, location, and network-operator metadata to
+  review automation credential usage without exposing token secrets.
 
 ### SQLCommenter / query tags
 
@@ -109,6 +118,14 @@ Recommend production, staging, and short-lived development branches with safe mi
 
 Recommend when query patterns or growth suggest shard-awareness problems. Do not reshard automatically.
 
+### Vitess workflows and vtctl operations
+
+Recommend documenting the approved use of `pscale branch vtctl`/`vtctld` for
+MoveTables, Materialize, Lookup Vindex, VDiff, PlannedReparentShard, tablet
+listing, and shard tablet-control operations. Read-only inspection can support
+assessments; workflow creation/control, reparents, and routing changes require
+the approval gates in the change contract.
+
 ## Postgres-specific recommendations
 
 ### User-defined roles
@@ -139,6 +156,13 @@ Recommend where connection churn or serverless/edge behavior creates pressure, s
 ### Private connectivity and IP restrictions
 
 Recommend for customers requiring private network posture or reduced public exposure. Treat changes as production-risking.
+
+### Public egress visibility
+
+For Postgres databases, verify whether high public network egress email
+notifications reach the database owners or on-call path. Pair the notification
+with Insights, application logs, and network posture review before recommending
+traffic, routing, or connectivity changes.
 
 ### Extensions
 
