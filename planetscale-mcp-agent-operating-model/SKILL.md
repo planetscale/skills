@@ -141,8 +141,9 @@ for the same fingerprint/recommendation ID).
   gather affected patterns, classify probable cause, post triage note to
   the incident channel. Output: triage note.
 - **Posture drift check** (daily): diff current safe-migrations flags,
-  webhook config, role list, and backup schedule against the last
-  assessment report; report any drift. Output: report.
+  webhook config, role list, service-token last-used metadata, and backup
+  schedule against the last assessment report; report any drift. Output:
+  report.
 
 ### Tier 2 — execute the review-gate action (standing authorization required)
 
@@ -163,9 +164,11 @@ for the same fingerprint/recommendation ID).
   budgets for newly identified expensive slices matching the allowlist;
   report warn counts on existing budgets. Enforce mode is never entered
   autonomously unless the authorization names the specific budget.
-- **Credential expiry enforcement** (daily): delete or flag passwords
-  past the authorized max age, only where the authorization lists the
-  affected roles and a rotation runbook exists.
+- **Credential expiry enforcement** (daily): delete or flag passwords and
+  service tokens past the authorized max age, using last-used IP, location,
+  and network-operator metadata as review evidence where available. Delete
+  only where the authorization lists the affected credentials and a rotation
+  runbook exists.
 
 ### Loop anti-patterns
 

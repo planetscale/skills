@@ -64,6 +64,34 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## Useful read-only inventory surfaces
+
+- Service token views in the dashboard, API, and CLI include non-secret
+  usage metadata such as last-used IP, location, and network operator. Use
+  that metadata for credential inventory and drift checks, but never emit or
+  request token secrets during routine inventory.
+- Audit logs in the dashboard and API include the network operator behind the
+  source IP. Treat that as access-context evidence, not as authorization to
+  publish sensitive actor details.
+
+## Vitess vtctl operations
+
+PlanetScale exposes Vitess operations through `pscale branch vtctl` (alias
+`vtctld`) and matching API surfaces. The command family includes operations
+such as MoveTables, Materialize, Lookup Vindex, VDiff, PlannedReparentShard,
+tablet listing, and shard tablet-control updates.
+
+For automation:
+
+- Verify the exact subcommand and JSON shape against live docs or
+  `pscale agent-guide --format json` before use.
+- Use `--format json` for supported read/list/show operations.
+- Treat list/show/status commands as inventory only when the command is
+  observational.
+- Do not create, start, stop, cancel, cut over, reparent, or update routing or
+  tablet controls without following
+  `../planetscale-change-gates-and-approval-contract/SKILL.md`.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide

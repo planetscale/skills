@@ -152,6 +152,34 @@ If the database is sharded, review:
 
 Recommend an agent-safe sharding review only as a proposal. Never reshard, change vschema, or alter routing automatically.
 
+### Vitess workflows and vtctl operations
+
+Review:
+
+- Active and recent Workflows-page entries for MoveTables and Materialize.
+- Whether operators understand that Materialize workflows can be inspected in
+  the dashboard while creation, start/stop/cancel, and other workflow control
+  remain CLI/API operations.
+- Whether `pscale branch vtctl`/`vtctld` usage is documented for supported
+  operations such as MoveTables, Materialize, Lookup Vindex, VDiff,
+  PlannedReparentShard, tablet listing, and shard tablet-control updates.
+- Whether operational runbooks classify vtctl commands by impact before they
+  are run.
+
+Recommend:
+
+- Use read-only list/show/status vtctl commands and the Workflows page for
+  assessment and incident context.
+- Require explicit operator approval before creating, starting, stopping,
+  cancelling, cutting over, or otherwise changing Vitess workflows.
+- Treat VDiff as an operational job that can consume database resources; run
+  it only with an approved target, time window, and validation purpose.
+- Treat PlannedReparentShard and shard tablet-control updates as
+  availability- or routing-impacting operations requiring named target
+  confirmation, rollback plan, and post-change monitoring.
+- Prefer normal deploy-request and workflow review paths for planned schema,
+  routing, and materialization work.
+
 ## Webhook recommendations for Vitess
 
 Evaluate and recommend webhooks for:

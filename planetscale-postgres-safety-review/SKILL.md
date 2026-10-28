@@ -181,6 +181,8 @@ Check:
 - Whether private connectivity is configured.
 - Whether IP restrictions are configured.
 - Whether public access remains available unexpectedly.
+- Whether high public network egress email notifications reach the operators
+  responsible for cost and traffic-anomaly review.
 
 Recommend:
 
@@ -189,6 +191,9 @@ Recommend:
 - Use AWS PrivateLink or GCP Private Service Connect for private network requirements.
 - Use IP restrictions to reduce public exposure.
 - Be explicit that private connectivity does not automatically block public access; IP restrictions or equivalent controls are required for private-only posture.
+- Use public egress notifications as an investigation trigger, then correlate
+  with Insights `egressBytes`, application deploys, workload changes, and
+  network posture before recommending traffic or connectivity changes.
 
 Do not change network restrictions without approval. Network changes can break application connectivity.
 

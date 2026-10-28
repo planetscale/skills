@@ -143,6 +143,8 @@ For Postgres:
 - Query tags.
 - Raw query collection posture.
 - Schema recommendations.
+- Public network egress notification path for Postgres or Neki databases, when
+  in scope.
 
 ### Automation
 
@@ -150,6 +152,8 @@ For Postgres:
 - Agent loops.
 - CI/PR workflows.
 - Incident routing.
+- Service-token last-used metadata and audit-log network-operator evidence
+  when it is used to assess automation credentials.
 
 ### Repository instrumentation
 
