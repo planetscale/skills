@@ -53,6 +53,8 @@ Always requires explicit approval:
 - Create/update/delete role.
 - Reset passwords.
 - Change pg_strict settings.
+- Change maintenance windows or reschedule restart-requiring maintenance.
+- Change Postgres storage limits, autoscaling, IOPS, or throughput.
 - Change connection pooling behavior.
 - Change IP restrictions, PrivateLink, PSC, or public access.
 - Change backup schedule or retention.
@@ -72,6 +74,8 @@ Requires explicit approval, named target confirmation, rollback plan, and ideall
 - Promoting or restoring branches.
 - Deleting branches, databases, roles, webhooks, backups, or traffic rules.
 - Enforcing Traffic Control on production.
+- Changing production maintenance scheduling for restart-requiring maintenance.
+- Changing production storage capacity or performance settings.
 - Changing production network access.
 - Rotating production credentials.
 - Emergency backup during high load.

@@ -133,6 +133,9 @@ For Postgres:
 - pg_strict.
 - Traffic Control.
 - Backups/PITR.
+- Maintenance window and pending restart-requiring maintenance.
+- Storage configuration, including autoscaling, IOPS, throughput, and
+  Terraform ownership when applicable.
 - Connection pooling.
 - Private connectivity and IP restrictions.
 
@@ -170,6 +173,8 @@ Recommendation IDs:
 - `OBS-*` for Insights/query tags.
 - `VIT-*` for Vitess safety/deploy workflow.
 - `PG-*` for Postgres roles, pg_strict, Traffic Control, PITR, network.
+  Use this prefix for Postgres maintenance windows and storage configuration
+  as well.
 - `WEB-*` for webhooks and automation.
 - `APP-*` for repository instrumentation.
 - `AGENT-*` for MCP/agent workflows.
@@ -198,6 +203,8 @@ State clearly:
 - No traffic controls changed.
 - No roles or credentials changed.
 - No webhooks changed.
+- No maintenance windows or scheduled maintenance changed.
+- No storage configuration changed.
 - No code changed.
 - No branches, backups, restores, deploy requests, or migrations created.
 
