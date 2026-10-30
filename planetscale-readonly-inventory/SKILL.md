@@ -25,8 +25,8 @@ Allowed by default:
 - Inspect live connection/session metadata with the Connections CLI view.
 - Inspect repository files for frameworks, ORMs, migrations, SQL tagging, and connection config.
 - Inspect Terraform or other infrastructure-as-code definitions for
-  PlanetScale roles, backups, backup policies, Postgres parameters, and
-  supported extensions.
+  PlanetScale roles, backups, backup policies, Postgres parameters,
+  Postgres storage configuration, and supported extensions.
 
 Not allowed without explicit approval:
 
@@ -194,6 +194,11 @@ For Postgres only, record:
   connection saturation during an active incident.
 - Whether private connectivity and IP restrictions are configured.
 - Whether backup retention and PITR meet the customer’s recovery expectations.
+- The weekly maintenance window, any pending restart-requiring maintenance,
+  notice/deadline state, and whether the schedule has been rescheduled.
+- Current storage configuration: minimum storage, maximum storage,
+  autoscaling state, IOPS, throughput, and whether Terraform or another
+  infrastructure-as-code source owns those settings.
 
 ### Vitess safety
 

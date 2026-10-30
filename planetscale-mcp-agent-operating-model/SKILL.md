@@ -40,7 +40,8 @@ targeting section to `AGENTS.md` or equivalent project instructions:
 - Production branch name.
 - Whether agents may use MCP insights-only or full MCP.
 - Whether write queries are forbidden.
-- Required approval protocol for schema, Traffic Control, webhooks, roles, and network changes.
+- Required approval protocol for schema, Traffic Control, webhooks, roles,
+  maintenance scheduling, storage configuration, and network changes.
 
 Do not edit `AGENTS.md` without approval.
 
@@ -79,6 +80,8 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 - Create or enforce Traffic Control budgets.
 - Rotate credentials.
 - Change roles.
+- Change maintenance windows or reschedule restart-requiring maintenance.
+- Change storage limits, autoscaling, IOPS, or throughput.
 - Change IP restrictions or private connectivity.
 - Restore or promote branches.
 
@@ -141,7 +144,8 @@ for the same fingerprint/recommendation ID).
   gather affected patterns, classify probable cause, post triage note to
   the incident channel. Output: triage note.
 - **Posture drift check** (daily): diff current safe-migrations flags,
-  webhook config, role list, and backup schedule against the last
+  webhook config, role list, backup schedule, maintenance window, and
+  storage configuration against the last
   assessment report; report any drift. Output: report.
 
 ### Tier 2 — execute the review-gate action (standing authorization required)

@@ -132,6 +132,23 @@ Recommend verifying retention and restore drill coverage.
 If Terraform is the customer's source of truth, recommend managing backup
 policies there so backup posture changes are reviewed as infrastructure code.
 
+### Maintenance windows
+
+Recommend verifying each branch's weekly maintenance window, pending
+restart-requiring maintenance notices, deadline, reschedule state, and
+operations owner. Align restart windows with staffed low-traffic periods and
+capture who receives the 7-day and 3-day administrator emails. Maintenance
+window or reschedule changes require approval.
+
+### Storage configuration
+
+Recommend reviewing minimum storage, maximum storage, autoscaling, IOPS, and
+throughput against measured utilization and growth. If Terraform is the
+customer's source of truth, recommend managing Postgres storage configuration
+with PlanetScale Terraform provider v1.16.0 or later through the
+`planetscale_postgres_branch` resource so drift is visible in review.
+Storage capacity or performance changes require approval.
+
 ### PgBouncer and connection pooling
 
 Recommend where connection churn or serverless/edge behavior creates pressure, subject to transaction-pooling limitations.

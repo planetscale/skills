@@ -168,6 +168,63 @@ Recommend:
 
 Do not restore or create emergency backups without approval. Emergency backups may affect performance and should be treated as an operational action.
 
+## Maintenance windows and restart notices
+
+Check:
+
+- The branch's weekly maintenance window.
+- Whether any upcoming maintenance requires a Postgres restart.
+- Notice state, including the deadline and whether administrators have
+  received the 7-day and 3-day emails for restart-requiring maintenance.
+- Whether the scheduled maintenance has already been moved, and how many
+  reschedule attempts remain when that information is available.
+- Whether an operations owner will be available during the selected window.
+
+Recommend:
+
+- Align the weekly window with the team's lowest-traffic and staffed
+  operational period.
+- Treat a scheduled restart as an availability event even when PlanetScale
+  sends advance notice.
+- Use the dashboard or API to move restart-requiring maintenance before its
+  deadline when the selected window conflicts with business or incident
+  constraints; a scheduled maintenance item can be moved up to 3 times.
+- Document who receives the maintenance emails and how the team confirms
+  application readiness before the window.
+- Do not treat every maintenance window as a restart; routine maintenance can
+  run in the window without restarting Postgres.
+
+Do not change the maintenance window or reschedule maintenance without
+approval.
+
+## Storage configuration
+
+Check:
+
+- Minimum storage.
+- Maximum storage.
+- Storage autoscaling state.
+- Provisioned IOPS and throughput.
+- Current storage utilization and recent `cluster.storage` events.
+- Whether Terraform is the source of truth through the
+  `planetscale_postgres_branch` resource.
+
+Recommend:
+
+- Set storage limits, autoscaling, IOPS, and throughput from measured
+  utilization, growth rate, and workload characteristics.
+- If Terraform is the customer's source of truth, manage Postgres storage
+  settings with PlanetScale Terraform provider v1.16.0 or later so drift is
+  visible in review.
+- Keep dashboard or API changes synchronized back to Terraform before the next
+  apply when Terraform manages the branch.
+- Review storage configuration alongside connection, query, and Traffic
+  Control findings when diagnosing resource pressure.
+
+Do not change storage limits, autoscaling, IOPS, or throughput without
+approval. Production storage changes can affect availability, performance, and
+cost.
+
 ## Connections, pooling, and network safety
 
 Check:
@@ -234,7 +291,8 @@ Recommended automation behavior:
 
 - Alerts: anomaly, out-of-memory, primary promotion, storage, maintenance.
 - Agent intake: anomaly, schema recommendation.
-- Human approval: any generated Traffic Control, schema, role, or network change.
+- Human approval: any generated Traffic Control, schema, role, network,
+  maintenance scheduling, or storage configuration change.
 
 ## Output
 
@@ -245,6 +303,7 @@ Return:
 - Recommended Traffic Control plan.
 - Recommended role and pg_strict plan.
 - Recommended backup/PITR plan.
+- Recommended maintenance-window and storage-configuration plan.
 - Recommended network posture plan.
 - Recommended query tagging plan.
 - Proposed changes requiring approval.
