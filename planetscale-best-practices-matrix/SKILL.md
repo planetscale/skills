@@ -48,6 +48,8 @@ Recommend:
 - Use full MCP only with narrow scopes and read-only default.
 - Put database targeting and safety rules in `AGENTS.md`.
 - Agents generate PRs/issues/change plans; humans approve database changes.
+- MCP feedback/question tools submit context to PlanetScale; use them only when
+  the operator approves the exact feedback or question to send.
 
 ### SQLCommenter / query tags
 
@@ -108,6 +110,13 @@ Recommend production, staging, and short-lived development branches with safe mi
 ### Sharding/keyspace review
 
 Recommend when query patterns or growth suggest shard-awareness problems. Do not reshard automatically.
+
+### Emergency backups
+
+For Vitess databases, recommend a runbook for emergency backups when a fresh
+backup is needed immediately or regular backups are failing. Include source
+selection (`primary` versus `replica`), expected workload impact, retention,
+billing, restore expectations, and the approval requirement before creation.
 
 ## Postgres-specific recommendations
 

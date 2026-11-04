@@ -148,6 +148,7 @@ For Postgres:
 
 - Webhooks.
 - Agent loops.
+- MCP feedback/question tools posture.
 - CI/PR workflows.
 - Incident routing.
 
@@ -200,6 +201,7 @@ State clearly:
 - No webhooks changed.
 - No code changed.
 - No branches, backups, restores, deploy requests, or migrations created.
+- No MCP feedback or question submissions sent to PlanetScale.
 
 ## Evidence appendix
 

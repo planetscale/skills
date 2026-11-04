@@ -31,6 +31,7 @@ Allowed by default:
 Not allowed without explicit approval:
 
 - Any create, update, delete, enable, disable, reset, deploy, restore, promote, enforce, or apply operation.
+- Manual or emergency backup creation.
 - Any SQL mutation.
 - Any command that emits new credentials unless the operator explicitly asked for credential work.
 
@@ -208,6 +209,8 @@ For Vitess only, record:
 - Sharding/vschema status.
 - Whether sharded query patterns use relevant vindexes.
 - Backups and restore posture.
+- Whether the recovery runbook covers emergency backups, including
+  primary-versus-replica source selection.
 
 ## Evidence format
 
