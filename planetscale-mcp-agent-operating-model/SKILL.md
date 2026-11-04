@@ -17,6 +17,20 @@ Use the full PlanetScale MCP server only when the task explicitly requires datab
 
 The full MCP server has query execution tools. Treat write query tools as disabled unless the operator explicitly approves a specific non-production action or a carefully reviewed production action.
 
+## MCP feedback and question tools
+
+The PlanetScale MCP server may expose tools such as `planetscale_submit_feedback`
+and `planetscale_ask_question` for sending product feedback or unanswered
+questions to the PlanetScale team. Treat these as external communication tools,
+not read-only evidence collection: each submission can include the tool,
+organization, database, PlanetScale user ID, and email address.
+
+Do not call these tools from scheduled loops or routine assessments by default.
+Use them only when the operator explicitly asks to send feedback or ask
+PlanetScale a question, or after approval of the exact text and context to
+submit. If an MCP gap blocks the assessment, record it in the run log and report
+the missing evidence; do not submit it automatically.
+
 ## AGENTS.md guidance
 
 Two different documents both named `AGENTS.md` serve different purposes:
@@ -81,6 +95,7 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 - Change roles.
 - Change IP restrictions or private connectivity.
 - Restore or promote branches.
+- Submit MCP feedback or question payloads to PlanetScale.
 
 ## Agent loops
 
@@ -220,6 +235,8 @@ Return:
 - Disallowed work.
 - Proposed agent loops.
 - Approval gates.
+- Whether MCP feedback/question tools are allowed, and the approval required
+  before sending any payload.
 
 End with:
 

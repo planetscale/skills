@@ -48,6 +48,8 @@ Always requires explicit approval:
 - Create/update/delete Traffic Control budget or rule.
 - Move Traffic Control budget to enforce mode.
 - Create/update/delete webhook.
+- Submit MCP feedback or questions to PlanetScale when the payload includes
+  organization, database, user, tool, customer, or assessment context.
 - Enable raw query collection.
 - Enable/disable extensions or settings that require restart.
 - Create/update/delete role.

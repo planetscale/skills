@@ -139,6 +139,18 @@ Recommend:
 - Run a non-production restore drill periodically.
 - Document restore target, RPO/RTO expectation, and application cutover plan.
 - For sharded databases, document shard-aware restore expectations.
+- Document when to create a Vitess emergency backup if regular backups are
+  failing or a fresh recovery point is needed immediately.
+- For production branches, choose the emergency backup source deliberately:
+  copy from a replica when that satisfies the recovery goal and primary load is
+  a concern; copy from the primary when primary-read freshness is required.
+- Treat emergency backups as manual backups for retention, billing, and restore
+  planning. The CLI form is
+  `pscale backup create --emergency --emergency-source primary|replica`.
+
+Do not create manual or emergency backups without approval. Emergency backups
+copy data from the running database and can affect current workload, especially
+when sourced from the primary.
 
 ### Sharding and keyspace safety
 
