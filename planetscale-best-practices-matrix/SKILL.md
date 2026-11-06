@@ -46,8 +46,15 @@ Recommend:
 
 - Use insights-only MCP for most autonomous analysis.
 - Use full MCP only with narrow scopes and read-only default.
+- For Postgres databases with IP restrictions, allowlist all four hosted MCP
+  egress `/32` addresses when full MCP query access is required:
+  `104.28.1.231`, `104.28.1.232`, `104.28.1.233`, and `104.28.1.234`.
+  Vitess needs no customer-side MCP allowlist change.
 - Put database targeting and safety rules in `AGENTS.md`.
 - Agents generate PRs/issues/change plans; humans approve database changes.
+- For GitHub Actions and Depot CI workflows, prefer PlanetScale OIDC
+  authentication to long-lived service token secrets when calling the API or
+  `pscale`.
 
 ### SQLCommenter / query tags
 
@@ -108,6 +115,13 @@ Recommend production, staging, and short-lived development branches with safe mi
 ### Sharding/keyspace review
 
 Recommend when query patterns or growth suggest shard-awareness problems. Do not reshard automatically.
+
+### Branch and keyspace parameters
+
+If Terraform is the customer's source of truth, recommend managing Vitess
+VTGate parameters on `planetscale_vitess_branch` and VTTablet/MySQL parameters
+on `planetscale_vitess_keyspace` so parameter changes are reviewed with the
+rest of the infrastructure code.
 
 ## Postgres-specific recommendations
 

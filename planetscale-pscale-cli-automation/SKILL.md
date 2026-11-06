@@ -37,6 +37,19 @@ If `auth check` returns `"status": "action_required"`, follow `issues` and
 `next_steps` in the JSON. For login, the human may need to approve in the
 browser; use `pscale auth login --format json`.
 
+## CI authentication
+
+For GitHub Actions and Depot CI workflows that call the PlanetScale API or
+`pscale`, prefer PlanetScale OpenID Connect (OIDC) authentication over storing
+long-lived service token secrets. Organization administrators define a trust
+policy in the dashboard that matches workflow claims, grants the needed access,
+and sets the short-lived service token duration. In GitHub Actions, use
+`planetscale/auth-action` in a job with `id-token: write`.
+
+Creating or changing an OIDC trust policy is credential and automation posture
+work; apply the approval contract in
+`../planetscale-change-gates-and-approval-contract/SKILL.md`.
+
 ## Conventions
 
 - Always pass **`--format json`** for automation.

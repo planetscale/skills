@@ -17,6 +17,23 @@ Use the full PlanetScale MCP server only when the task explicitly requires datab
 
 The full MCP server has query execution tools. Treat write query tools as disabled unless the operator explicitly approves a specific non-production action or a carefully reviewed production action.
 
+## Hosted MCP egress
+
+The hosted MCP server at `mcp.pscale.dev` sends database queries from four
+dedicated egress IP addresses:
+
+- `104.28.1.231`
+- `104.28.1.232`
+- `104.28.1.233`
+- `104.28.1.234`
+
+For PlanetScale Postgres databases with IP restrictions, full MCP query access
+requires all four addresses allowlisted as `/32` CIDRs. Missing any address can
+make MCP queries fail. Adding those addresses is a network restriction change
+and requires approval. Vitess databases do not require customer-side IP
+allowlist changes for hosted MCP because MCP-created short-lived passwords are
+already restricted to those addresses.
+
 ## AGENTS.md guidance
 
 Two different documents both named `AGENTS.md` serve different purposes:
@@ -39,6 +56,8 @@ targeting section to `AGENTS.md` or equivalent project instructions:
 - Engine: Vitess or Postgres.
 - Production branch name.
 - Whether agents may use MCP insights-only or full MCP.
+- For Postgres databases with IP restrictions, whether hosted MCP egress IPs
+  are allowlisted for full MCP query access.
 - Whether write queries are forbidden.
 - Required approval protocol for schema, Traffic Control, webhooks, roles, and network changes.
 

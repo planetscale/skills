@@ -152,6 +152,23 @@ If the database is sharded, review:
 
 Recommend an agent-safe sharding review only as a proposal. Never reshard, change vschema, or alter routing automatically.
 
+### Branch and keyspace parameters
+
+Review whether Vitess parameters are managed manually or through Terraform.
+Terraform provider v1.18.0 and later can manage VTGate parameters on
+`planetscale_vitess_branch`, and VTTablet and MySQL parameters on
+`planetscale_vitess_keyspace`.
+
+Recommend:
+
+- Keep the source of truth clear: if Terraform manages Vitess parameters,
+  review parameter changes as infrastructure code and avoid dashboard/API drift.
+- Evaluate parameter changes for availability, performance, restart, and shard
+  impact before applying them.
+- Treat production parameter changes as approval-gated operational changes.
+
+Do not change Vitess parameters without approval.
+
 ## Webhook recommendations for Vitess
 
 Evaluate and recommend webhooks for:
@@ -188,6 +205,7 @@ Return:
 - Recommended webhook subscriptions.
 - Schema recommendation triage table.
 - Deploy safety gaps.
+- Parameter management and Terraform source-of-truth gaps.
 - Proposed changes requiring approval.
 
 End with:

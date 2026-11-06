@@ -48,8 +48,11 @@ Always requires explicit approval:
 - Create/update/delete Traffic Control budget or rule.
 - Move Traffic Control budget to enforce mode.
 - Create/update/delete webhook.
+- Create/update/delete OIDC trust policy for CI/API authentication.
 - Enable raw query collection.
 - Enable/disable extensions or settings that require restart.
+- Change branch, keyspace, VTGate, VTTablet, MySQL, Postgres, PgBouncer, or
+  extension parameters.
 - Create/update/delete role.
 - Reset passwords.
 - Change pg_strict settings.

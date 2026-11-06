@@ -25,8 +25,8 @@ Allowed by default:
 - Inspect live connection/session metadata with the Connections CLI view.
 - Inspect repository files for frameworks, ORMs, migrations, SQL tagging, and connection config.
 - Inspect Terraform or other infrastructure-as-code definitions for
-  PlanetScale roles, backups, backup policies, Postgres parameters, and
-  supported extensions.
+  PlanetScale roles, backups, backup policies, Postgres parameters,
+  supported extensions, and Vitess branch/keyspace parameters.
 
 Not allowed without explicit approval:
 
@@ -78,7 +78,10 @@ Verified interface notes (recheck against the docs when a command fails):
   role by ID, not name (`pscale role get <db> <branch> <role-id>`).
 - IP restrictions: database-level
   `organizations/{org}/databases/{db}/cidrs`. Branch-level IP-restriction
-  paths are not valid.
+  paths are not valid. For Postgres databases that need hosted MCP query access,
+  verify all four MCP egress addresses are present as `/32` CIDRs:
+  `104.28.1.231`, `104.28.1.232`, `104.28.1.233`, and `104.28.1.234`.
+  Vitess databases do not need customer-side MCP allowlist entries.
 - Schema recommendations: database-level
   `.../databases/{db}/schema-recommendations` (the branch-level path is
   not valid). Requesting `page=2` currently returns 404 even when the
@@ -205,6 +208,8 @@ For Vitess only, record:
 - Gated deployment usage.
 - Schema revert availability.
 - Branch and keyspace topology.
+- Whether Terraform manages `planetscale_vitess_branch` VTGate parameters or
+  `planetscale_vitess_keyspace` VTTablet/MySQL parameters.
 - Sharding/vschema status.
 - Whether sharded query patterns use relevant vindexes.
 - Backups and restore posture.
