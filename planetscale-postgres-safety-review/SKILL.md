@@ -180,6 +180,9 @@ Check:
   incidents.
 - Whether private connectivity is configured.
 - Whether IP restrictions are configured.
+- Whether hosted MCP query access is expected; if so, all four MCP egress
+  addresses must be allowlisted as `/32` CIDRs:
+  `104.28.1.231`, `104.28.1.232`, `104.28.1.233`, and `104.28.1.234`.
 - Whether public access remains available unexpectedly.
 
 Recommend:
@@ -188,6 +191,9 @@ Recommend:
 - Use direct connections for session-dependent features that PgBouncer transaction mode cannot support.
 - Use AWS PrivateLink or GCP Private Service Connect for private network requirements.
 - Use IP restrictions to reduce public exposure.
+- For Postgres databases that use IP restrictions and need hosted MCP query
+  access, add every hosted MCP egress address above; partial allowlisting can
+  cause intermittent or complete MCP query failures.
 - Be explicit that private connectivity does not automatically block public access; IP restrictions or equivalent controls are required for private-only posture.
 
 Do not change network restrictions without approval. Network changes can break application connectivity.
