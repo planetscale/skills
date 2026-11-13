@@ -64,6 +64,22 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
 
+## OIDC trust commands
+
+Use `pscale oidc-trust providers list --org <org> --format json` and
+`pscale oidc-trust providers show <provider> --org <org> --format json` to
+inspect supported identity providers and required token claims.
+
+Use `pscale oidc-trust list --org <org> --format json` and
+`pscale oidc-trust show <trust-id> --org <org> --format json` for inventory.
+
+Creating, updating, or deleting OIDC trusts changes which external workflows can
+exchange OIDC tokens for short-lived PlanetScale service tokens. Treat
+`pscale oidc-trust create`, `update`, and `delete` as credential/auth changes:
+require explicit approval, review provider, conditions, maximum TTL, and
+organization/database access grants, and use `delete --force` only after that
+approval.
+
 ## MCP vs CLI
 
 - **MCP clients** — use the hosted PlanetScale MCP server (see `pscale agent-guide

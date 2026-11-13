@@ -19,6 +19,7 @@ Allowed without approval:
 - Inspect repository code.
 - Read schema metadata.
 - Read non-sensitive database metadata.
+- List OIDC trust providers and existing OIDC trusts.
 - Produce reports and proposed change sets.
 
 ### Class B: state-creating proposals
@@ -52,6 +53,7 @@ Always requires explicit approval:
 - Enable/disable extensions or settings that require restart.
 - Create/update/delete role.
 - Reset passwords.
+- Create/update/delete OIDC trusts or change their conditions, token TTL, or access grants.
 - Change pg_strict settings.
 - Change connection pooling behavior.
 - Change IP restrictions, PrivateLink, PSC, or public access.

@@ -53,6 +53,7 @@ Allowed by default:
 - Read schema metadata.
 - Read existing webhooks and Traffic Control configuration.
 - Read branch metadata.
+- Read OIDC trust providers and existing trust metadata.
 - Inspect repository code.
 - Correlate query patterns with code.
 - File issues.
@@ -78,6 +79,7 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 - Create webhooks.
 - Create or enforce Traffic Control budgets.
 - Rotate credentials.
+- Create, update, or delete OIDC trusts.
 - Change roles.
 - Change IP restrictions or private connectivity.
 - Restore or promote branches.
