@@ -47,6 +47,8 @@ Recommend:
 - Use insights-only MCP for most autonomous analysis.
 - Use full MCP only with narrow scopes and read-only default.
 - Put database targeting and safety rules in `AGENTS.md`.
+- Prefer OIDC trusts for CI or agent workflows that support OIDC so they receive
+  short-lived service tokens instead of storing long-lived CI secrets.
 - Agents generate PRs/issues/change plans; humans approve database changes.
 
 ### SQLCommenter / query tags

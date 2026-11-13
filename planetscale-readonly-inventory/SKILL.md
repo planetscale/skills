@@ -23,6 +23,7 @@ Allowed by default:
 - Read backup schedules and restore metadata.
 - Read branch schema.
 - Inspect live connection/session metadata with the Connections CLI view.
+- List OIDC trust providers and existing OIDC trusts.
 - Inspect repository files for frameworks, ORMs, migrations, SQL tagging, and connection config.
 - Inspect Terraform or other infrastructure-as-code definitions for
   PlanetScale roles, backups, backup policies, Postgres parameters, and
@@ -33,6 +34,7 @@ Not allowed without explicit approval:
 - Any create, update, delete, enable, disable, reset, deploy, restore, promote, enforce, or apply operation.
 - Any SQL mutation.
 - Any command that emits new credentials unless the operator explicitly asked for credential work.
+- Creating, updating, or deleting OIDC trusts.
 
 ## Interfaces and documentation grounding
 
@@ -63,6 +65,11 @@ Verified interface notes (recheck against the docs when a command fails):
   session inventory works for Postgres and Vitess over a reserved
   administrative connection. Do not cancel queries or terminate connections
   unless the operator explicitly approves that operational action.
+- `pscale oidc-trust providers list --org <org>` and
+  `pscale oidc-trust providers show <provider> --org <org>` — inspect
+  supported OIDC providers and token claims. Inventory existing trusts with
+  `pscale oidc-trust list --org <org>` and
+  `pscale oidc-trust show <trust-id> --org <org>`.
 - Query Insights is public API. Live query telemetry:
   `.../branches/{branch}/insights` (per-pattern statistics; supports
   `from`/`to`/`period`, `q`, `sort`, `dir`, `tablet_type`, `type`,
