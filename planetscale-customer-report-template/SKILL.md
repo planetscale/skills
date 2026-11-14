@@ -131,6 +131,7 @@ For Postgres:
 - Branch migration workflow.
 - Roles.
 - pg_strict.
+- Minor version and security-maintenance status.
 - Traffic Control.
 - Backups/PITR.
 - Connection pooling.
@@ -169,7 +170,8 @@ Recommendation IDs:
 
 - `OBS-*` for Insights/query tags.
 - `VIT-*` for Vitess safety/deploy workflow.
-- `PG-*` for Postgres roles, pg_strict, Traffic Control, PITR, network.
+- `PG-*` for Postgres roles, pg_strict, minor-version maintenance, Traffic
+  Control, PITR, network.
 - `WEB-*` for webhooks and automation.
 - `APP-*` for repository instrumentation.
 - `AGENT-*` for MCP/agent workflows.
