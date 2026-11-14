@@ -112,6 +112,8 @@ Record:
 - Production/development branch status.
 - Branch protection and safe workflow state.
 - Size and cluster shape.
+- For Postgres, current major/minor version and any visible pending or recent
+  platform maintenance/security minor-version upgrade state.
 
 ### Branches and schema workflow
 
@@ -194,6 +196,10 @@ For Postgres only, record:
   connection saturation during an active incident.
 - Whether private connectivity and IP restrictions are configured.
 - Whether backup retention and PITR meet the customer’s recovery expectations.
+- Whether the database is on the current patched platform minor version. As of
+  2026-11-13, new PlanetScale Postgres databases use 17.12 or 18.7, and Neki
+  runs Postgres 18.7; existing databases receive platform security minor
+  upgrades through maintenance.
 
 ### Vitess safety
 

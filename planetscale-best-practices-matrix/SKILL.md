@@ -132,6 +132,15 @@ Recommend verifying retention and restore drill coverage.
 If Terraform is the customer's source of truth, recommend managing backup
 policies there so backup posture changes are reviewed as infrastructure code.
 
+### Minor versions and security maintenance
+
+Recommend recording current Postgres major/minor version and maintenance status.
+As of 2026-11-13, new PlanetScale Postgres databases use patched upstream minor
+versions 17.12 or 18.7, existing databases receive those security minor-version
+upgrades through platform maintenance, and Neki runs Postgres 18.7. Treat
+older versions after the upgrade window as support/maintenance follow-up
+evidence, not as a customer-side setting to mutate.
+
 ### PgBouncer and connection pooling
 
 Recommend where connection churn or serverless/edge behavior creates pressure, subject to transaction-pooling limitations.

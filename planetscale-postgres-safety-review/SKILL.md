@@ -168,6 +168,30 @@ Recommend:
 
 Do not restore or create emergency backups without approval. Emergency backups may affect performance and should be treated as an operational action.
 
+## Minor versions and security maintenance
+
+Check:
+
+- Current Postgres major/minor version for production branches.
+- Whether any platform maintenance/security minor-version upgrade is pending,
+  recently completed, or blocked by maintenance scheduling.
+- For Neki, whether the database is on Postgres 18.7 or newer.
+
+As of 2026-11-13, new PlanetScale Postgres databases use patched upstream minor
+versions 17.12 or 18.7, existing PlanetScale Postgres databases are being
+upgraded to those versions through platform maintenance, and Neki runs Postgres
+18.7.
+
+Recommend:
+
+- Treat older observed minor versions after the upgrade window as follow-up
+  evidence to verify with PlanetScale support or maintenance status, not as a
+  customer-applied database setting.
+- Coordinate any restart-requiring maintenance with the customer’s approved
+  maintenance-window process.
+
+Do not reschedule maintenance or change version-related settings without approval.
+
 ## Connections, pooling, and network safety
 
 Check:
