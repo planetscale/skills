@@ -47,6 +47,12 @@ Recommend:
 - Use insights-only MCP for most autonomous analysis.
 - Use full MCP only with narrow scopes and read-only default.
 - Put database targeting and safety rules in `AGENTS.md`.
+- Prefer OIDC trusts and short-lived service tokens for CI agents in GitHub
+  Actions, Depot CI, and Buildkite instead of storing long-lived PlanetScale
+  credentials.
+- Document the access revocation path for lost devices, departing members,
+  personal CLI logins, and OAuth/MCP clients. Personal or member-token
+  revocation does not affect organization service tokens.
 - Agents generate PRs/issues/change plans; humans approve database changes.
 
 ### SQLCommenter / query tags

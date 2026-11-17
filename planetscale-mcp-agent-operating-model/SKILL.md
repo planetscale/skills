@@ -40,6 +40,12 @@ targeting section to `AGENTS.md` or equivalent project instructions:
 - Production branch name.
 - Whether agents may use MCP insights-only or full MCP.
 - Whether write queries are forbidden.
+- Which identity agents and CI use: personal OAuth/MCP client, organization
+  service token, or OIDC trust. Prefer OIDC short-lived service tokens for
+  GitHub Actions, Depot CI, and Buildkite pipelines.
+- How to revoke access if a device, member account, CLI login, or authorized
+  OAuth/MCP client should no longer reach the organization. Revoking personal
+  sessions or member tokens does not revoke organization service tokens.
 - Required approval protocol for schema, Traffic Control, webhooks, roles, and network changes.
 
 Do not edit `AGENTS.md` without approval.
@@ -52,6 +58,7 @@ Allowed by default:
 - Read schema recommendations.
 - Read schema metadata.
 - Read existing webhooks and Traffic Control configuration.
+- Read existing OIDC trusts/providers and non-secret token metadata.
 - Read branch metadata.
 - Inspect repository code.
 - Correlate query patterns with code.
@@ -78,6 +85,8 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 - Create webhooks.
 - Create or enforce Traffic Control budgets.
 - Rotate credentials.
+- Create, update, delete, or revoke OIDC trusts, service tokens, personal
+  sessions, member tokens, CLI logins, or OAuth/MCP client access.
 - Change roles.
 - Change IP restrictions or private connectivity.
 - Restore or promote branches.

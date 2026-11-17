@@ -20,6 +20,7 @@ Allowed by default:
 - Read Query Insights, anomalies, and query patterns through MCP or API.
 - Read traffic budgets and rules.
 - Read Postgres roles and non-secret role metadata.
+- Read OIDC trust/provider configuration and non-secret token metadata.
 - Read backup schedules and restore metadata.
 - Read branch schema.
 - Inspect live connection/session metadata with the Connections CLI view.
@@ -169,6 +170,9 @@ Record:
 - Destination category: Slack, PagerDuty, internal automation, CI, agent queue, unknown.
 - Whether webhook signature verification is documented or implemented.
 - Whether webhook handling is idempotent and asynchronous.
+- CI/agent API authentication model: OIDC trust usage for GitHub Actions,
+  Depot CI, or Buildkite; long-lived service tokens; personal OAuth/MCP
+  clients; and the documented revocation path for member access.
 
 ### Postgres Traffic Control
 
