@@ -149,6 +149,9 @@ For Postgres:
 - Webhooks.
 - Agent loops.
 - CI/PR workflows.
+- CI/agent authentication model, including OIDC trust usage for GitHub
+  Actions, Depot CI, or Buildkite, long-lived service tokens, personal
+  OAuth/MCP clients, and member/session revocation runbooks.
 - Incident routing.
 
 ### Repository instrumentation
@@ -196,7 +199,7 @@ State clearly:
 - No PlanetScale settings changed.
 - No schema changed.
 - No traffic controls changed.
-- No roles or credentials changed.
+- No roles, credentials, tokens, or OAuth/MCP grants changed.
 - No webhooks changed.
 - No code changed.
 - No branches, backups, restores, deploy requests, or migrations created.

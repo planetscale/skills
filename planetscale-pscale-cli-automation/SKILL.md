@@ -37,6 +37,21 @@ If `auth check` returns `"status": "action_required"`, follow `issues` and
 `next_steps` in the JSON. For login, the human may need to approve in the
 browser; use `pscale auth login --format json`.
 
+## Auth identities
+
+- For local human-operated CLI use, `pscale auth login` creates a personal
+  login that can be revoked from account settings.
+- For CI systems, prefer OIDC trusts and short-lived service tokens over stored
+  long-lived PlanetScale credentials. PlanetScale supports this flow for
+  GitHub Actions, Depot CI, and Buildkite; Buildkite steps request a token with
+  `buildkite-agent oidc request-token` and exchange it with the PlanetScale API.
+- Revoking all account sessions signs the user out in other browsers and
+  revokes personal `pscale` CLI logins plus authorized OAuth applications such
+  as MCP clients. Organization service tokens are not affected.
+- Organization administrators can revoke a member's tokens for the organization;
+  that member's personal CLI logins and authorized OAuth applications then lose
+  access to that organization.
+
 ## Conventions
 
 - Always pass **`--format json`** for automation.
