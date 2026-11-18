@@ -16,6 +16,8 @@ Prevent accidental or autonomous changes that can affect availability, safety, s
 Allowed without approval:
 
 - List databases, branches, keyspaces, webhooks, backups, roles, traffic budgets, schema recommendations, deploy requests, and Insights data.
+- List and show Insights Agent runs and schedules.
+- List organization security posture, OIDC trusts, and non-secret service token metadata.
 - Inspect repository code.
 - Read schema metadata.
 - Read non-sensitive database metadata.
@@ -26,6 +28,7 @@ Allowed without approval:
 Allowed by default; requires approval only when the operator has demanded strict no-mutation mode:
 
 - Creating a query-pattern report through an API POST, even if the result is read-only telemetry.
+- Starting or canceling a bounded one-shot Insights Agent run for selected slow query fingerprints or schema recommendations.
 - Triggering a webhook test event.
 - Creating temporary local branches or files.
 - Opening PRs or issues in external tools.
@@ -58,6 +61,10 @@ Always requires explicit approval:
 - Change backup schedule or retention.
 - Create restore branch.
 - Create backup beyond automatic backups.
+- Enable, disable, or change recurring Insights Agent schedules.
+- Change organization authentication settings, including requiring MFA.
+- Create/update/delete OIDC trust policies.
+- Duplicate or update service tokens, including renaming, expiration changes, or cloning permissions.
 - Change branch size or replica topology.
 - Edit repository files or dependencies.
 
@@ -74,6 +81,7 @@ Requires explicit approval, named target confirmation, rollback plan, and ideall
 - Enforcing Traffic Control on production.
 - Changing production network access.
 - Rotating production credentials.
+- Creating or duplicating production service token secrets.
 - Emergency backup during high load.
 
 ### Class E: never autonomous

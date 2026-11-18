@@ -18,9 +18,12 @@ Allowed by default:
 - Read webhook configuration.
 - Read schema recommendations.
 - Read Query Insights, anomalies, and query patterns through MCP or API.
+- Read Insights Agent runs and schedules.
 - Read traffic budgets and rules.
 - Read Postgres roles and non-secret role metadata.
 - Read backup schedules and restore metadata.
+- Read organization authentication posture, OIDC trusts, and non-secret
+  service token metadata when agent or credential posture is in scope.
 - Read branch schema.
 - Inspect live connection/session metadata with the Connections CLI view.
 - Inspect repository files for frameworks, ORMs, migrations, SQL tagging, and connection config.
@@ -33,6 +36,8 @@ Not allowed without explicit approval:
 - Any create, update, delete, enable, disable, reset, deploy, restore, promote, enforce, or apply operation.
 - Any SQL mutation.
 - Any command that emits new credentials unless the operator explicitly asked for credential work.
+- Any change to organization MFA requirements, OIDC trust policies, service
+  tokens, or Insights Agent schedules.
 
 ## Interfaces and documentation grounding
 
@@ -146,6 +151,9 @@ Record:
 - Postgres CPU-heavy query patterns and Vitess vindex-usage data when exposed
   by the Insights interface in use.
 - Whether application deploy identifiers are visible in comments or tags.
+- Existing Insights Agent runs and schedules related to slow queries or schema
+  recommendations, including whether token scopes allow only read or also
+  write access.
 
 ### Recommendations
 
@@ -169,6 +177,13 @@ Record:
 - Destination category: Slack, PagerDuty, internal automation, CI, agent queue, unknown.
 - Whether webhook signature verification is documented or implemented.
 - Whether webhook handling is idempotent and asynchronous.
+- Whether organization MFA is required for members when organization security
+  posture is in scope.
+- Whether automation uses OIDC trusts, such as Cursor Cloud Agent trusts, or
+  long-lived service tokens.
+- Service token metadata relevant to automation: name, scope, expiration, last
+  use metadata, and whether duplicate/update operations are part of the
+  credential runbook. Never collect or print token secrets.
 
 ### Postgres Traffic Control
 

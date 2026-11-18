@@ -21,6 +21,7 @@ Collect:
 - Application repository and migration system.
 - Engine: Vitess or Postgres.
 - Target branch.
+- Existing Insights Agent runs for the same recommendation, if any.
 
 ## Recommendation types to recognize
 
@@ -83,6 +84,17 @@ When a repository is available:
 - Search for migrations.
 - Search for query fingerprints, route tags, job names, and controller/action names from Insights.
 - Identify whether the recommendation should be implemented in database DDL, ORM schema, raw migration, or application query code.
+
+## Insights Agent triage
+
+When the recommendation needs more evidence before a code or migration plan,
+start an Insights Agent run through CLI or MCP with the recommendation as one
+of at most five inputs. Reuse existing runs first. Treat the run output as
+supporting analysis; the safe implementation path and approval gate still come
+from this skill.
+
+Do not enable, disable, or change recurring `schema_recommendation` schedules
+without approval.
 
 ## Safety checks before proposing implementation
 

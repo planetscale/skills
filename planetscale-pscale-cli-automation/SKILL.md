@@ -37,6 +37,18 @@ If `auth check` returns `"status": "action_required"`, follow `issues` and
 `next_steps` in the JSON. For login, the human may need to approve in the
 browser; use `pscale auth login --format json`.
 
+## Authentication for hosted agents and CI
+
+Prefer short-lived PlanetScale service tokens from OIDC where the runner
+supports it. Cursor Cloud Agents can use a Cursor OIDC trust policy in the
+PlanetScale dashboard, then request a Cursor OIDC token and exchange it with
+the PlanetScale API instead of storing a long-lived PlanetScale token in
+Cursor secrets.
+
+Use long-lived service tokens only when OIDC is unavailable, and scope them to
+the exact commands needed. Treat any command that prints or creates a new token
+secret as credential work requiring explicit operator approval.
+
 ## Conventions
 
 - Always pass **`--format json`** for automation.
@@ -63,6 +75,25 @@ pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
 
 MySQL uses `@primary` by default (same as `pscale shell`); pass `--keyspace` only
 for multi-keyspace databases.
+
+## Current CLI surfaces to gate carefully
+
+- `pscale insights agent runs create` starts an Insights Agent run for up to
+  five slow query fingerprints or schema recommendations. Listing and showing
+  runs require `read_insights_agent`; creating or canceling runs requires
+  `write_insights_agent`.
+- `pscale insights agent schedules update` enables, disables, or changes the
+  recurring `slow_query` or `schema_recommendation` Insights Agent schedule.
+  Treat schedule changes as automation mutations.
+- `pscale backup restore` for Postgres accepts `--storage-iops` and
+  `--storage-throughput` when restoring to a new branch on AWS
+  network-attached storage. These values stay on the restored branch and can be
+  changed later from storage settings.
+- `pscale service-token duplicate` creates a new token ID and secret with the
+  copied token's permissions; `pscale service-token update` renames a token or
+  changes its expiration. Do not run either unless credential work is
+  explicitly approved, and never print the returned secret into logs, issues,
+  PRs, or chat.
 
 ## MCP vs CLI
 
