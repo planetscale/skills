@@ -17,6 +17,19 @@ Use the full PlanetScale MCP server only when the task explicitly requires datab
 
 The full MCP server has query execution tools. Treat write query tools as disabled unless the operator explicitly approves a specific non-production action or a carefully reviewed production action.
 
+## Agent authentication
+
+For Cursor Cloud Agents, prefer PlanetScale's Cursor OIDC flow over storing a
+long-lived PlanetScale token in Cursor secrets. The PlanetScale organization
+must have a Cursor trust policy for the Cursor team; the agent then requests a
+Cursor OIDC token and exchanges it with the PlanetScale API for a short-lived
+service token.
+
+If OIDC is unavailable, use a purpose-limited service token. Scope tokens to
+the MCP server and agent loop actually needed: `read_insights_agent` is enough
+to list and show Insights Agent runs, while starting, canceling, or changing
+Insights Agent schedules needs `write_insights_agent`.
+
 ## AGENTS.md guidance
 
 Two different documents both named `AGENTS.md` serve different purposes:
@@ -55,6 +68,10 @@ Allowed by default:
 - Read branch metadata.
 - Inspect repository code.
 - Correlate query patterns with code.
+- List and show Insights Agent runs and schedules.
+- Start a bounded one-shot Insights Agent run for selected slow query
+  fingerprints or schema recommendations, when producing analysis artifacts is
+  within the task scope.
 - File issues.
 - Open pull requests.
 - Create development branches.
@@ -81,6 +98,8 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 - Change roles.
 - Change IP restrictions or private connectivity.
 - Restore or promote branches.
+- Enable, disable, or modify recurring Insights Agent schedules.
+- Create, duplicate, update, or reveal service token secrets.
 
 ## Agent loops
 
@@ -89,9 +108,11 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 1. Read open schema recommendations.
 2. Read top Insights regressions.
 3. Correlate with repository code.
-4. Generate ranked issues or PRs.
-5. Human reviews.
-6. Human approves any database-affecting action.
+4. Optionally start an Insights Agent run with up to five slow query
+   fingerprints or schema recommendations when deeper analysis is needed.
+5. Generate ranked issues or PRs.
+6. Human reviews.
+7. Human approves any database-affecting action.
 
 ### Anomaly loop
 

@@ -154,6 +154,8 @@ Check:
 - WAL/PITR availability.
 - Manual backups that prevent deletion.
 - Restore drill history.
+- Restore branch storage settings, including IOPS and throughput where
+  applicable.
 - Recovery runbook.
 
 Recommend:
@@ -164,6 +166,11 @@ Recommend:
   Terraform so retention and schedule changes are reviewed with the rest of
   the infrastructure code.
 - Run a restore drill to a new branch.
+- For large restores on AWS network-attached storage, choose explicit restore
+  IOPS and throughput when needed (`pscale backup restore --storage-iops
+  <iops> --storage-throughput <MiBps>`) instead of upsizing the cluster solely
+  to reduce restore time. The settings remain on the restored branch and can be
+  changed later.
 - Document the exact application cutover procedure after restore.
 
 Do not restore or create emergency backups without approval. Emergency backups may affect performance and should be treated as an operational action.

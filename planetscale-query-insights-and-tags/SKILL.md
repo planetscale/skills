@@ -82,6 +82,22 @@ engine-specific: CPU/IO durations and block-cache statistics
 populated for Postgres; shard queries, keyspaces, `tablet_type`, and
 routing-index (vindex) usage are populated for Vitess.
 
+### Insights Agent
+
+When a slow query or schema recommendation needs deeper triage, use an
+Insights Agent run as an analysis input rather than inventing the diagnosis.
+Start a run from the CLI with `pscale insights agent runs create` or from MCP
+with `planetscale_start_insights_agent_run`, passing at most five slow query
+fingerprints or schema recommendations. List/show existing runs first when
+possible to avoid duplicate work.
+
+Service tokens need `read_insights_agent` to list and show runs, and
+`write_insights_agent` to start or cancel runs. Updating recurring
+`slow_query` or `schema_recommendation` schedules with
+`pscale insights agent schedules update` or
+`planetscale_update_insights_agent_schedule` is an automation change and needs
+approval under `../planetscale-change-gates-and-approval-contract/SKILL.md`.
+
 ### Tag coverage
 
 For each expensive or anomalous query, determine:
@@ -230,6 +246,8 @@ Return:
 - Recommended tag schema for this application.
 - Candidate Traffic Control slices.
 - Candidate schema and code changes.
+- Candidate Insights Agent runs for unresolved slow query fingerprints or
+  schema recommendations.
 - Proposed changes requiring approval.
 
 End with:

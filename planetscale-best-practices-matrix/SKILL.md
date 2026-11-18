@@ -46,8 +46,29 @@ Recommend:
 
 - Use insights-only MCP for most autonomous analysis.
 - Use full MCP only with narrow scopes and read-only default.
+- Use Cursor OIDC trusts for Cursor Cloud Agents instead of storing
+  long-lived PlanetScale tokens in Cursor secrets when that path is available.
+- Grant `read_insights_agent` for inventory and review; grant
+  `write_insights_agent` only to agents allowed to start/cancel runs or manage
+  schedules.
 - Put database targeting and safety rules in `AGENTS.md`.
 - Agents generate PRs/issues/change plans; humans approve database changes.
+- Use Insights Agent runs for selected slow query fingerprints or schema
+  recommendations that need deeper analysis; require approval before changing
+  recurring schedules.
+
+### Organization and credential security
+
+Recommend:
+
+- Require MFA for organization members when it fits the organization's access
+  policy; members without MFA need an authenticator app, passkey, or security
+  key before they can access the organization after enforcement begins.
+- Prefer OIDC-backed short-lived service tokens for supported automation
+  runners, including Cursor Cloud Agents and CI.
+- Keep service token duplication and expiration edits in the credential
+  rotation runbook. Duplicating a token creates a new secret with the copied
+  token's permissions, so it is credential work, not a read-only action.
 
 ### SQLCommenter / query tags
 
@@ -131,6 +152,9 @@ Recommend for resource isolation of agents, exports, reports, workers, integrati
 Recommend verifying retention and restore drill coverage.
 If Terraform is the customer's source of truth, recommend managing backup
 policies there so backup posture changes are reviewed as infrastructure code.
+For large Postgres restores on AWS network-attached storage, include restored
+branch storage IOPS and throughput in the restore drill plan so disk throughput
+can be tuned without choosing a larger cluster size solely for restore speed.
 
 ### PgBouncer and connection pooling
 

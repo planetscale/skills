@@ -148,6 +148,11 @@ For Postgres:
 
 - Webhooks.
 - Agent loops.
+- Insights Agent runs and schedules.
+- Agent authentication path, including whether supported runners use OIDC
+  trusts or long-lived service tokens.
+- Organization access controls in scope for automation, such as MFA
+  requirement state and service token metadata.
 - CI/PR workflows.
 - Incident routing.
 
@@ -173,6 +178,8 @@ Recommendation IDs:
 - `WEB-*` for webhooks and automation.
 - `APP-*` for repository instrumentation.
 - `AGENT-*` for MCP/agent workflows.
+- `SEC-*` for organization authentication, OIDC trusts, and service token
+  hygiene.
 
 ## Proposed change set requiring approval
 
@@ -197,6 +204,8 @@ State clearly:
 - No schema changed.
 - No traffic controls changed.
 - No roles or credentials changed.
+- No organization MFA settings, OIDC trusts, service tokens, or Insights Agent
+  schedules changed.
 - No webhooks changed.
 - No code changed.
 - No branches, backups, restores, deploy requests, or migrations created.
