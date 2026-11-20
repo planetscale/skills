@@ -131,6 +131,21 @@ Tags and raw collection are complementary instruments: tags attribute a
 pattern to a code path; raw collection identifies the specific invocation.
 Assessments should evaluate both.
 
+### Insights Agent runs
+
+When Insights Agent is part of the workflow, review completed runs alongside
+the underlying query patterns or schema recommendations:
+
+- Confirm whether a run opened a PR, explained that no change was justified, or
+  failed/skipped.
+- Completed runs can be rated from the dashboard, CLI
+  (`pscale insights agent runs feedback`), API, or MCP
+  (`planetscale_submit_insights_agent_run_feedback`). Use feedback to record
+  why a run was not useful (`wrong_diagnosis`, `fix_wont_work`, `too_risky`,
+  `already_known`, `doesnt_fit`, or `other`).
+- Keep feedback notes free of secrets, personal data, customer data, and
+  proprietary code excerpts; the note is sent to PlanetScale.
+
 ## SQLCommenter tag schema
 
 Recommend this baseline tag set:

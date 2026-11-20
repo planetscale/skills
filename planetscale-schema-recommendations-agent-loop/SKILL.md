@@ -97,6 +97,11 @@ Block direct application when:
 - The migration framework has a different schema source of truth.
 - The recommendation targets production and no branch/test plan exists.
 
+If a hosted Insights Agent run already attempted the recommendation, include
+its outcome in the triage. When the run was completed but unhelpful, submit
+operator-approved feedback with a bounded reason and no sensitive note content
+instead of starting duplicate work.
+
 ## Output
 
 For each recommendation, produce:

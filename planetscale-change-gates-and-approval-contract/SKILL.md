@@ -26,6 +26,8 @@ Allowed without approval:
 Allowed by default; requires approval only when the operator has demanded strict no-mutation mode:
 
 - Creating a query-pattern report through an API POST, even if the result is read-only telemetry.
+- Submitting feedback on a completed Insights Agent run, provided the note does
+  not include secrets, personal data, customer data, or proprietary code.
 - Triggering a webhook test event.
 - Creating temporary local branches or files.
 - Opening PRs or issues in external tools.
@@ -52,6 +54,8 @@ Always requires explicit approval:
 - Enable/disable extensions or settings that require restart.
 - Create/update/delete role.
 - Reset passwords.
+- Create, duplicate, update, or delete service tokens, or change token
+  permissions, expiration, or CIDR/IP restrictions.
 - Change pg_strict settings.
 - Change connection pooling behavior.
 - Change IP restrictions, PrivateLink, PSC, or public access.

@@ -48,6 +48,12 @@ Recommend:
 - Use full MCP only with narrow scopes and read-only default.
 - Put database targeting and safety rules in `AGENTS.md`.
 - Agents generate PRs/issues/change plans; humans approve database changes.
+- For long-lived service tokens used by agents or CI, restrict API use to known
+  IPv4 egress addresses/CIDR ranges when that egress is stable. OIDC-minted
+  and OAuth tokens do not support service-token IP restrictions.
+- Use completed Insights Agent run feedback to label unhelpful runs
+  (`wrong_diagnosis`, `fix_wont_work`, `too_risky`, `already_known`,
+  `doesnt_fit`, or `other`) without sending secrets or customer data in notes.
 
 ### SQLCommenter / query tags
 

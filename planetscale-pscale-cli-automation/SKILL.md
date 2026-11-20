@@ -70,6 +70,18 @@ for multi-keyspace databases.
   --format json` for the current URL).
 - **Shell scripts and coding agents** — use `pscale` with `--format json` as above.
 
+## Current CLI surfaces to know
+
+- Service-token IP restrictions use `--cidrs` on `pscale service-token create`
+  and `pscale service-token update`. The flag is repeatable or comma-separated;
+  `--cidrs ""` clears the list. Values must be IPv4 addresses or CIDR ranges;
+  IPv6 and `0.0.0.0/0` are rejected.
+- Completed Insights Agent runs can be rated with
+  `pscale insights agent runs feedback <database> <branch> <number> --org <org>
+  --rating useful|not_useful`. For `not_useful`, include a bounded reason such
+  as `wrong_diagnosis`, `fix_wont_work`, `too_risky`, `already_known`,
+  `doesnt_fit`, or `other`, and keep notes free of sensitive data.
+
 ## When this skill is not enough
 
 Install the full PlanetScale skills pack (if not already):

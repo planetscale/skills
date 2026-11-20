@@ -44,6 +44,9 @@ Recommend:
   the admin who opens a deploy request can also approve it. If the goal is to keep agents from
   self-approving, give the agent a separate user, or a service token without deploy request
   approval permission.
+- For long-lived service tokens used by automation, keep scopes narrow, set
+  expirations where appropriate, and restrict API use to known IPv4 egress
+  addresses/CIDR ranges when that egress is stable.
 - Prefer normal safe deployments over instant deployments unless the migration is known to be instant-safe and the rollback story is acceptable.
 - Use gated deployment when cutover timing matters.
 - Treat “force cutover now” as an operator-controlled action for delayed

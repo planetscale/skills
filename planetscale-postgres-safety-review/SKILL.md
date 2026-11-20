@@ -40,6 +40,9 @@ Recommend:
 - Separate roles by service, environment, and access pattern.
 - Use read-only roles for analytics, dashboards, reporting, and agents that do not need writes.
 - Use short-lived or purpose-limited roles for automation.
+- For long-lived PlanetScale service tokens used by automation, scope database
+  permissions narrowly, set expirations where appropriate, and restrict use to
+  known IPv4 egress addresses/CIDR ranges when that egress is stable.
 - When Terraform manages PlanetScale Postgres roles, prefer
   `planetscale_postgres_redacted_branch_role` for roles whose password should
   stay out of Terraform state; reset the password through the API or dashboard
