@@ -20,6 +20,8 @@ Allowed by default:
 - Read Query Insights, anomalies, and query patterns through MCP or API.
 - Read traffic budgets and rules.
 - Read Postgres roles and non-secret role metadata.
+- Read service token metadata such as name, scopes, expiration, last-use
+  fields, and `cidrs`; never retrieve or print token secrets.
 - Read backup schedules and restore metadata.
 - Read branch schema.
 - Inspect live connection/session metadata with the Connections CLI view.
@@ -76,6 +78,10 @@ Verified interface notes (recheck against the docs when a command fails):
   `pscale traffic-control budget list`; use the API for inventory.
 - Postgres roles: list via `.../branches/{branch}/roles`; fetch a single
   role by ID, not name (`pscale role get <db> <branch> <role-id>`).
+- Service tokens: organization-level list/show endpoints return non-secret
+  metadata, including CIDR/IP restrictions when configured. Under
+  service-token authentication, token-management CLI commands are blocked; use
+  `pscale api organizations/{org}/service-tokens` for read-only inventory.
 - IP restrictions: database-level
   `organizations/{org}/databases/{db}/cidrs`. Branch-level IP-restriction
   paths are not valid.
@@ -169,6 +175,8 @@ Record:
 - Destination category: Slack, PagerDuty, internal automation, CI, agent queue, unknown.
 - Whether webhook signature verification is documented or implemented.
 - Whether webhook handling is idempotent and asynchronous.
+- Service-token posture for automation: scopes, expiration, last-use metadata,
+  and CIDR/IP restrictions, without recording secrets.
 
 ### Postgres Traffic Control
 

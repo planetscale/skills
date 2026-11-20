@@ -62,6 +62,9 @@ Allowed by default:
 - Open deploy requests into branches protected by a review workflow.
 - Draft Traffic Control budget proposals.
 - Draft webhook receiver requirements.
+- Submit feedback on completed Insights Agent runs when the operator asked for
+  feedback to be sent; keep notes free of secrets, personal data, customer
+  data, and proprietary code.
 
 Where a PR + deploy-request workflow exists, the default deliverable for a
 schema recommendation is the complete reviewable unit: development branch
@@ -78,6 +81,8 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 - Create webhooks.
 - Create or enforce Traffic Control budgets.
 - Rotate credentials.
+- Create, duplicate, update, or delete service tokens, including their
+  permission sets, expiration, and CIDR/IP restrictions.
 - Change roles.
 - Change IP restrictions or private connectivity.
 - Restore or promote branches.

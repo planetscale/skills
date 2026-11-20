@@ -150,6 +150,8 @@ For Postgres:
 - Agent loops.
 - CI/PR workflows.
 - Incident routing.
+- Service-token posture for automation: scopes, expiration, last-use metadata,
+  and CIDR/IP restrictions, with no secrets included.
 
 ### Repository instrumentation
 
