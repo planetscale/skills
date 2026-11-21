@@ -20,9 +20,9 @@ Allowed by default:
 - Read Query Insights, anomalies, and query patterns through MCP or API.
 - Read traffic budgets and rules.
 - Read Postgres roles and non-secret role metadata.
-- Read backup schedules and restore metadata.
+- Read backup schedules, branch backup policies, and restore metadata.
 - Read branch schema.
-- Inspect live connection/session metadata with the Connections CLI view.
+- Inspect live connection/session metadata with MCP or the Connections CLI view.
 - Inspect repository files for frameworks, ORMs, migrations, SQL tagging, and connection config.
 - Inspect Terraform or other infrastructure-as-code definitions for
   PlanetScale roles, backups, backup policies, Postgres parameters, and
@@ -59,10 +59,16 @@ Verified interface notes (recheck against the docs when a command fails):
 - `pscale webhook list <database> --org <org>` — the database is a
   positional argument. `pscale backup list <database> <branch>` requires
   the branch.
-- `pscale branch connections top <database> <branch>` — live read-only
-  session inventory works for Postgres and Vitess over a reserved
-  administrative connection. Do not cancel queries or terminate connections
-  unless the operator explicitly approves that operational action.
+- MCP `planetscale_list_live_connections` or
+  `pscale branch connections top <database> <branch>` — live read-only
+  session inventory works for Postgres and Vitess without depending on
+  normal application connection capacity. MCP live connections has its own
+  permission, and production live connections need the production
+  permission. Do not cancel queries or terminate connections unless the
+  operator explicitly approves that operational action.
+- MCP `planetscale_get_branch_backups` shows backup policies that apply to a
+  branch, its recent backups, and full backup details. It has its own MCP
+  permission.
 - Query Insights is public API. Live query telemetry:
   `.../branches/{branch}/insights` (per-pattern statistics; supports
   `from`/`to`/`period`, `q`, `sort`, `dir`, `tablet_type`, `type`,
@@ -86,10 +92,11 @@ Verified interface notes (recheck against the docs when a command fails):
   `open_schema_recommendations_count` as the authoritative total, treat
   the returned page as a sample, and state in the report when the itemized
   list covers only part of the total.
-- PITR state and branch-level backup policies have no verified read path;
-  record backup posture from `pscale backup list` and the database-level
-  backup policy, and mark PITR "not assessed in this run" rather than
-  probing paths.
+- Branch-level backup policy evidence is available through MCP
+  `planetscale_get_branch_backups`. If that permission or interface is not
+  available, record backup posture from `pscale backup list` and the
+  database-level backup policy. Mark PITR "not assessed in this run" unless
+  a verified interface in the docs exposes the exact PITR state.
 - List endpoints paginate; follow the pagination parameters until
   exhausted before reporting counts (except the schema-recommendations
   case above).
@@ -109,6 +116,7 @@ Record:
 - Branch.
 - Engine: Vitess or Postgres.
 - Region and cloud provider.
+- Sleeping/available state when exposed by the interface.
 - Production/development branch status.
 - Branch protection and safe workflow state.
 - Size and cluster shape.

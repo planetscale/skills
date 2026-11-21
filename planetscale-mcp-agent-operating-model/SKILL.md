@@ -13,7 +13,9 @@ Define how agents should use PlanetScale MCP safely. Agents should use productio
 
 Use the PlanetScale MCP insights-only server when the task only needs Insights and Schema Recommendations.
 
-Use the full PlanetScale MCP server only when the task explicitly requires database/schema access beyond Insights. Prefer read-only scopes.
+Use the full PlanetScale MCP server only when the task explicitly requires
+database/schema access beyond Insights, such as live connection inspection
+or branch backup inventory. Prefer read-only scopes.
 
 The full MCP server has query execution tools. Treat write query tools as disabled unless the operator explicitly approves a specific non-production action or a carefully reviewed production action.
 
@@ -53,6 +55,10 @@ Allowed by default:
 - Read schema metadata.
 - Read existing webhooks and Traffic Control configuration.
 - Read branch metadata.
+- Read live connections when the client has the live-connections permission
+  for the target branch.
+- Read branch backups and backup policies when the client has the backups
+  permission.
 - Inspect repository code.
 - Correlate query patterns with code.
 - File issues.
@@ -80,7 +86,7 @@ Not allowed by default (the review-gate actions and non-reviewable mutations):
 - Rotate credentials.
 - Change roles.
 - Change IP restrictions or private connectivity.
-- Restore or promote branches.
+- Restore, sleep, wake, or promote branches or databases.
 
 ## Agent loops
 
@@ -141,8 +147,8 @@ for the same fingerprint/recommendation ID).
   gather affected patterns, classify probable cause, post triage note to
   the incident channel. Output: triage note.
 - **Posture drift check** (daily): diff current safe-migrations flags,
-  webhook config, role list, and backup schedule against the last
-  assessment report; report any drift. Output: report.
+  webhook config, role list, backup policy, and sleep/availability state
+  against the last assessment report; report any drift. Output: report.
 
 ### Tier 2 — execute the review-gate action (standing authorization required)
 
@@ -214,7 +220,9 @@ For write queries:
 Return:
 
 - Recommended MCP server choice.
-- Required scopes.
+- Required scopes. Call out that live connections, branch backups, and
+  production live connections each require their own MCP permission when
+  those surfaces are needed.
 - AGENTS.md instructions to add.
 - Allowed autonomous work.
 - Disallowed work.

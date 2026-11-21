@@ -133,14 +133,16 @@ For Postgres:
 - pg_strict.
 - Traffic Control.
 - Backups/PITR.
+- Sleep/wake posture where applicable.
 - Connection pooling.
-- Private connectivity and IP restrictions.
+- Private connectivity, VPC peering where applicable, and IP restrictions.
 
 ### Observability
 
 - Query Insights state.
 - Anomalies.
 - Query tags.
+- Weekly report query filters, when weekly reports are enabled.
 - Raw query collection posture.
 - Schema recommendations.
 
@@ -198,6 +200,7 @@ State clearly:
 - No traffic controls changed.
 - No roles or credentials changed.
 - No webhooks changed.
+- No sleep, wake, network, backup policy, or IP-restriction settings changed.
 - No code changed.
 - No branches, backups, restores, deploy requests, or migrations created.
 

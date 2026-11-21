@@ -17,6 +17,7 @@ Check:
 
 - Whether a development or test branch exists.
 - Whether branches are empty or restored from backup.
+- Whether the database is sleeping or intentionally kept awake.
 - Whether migrations are tested against a branch before production.
 - Whether application migrations are reversible or have a documented rollback strategy.
 - Whether production DDL is manually reviewed.
@@ -168,6 +169,27 @@ Recommend:
 
 Do not restore or create emergency backups without approval. Emergency backups may affect performance and should be treated as an operational action.
 
+## Database sleep and wake
+
+Sleep and wake for PlanetScale Postgres are availability-changing operations.
+Sleeping shuts down every branch, closes open connections, and leaves the
+database unavailable until it is woken. Before sleep, PlanetScale archives
+recent writes; every branch needs a successful scheduled backup before the
+database can sleep.
+
+Check:
+
+- Whether the database is sleeping, waking, or intentionally kept awake.
+- Whether any sleep usage is limited to databases that are not serving active
+  application traffic.
+- Whether owners understand that sleep is not a rollback or incident recovery
+  mechanism.
+
+Recommend sleep only for intentionally idle Postgres databases where the
+unavailability is acceptable. Do not sleep or wake a database without approval;
+production sleep/wake needs the same confirmation, rollback, and monitoring
+discipline as other availability-impacting actions.
+
 ## Connections, pooling, and network safety
 
 Check:
@@ -175,7 +197,8 @@ Check:
 - Whether app uses direct port 5432 or PgBouncer port 6432.
 - Whether connection pool size matches runtime and deployment model.
 - Whether serverless or edge environments can create connection storms.
-- Live connection/session pressure through `pscale branch connections top`,
+- Live connection/session pressure through MCP
+  `planetscale_list_live_connections` or `pscale branch connections top`,
   including blockers and idle-in-transaction sessions when diagnosing active
   incidents.
 - Whether private connectivity is configured.
@@ -186,7 +209,11 @@ Recommend:
 
 - Use PgBouncer for high-churn application connections where transaction-pooling limitations are acceptable.
 - Use direct connections for session-dependent features that PgBouncer transaction mode cannot support.
-- Use AWS PrivateLink or GCP Private Service Connect for private network requirements.
+- Use AWS PrivateLink, GCP Private Service Connect, or Neki VPC peering for
+  private network requirements where the deployment supports them.
+- For Neki VPC peering, document client DNS behavior: use the provided
+  private hostnames, respect DNS TTLs, configure fallback from per-zone
+  hostnames, and remember that peering does not disable the public endpoint.
 - Use IP restrictions to reduce public exposure.
 - Be explicit that private connectivity does not automatically block public access; IP restrictions or equivalent controls are required for private-only posture.
 
@@ -245,6 +272,7 @@ Return:
 - Recommended Traffic Control plan.
 - Recommended role and pg_strict plan.
 - Recommended backup/PITR plan.
+- Recommended sleep/wake posture plan.
 - Recommended network posture plan.
 - Recommended query tagging plan.
 - Proposed changes requiring approval.

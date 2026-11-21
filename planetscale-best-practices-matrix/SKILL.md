@@ -26,6 +26,9 @@ Recommend for every production database:
   (`insights/tags`, `insights/tags/summaries`) on both engines, plus
   `tag:key:value` filtering and per-execution tag drill-down in the Vitess
   dashboard.
+- If weekly report emails are used, filter internal or maintenance query
+  noise with the same Insights query-search syntax so the report stays
+  aligned with the queries operators intend to review.
 - Use anomalies as alert and automation inputs.
 
 ### Webhooks
@@ -45,7 +48,9 @@ Recommend for operational events:
 Recommend:
 
 - Use insights-only MCP for most autonomous analysis.
-- Use full MCP only with narrow scopes and read-only default.
+- Use full MCP only with narrow scopes and read-only default, including the
+  separate live-connections and backups permissions when those read-only
+  surfaces are needed.
 - Put database targeting and safety rules in `AGENTS.md`.
 - Agents generate PRs/issues/change plans; humans approve database changes.
 
@@ -131,6 +136,16 @@ Recommend for resource isolation of agents, exports, reports, workers, integrati
 Recommend verifying retention and restore drill coverage.
 If Terraform is the customer's source of truth, recommend managing backup
 policies there so backup posture changes are reviewed as infrastructure code.
+Use MCP branch-backup inventory when available to read the backup policies
+that apply to a branch and its recent backup details.
+
+### Database sleep/wake
+
+For Postgres databases that are intentionally idle, recommend documenting
+whether beta sleep/wake is appropriate. Sleeping closes connections, makes
+every branch unavailable until wake, and requires successful scheduled
+backups on every branch first. Treat sleep/wake as availability-impacting,
+not as a recovery mechanism.
 
 ### PgBouncer and connection pooling
 
@@ -138,7 +153,11 @@ Recommend where connection churn or serverless/edge behavior creates pressure, s
 
 ### Private connectivity and IP restrictions
 
-Recommend for customers requiring private network posture or reduced public exposure. Treat changes as production-risking.
+Recommend for customers requiring private network posture or reduced public
+exposure. For Neki, include VPC peering for supported single-tenant or
+PlanetScale Managed deployments; peering keeps traffic off the public
+internet but does not disable the public endpoint. Treat changes as
+production-risking.
 
 ### Extensions
 
@@ -150,9 +169,10 @@ that source of truth aligned with approved dashboard/API changes.
 
 ### Live connections
 
-Recommend inspecting `pscale branch connections top` during active connection
-pressure incidents to identify sessions, blockers, and idle-in-transaction
-roots without relying on normal database connection capacity.
+Recommend inspecting MCP `planetscale_list_live_connections` or
+`pscale branch connections top` during active connection pressure incidents
+to identify sessions, blockers, and idle-in-transaction roots without
+relying on normal database connection capacity.
 
 ## Output
 
