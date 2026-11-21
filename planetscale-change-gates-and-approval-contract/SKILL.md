@@ -15,7 +15,9 @@ Prevent accidental or autonomous changes that can affect availability, safety, s
 
 Allowed without approval:
 
-- List databases, branches, keyspaces, webhooks, backups, roles, traffic budgets, schema recommendations, deploy requests, and Insights data.
+- List databases, branches, keyspaces, webhooks, backups, live connections,
+  roles, traffic budgets, schema recommendations, deploy requests, and
+  Insights data.
 - Inspect repository code.
 - Read schema metadata.
 - Read non-sensitive database metadata.
@@ -54,10 +56,11 @@ Always requires explicit approval:
 - Reset passwords.
 - Change pg_strict settings.
 - Change connection pooling behavior.
-- Change IP restrictions, PrivateLink, PSC, or public access.
+- Change IP restrictions, PrivateLink, PSC, VPC peering, or public access.
 - Change backup schedule or retention.
 - Create restore branch.
 - Create backup beyond automatic backups.
+- Sleep or wake a non-production database.
 - Change branch size or replica topology.
 - Edit repository files or dependencies.
 
@@ -75,6 +78,7 @@ Requires explicit approval, named target confirmation, rollback plan, and ideall
 - Changing production network access.
 - Rotating production credentials.
 - Emergency backup during high load.
+- Sleep or wake a production database.
 
 ### Class E: never autonomous
 

@@ -59,6 +59,8 @@ Send these to incident or operations channels:
 
 Send these to Slack, Linear/Jira, or deployment channels:
 
+- `branch.ready`
+- `branch.sleeping`
 - `deploy_request.opened`
 - `deploy_request.queued`
 - `deploy_request.in_progress`

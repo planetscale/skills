@@ -25,6 +25,9 @@ For the selected database and branch, inspect:
 - Notable queries and active anomalies.
 - Query patterns affected by recent deploys.
 - Query patterns attached to schema recommendations.
+- Weekly report query filters, when the database sends weekly report emails,
+  to confirm internal or maintenance query noise is excluded with the same
+  search syntax used in Query Insights.
 - For sharded Vitess databases, vindex usage for each query pattern: the
   percentage of traffic using relevant vindexes and the vindex-usage trend
   over time. The API exposes per-pattern `index_usages` and
@@ -214,6 +217,7 @@ Do not:
 
 - Enable raw query collection.
 - Add tags to code.
+- Change weekly report query filters.
 - Change Traffic Control budgets.
 - Apply schema recommendations.
 - Run production EXPLAIN ANALYZE on expensive queries.
