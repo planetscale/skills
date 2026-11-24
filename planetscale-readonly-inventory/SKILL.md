@@ -26,7 +26,7 @@ Allowed by default:
 - Inspect repository files for frameworks, ORMs, migrations, SQL tagging, and connection config.
 - Inspect Terraform or other infrastructure-as-code definitions for
   PlanetScale roles, backups, backup policies, Postgres parameters, and
-  supported extensions.
+  supported extensions, and Postgres branch replica counts.
 
 Not allowed without explicit approval:
 
@@ -111,7 +111,7 @@ Record:
 - Region and cloud provider.
 - Production/development branch status.
 - Branch protection and safe workflow state.
-- Size and cluster shape.
+- Size, cluster shape, and replica topology.
 
 ### Branches and schema workflow
 
@@ -131,6 +131,8 @@ For Postgres, record:
 - Whether schema changes are managed manually, through migrations, or through an ORM.
 - Whether a separate branch is used for migration testing.
 - Whether the team expects Vitess-style deploy requests; if yes, flag that Postgres branches do not use deploy requests in the same way.
+- Branch replica counts and whether Terraform manages them with
+  `planetscale_postgres_branch.replicas`.
 
 ### Observability
 
@@ -178,6 +180,7 @@ For Postgres only, record:
 - Budget modes: off, warn, enforce.
 - Limits: rate, capacity, burst, concurrency, warning threshold.
 - Rules by fingerprint, keyspace, query kind, or tags.
+- Whether tag rules match missing or empty values for required tags.
 - Whether rules are tied to meaningful SQLCommenter tags.
 - Whether any production budget is in enforce mode.
 

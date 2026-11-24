@@ -58,7 +58,7 @@ Always requires explicit approval:
 - Change backup schedule or retention.
 - Create restore branch.
 - Create backup beyond automatic backups.
-- Change branch size or replica topology.
+- Change branch size or replica topology, including Terraform-managed Postgres branch `replicas`.
 - Edit repository files or dependencies.
 
 ### Class D: production data/availability impacting

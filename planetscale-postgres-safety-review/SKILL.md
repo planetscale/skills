@@ -30,6 +30,25 @@ Recommend:
 
 Do not create branches, run migrations, or restore backups without approval.
 
+## Branch topology and replicas
+
+Check:
+
+- Branch size and replica count.
+- Whether production is single-node (`replicas = 0`) or high availability
+  (`replicas` from 2 to 8, or the cluster-size default when unset).
+- Whether Terraform manages Postgres branches with the
+  `planetscale_postgres_branch.replicas` attribute.
+
+Recommend:
+
+- Align production replica topology with the customer's availability target.
+- Keep Terraform as the source of truth when it already manages branch
+  topology; review replica changes like other infrastructure changes.
+- Treat branch size and replica topology as availability-affecting changes.
+
+Do not change branch size or replica topology without approval.
+
 ## Roles and least privilege
 
 Check whether the application connects with the default role. Flag this as a safety gap.
@@ -139,6 +158,7 @@ Default recommendation:
 
 - Start budgets in `warn` mode.
 - Use query tags where possible.
+- Use missing-value tag rules for traffic where required tags are absent or empty.
 - Use fingerprint-specific rules for known offenders.
 - Use enforce mode only after observing warnings and confirming no critical traffic is blocked.
 - Maintain an emergency disable procedure.

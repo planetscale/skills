@@ -129,6 +129,7 @@ For Vitess:
 For Postgres:
 
 - Branch migration workflow.
+- Branch size and replica topology, including Terraform source of truth when present.
 - Roles.
 - pg_strict.
 - Traffic Control.
