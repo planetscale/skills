@@ -90,6 +90,7 @@ For each expensive or anomalous query, determine:
 - Which service produced it?
 - Which route, job, controller, or action produced it?
 - Which deployment SHA produced it?
+- Are required tags missing or present with empty values?
 - Is the tag cardinality safe?
 - Are tags consistent across frameworks and languages?
 - Use the tags API to answer these questions: `/insights/tags` shows which
@@ -198,7 +199,10 @@ Recommend replacing high-cardinality tags with bounded values.
 
 ### Add Traffic Control warning budget
 
-For Postgres only, recommend `warn` mode budgets for expensive but important routes, jobs, analytics, exports, or third-party integrations.
+For Postgres only, recommend `warn` mode budgets for expensive but important
+routes, jobs, analytics, exports, third-party integrations, or traffic missing
+required tags. Missing-value tag rules are useful during instrumentation
+rollouts because they match queries where a tag is absent or empty.
 
 ### Add schema recommendation workflow
 

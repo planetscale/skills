@@ -124,7 +124,9 @@ Recommend for application roles after evaluation, especially to block accidental
 
 ### Traffic Control
 
-Recommend for resource isolation of agents, exports, reports, workers, integrations, BI, and known expensive fingerprints.
+Recommend for resource isolation of agents, exports, reports, workers,
+integrations, BI, untagged traffic with missing or empty required tags, and
+known expensive fingerprints.
 
 ### Backups and PITR
 
@@ -135,6 +137,13 @@ policies there so backup posture changes are reviewed as infrastructure code.
 ### PgBouncer and connection pooling
 
 Recommend where connection churn or serverless/edge behavior creates pressure, subject to transaction-pooling limitations.
+
+### Branch topology and replicas
+
+Recommend reviewing Postgres branch replica counts against availability goals.
+When Terraform manages branches, use `planetscale_postgres_branch.replicas`
+for reviewed single-node (`0`) or high-availability (`2` to `8`) topology
+changes.
 
 ### Private connectivity and IP restrictions
 

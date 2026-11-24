@@ -65,6 +65,12 @@ Prefer tag-based rules when tags are stable and bounded:
 - `job=DailyBackfill`
 - `service=analytics-worker`
 
+Use missing-value tag rules for traffic that lacks a required tag or sends it
+empty, such as queries missing `application` or `service` during a tagging
+rollout. Missing-value rules can be combined with other tags in the same rule;
+in the dashboard choose `missing value`, and in the CLI represent it as an
+empty value such as `--tag key=application,value=`.
+
 Use fingerprint rules when:
 
 - A specific known query pattern is dangerous.
@@ -104,6 +110,18 @@ Target: worker service, queue, or job tags.
 Intent: prevent backfills and retries from starving interactive traffic.
 
 Mode: `warn` first; enforce only after confirming queue backpressure behavior.
+
+### Untagged traffic budget
+
+Target: missing or empty required tags such as `application`, `service`, or
+`source`.
+
+Intent: cap uninstrumented traffic separately while teams roll out
+SQLCommenter tags or fix clients that omit required attribution.
+
+Mode: `warn` first; enforce only after confirming the rule is not matching
+critical traffic whose tags are absent for reasons outside the application's
+control.
 
 ### Third-party integration budget
 
