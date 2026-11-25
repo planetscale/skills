@@ -20,6 +20,7 @@ Allowed by default:
 - Read Query Insights, anomalies, and query patterns through MCP or API.
 - Read traffic budgets and rules.
 - Read Postgres roles and non-secret role metadata.
+- Read organization member role assignments and custom role definitions.
 - Read backup schedules and restore metadata.
 - Read branch schema.
 - Inspect live connection/session metadata with the Connections CLI view.
@@ -112,6 +113,15 @@ Record:
 - Production/development branch status.
 - Branch protection and safe workflow state.
 - Size and cluster shape.
+
+### Organization access
+
+Record:
+
+- Whether operators and automation use predefined or custom organization roles.
+- Which role the current agent or CLI/API member identity has, if visible.
+- Whether a custom role would better fit repetitive agent or operator workflows
+  than broad predefined membership.
 
 ### Branches and schema workflow
 

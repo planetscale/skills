@@ -118,6 +118,9 @@ Include evidence.
 
 ### Safety workflow
 
+- Organization access model: predefined roles, custom roles, and
+  agent/operator identities.
+
 For Vitess:
 
 - Safe migrations.
@@ -167,6 +170,7 @@ Use this table structure:
 
 Recommendation IDs:
 
+- `ORG-*` for organization/member permissions and custom roles.
 - `OBS-*` for Insights/query tags.
 - `VIT-*` for Vitess safety/deploy workflow.
 - `PG-*` for Postgres roles, pg_strict, Traffic Control, PITR, network.
@@ -197,6 +201,7 @@ State clearly:
 - No schema changed.
 - No traffic controls changed.
 - No roles or credentials changed.
+- No organization custom roles or member assignments changed.
 - No webhooks changed.
 - No code changed.
 - No branches, backups, restores, deploy requests, or migrations created.

@@ -49,6 +49,16 @@ Recommend:
 - Put database targeting and safety rules in `AGENTS.md`.
 - Agents generate PRs/issues/change plans; humans approve database changes.
 
+### Organization custom roles
+
+Recommend custom organization roles when a member identity needs narrower
+permissions than the predefined Administrator, Analyst, or Member roles.
+Custom roles apply to member actions in the app, API, and CLI. For agent
+workflows that authenticate as an organization member, prefer a custom role
+that grants only the needed actions; keep service token permissions scoped
+through the service-token mechanism. Treat custom role creation and member role
+assignment as approval-gated security changes.
+
 ### SQLCommenter / query tags
 
 Recommend:
