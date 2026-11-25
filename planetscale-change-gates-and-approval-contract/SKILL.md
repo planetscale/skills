@@ -16,6 +16,7 @@ Prevent accidental or autonomous changes that can affect availability, safety, s
 Allowed without approval:
 
 - List databases, branches, keyspaces, webhooks, backups, roles, traffic budgets, schema recommendations, deploy requests, and Insights data.
+- Read organization member role assignments and custom role definitions.
 - Inspect repository code.
 - Read schema metadata.
 - Read non-sensitive database metadata.
@@ -50,7 +51,8 @@ Always requires explicit approval:
 - Create/update/delete webhook.
 - Enable raw query collection.
 - Enable/disable extensions or settings that require restart.
-- Create/update/delete role.
+- Create/update/delete database role or organization custom role.
+- Assign/remove predefined or custom organization roles for members.
 - Reset passwords.
 - Change pg_strict settings.
 - Change connection pooling behavior.
@@ -70,7 +72,7 @@ Requires explicit approval, named target confirmation, rollback plan, and ideall
 - Applying schema recommendation to production.
 - Queueing or applying Vitess deploy request to production.
 - Promoting or restoring branches.
-- Deleting branches, databases, roles, webhooks, backups, or traffic rules.
+- Deleting branches, databases, database roles, organization custom roles, webhooks, backups, or traffic rules.
 - Enforcing Traffic Control on production.
 - Changing production network access.
 - Rotating production credentials.
@@ -93,7 +95,7 @@ Never do without direct human operation or separately approved incident procedur
 A valid approval must include:
 
 - Change ID.
-- Target organization/database/branch.
+- Target organization/database/branch/member, as applicable.
 - Whether production is affected.
 - Permission to execute the exact action.
 

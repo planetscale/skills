@@ -37,6 +37,12 @@ If `auth check` returns `"status": "action_required"`, follow `issues` and
 `next_steps` in the JSON. For login, the human may need to approve in the
 browser; use `pscale auth login --format json`.
 
+If authentication succeeds but a command returns a permission error, check
+whether the member has a predefined or custom organization role that grants
+that action. Custom roles affect member actions in the app, API, and CLI; do
+not work around a role gap by switching to administrator credentials without an
+approved identity or permission change.
+
 ## Conventions
 
 - Always pass **`--format json`** for automation.
